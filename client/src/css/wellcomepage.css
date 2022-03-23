@@ -1,0 +1,66 @@
+.header{
+    display: flex;
+    justify-content: space-between;
+}
+
+.name{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background-color: white;
+    width:19%;
+    margin: 0px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top: 20px;
+    margin-right: 20px;
+    height: 60px;
+    border: #000 solid 1px;
+    border-radius: 40px;
+}
+.name h1{
+    font-size: 25px;
+}
+.avt{
+    width: 50px;
+    height: 50px;
+    border: 1px solid #000;
+    border-radius: 50%;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.nav{
+    width: 40px;
+}
+.content{
+    width: 100%;
+    height: 500px;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+.content img{
+    display: block;
+    height: 280px;
+    width: 280px;
+}
+.content h1{
+    display: inline;
+    font-size: 50px;
+}
+.btn{
+    display: flex;
+    justify-content: space-around;
+    width: 80%;
+}
+.btn a{
+    width: 35%;
+    height: 100px;
+}
+.view-btn{
+    height: 100%;
+    border: 2px solid #3794EB;
+    font-size: 45px !important;
+}

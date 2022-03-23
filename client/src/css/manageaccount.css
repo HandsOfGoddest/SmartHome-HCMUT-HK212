@@ -1,0 +1,253 @@
+
+.manage-account-content{
+    display: flex;
+    justify-content: space-around;
+    margin-top: 30px;
+}
+p{
+    cursor: default;
+}
+span{
+    cursor:default;
+}
+.manage-account-content-left{
+    width: 60%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: #000 2px solid;
+    border-radius: 20px;
+    background-color: white;
+
+}
+.table-content{
+    width: 100%;
+    height: 450px;
+    border-radius: 20px;
+    overflow-y: auto;
+}
+::-webkit-scrollbar-track-piece {
+    background: #f1f1f100;
+  }
+table{
+    font-size: 22px;
+    border-radius: 20px;
+}
+td{
+    border: #000000 1px solid;
+}
+tr{
+    height: 20px;
+    
+    
+}
+th{
+    height: 50px;
+}
+
+.manage-account-title{
+    background-color: white;
+    border: 1px solid #000;
+    border-radius: 10px;
+    font-size: 30px;
+    padding: 6px 20px;
+}
+.manage-account-names{
+    display: flex;
+    background-color: white;
+    border: 1px solid #000;
+    border-radius: 10px;
+    font-size: 30px;
+    padding: 6px 20px;
+
+}
+.manage-account-icon{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.manage-account-icon img{
+    height: 30px;
+    width: 30px;
+    background-color: white;
+    padding: 2px 2px;
+    border: #00FF47 3px solid;
+    border-radius: 50%;
+}
+.manage-account-icon p{
+    font-size: 15px;
+}
+.icon-overlay{
+    background-color: white;
+    border: #000 1px solid;
+    border-radius: 10px;
+    padding: 10px 10px;
+    width: 340px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+.icon{
+    height: 100px;
+    width: 100px;
+}
+.manage-account-name{
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.manage-account-name input{
+    font-size: 20px;
+    width: 170px;
+    border-radius: 10px;
+    padding: 5px 5px;
+}
+.content-bottom{
+    width: 100%;
+    height: 300px;
+    margin-top: 50px;
+    background-color: white;
+    border: 1px solid #000;
+    border-radius: 10px;
+}
+
+
+
+.manage-account-content-right{
+    height:470px;
+    width: 28%;
+    border: 1px solid #000;
+    border-radius: 20px;
+    background-color: white;
+}
+.dv-info-table{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    border: 0px;
+
+}
+.right-header-title{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+.dv-name{
+    white-space: nowrap;
+    margin-right: 10px;
+}
+.edit-mem{
+    height: 40px;
+    border: #000 1px solid;
+    border-radius: 10px;
+    justify-self: flex-end;
+    margin-right: 10px;
+}
+.trash-border{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+.trash-img{
+    height: 40px;
+    border: #000 1px solid;
+    border-radius: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+.account-inf{
+    width: 94%;
+    display: flex;
+    justify-content: space-between;
+    font-size: 22px;
+    margin: 5px 0px;
+}
+.account-inf span{
+    font-size: 20px;
+}
+.account-inf select{
+    border-radius: 10px;
+    font-size: 22px;
+    padding: 4px 8px;
+    width: 65%;
+    text-align: center;
+    border: #000 solid 2px;
+}
+.account-inf input{
+    border-radius: 10px;
+    font-size: 22px;
+    padding: 4px 8px;
+    width: 60%;
+}
+
+
+
+.manage-account-footer{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 120px;
+}
+.nav2{
+    width:50px;
+    height:50px;
+    transform: rotate(90deg);
+    border-radius: 40px;
+    border: #000 1px solid;
+}
+.manage-account-center-part{
+    display: flex;
+    width: 40%;
+}
+.add-mem{
+    height: 50px;
+    border: #000 1px solid;
+    border-radius: 10px;
+    margin-right: 10%;
+
+}
+.table-bd{
+    height: 200px;
+}
+.search{
+    display: flex;
+    width: 80%;
+    padding: 5px 5px;
+    border-radius: 30px;
+    background-color: #C4C4C4;
+}
+.search img{
+    height: 50px;
+    border-radius: 25px;
+    margin-right: 5px;
+}
+.search input{
+    width: 100%;
+    border-radius: 25px;
+    padding: 5px 15px;
+    border: #fff 1px solid;
+    font-size: 22px;
+
+}
+
+
+.manage-account-header{
+    display: flex;
+    width: max-content;
+    height: 50px;
+    font-size: 30px;
+    margin-left: 15%;
+    background-color: white;
+    border-radius: 20px;
+    align-items: center;
+    justify-content: space-between;
+}
+.manage-account-header p{
+    white-space: nowrap;
+}
+

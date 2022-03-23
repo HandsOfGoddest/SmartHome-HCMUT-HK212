@@ -1,0 +1,30 @@
+.sophong{
+    width: 10%;
+    background-color: white;
+    border: 1px solid #000;
+    border-radius: 20px;
+    height: max-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 5px;
+}
+.name{
+    margin: 0;
+}
+.header{
+    height: 100px;
+    align-items: center;
+}
+.logo img{
+    height: 100px;
+    width: 100px;
+}
+.logo h2{
+    font-size: 60px;
+
+}
+.logo-click{
+    color: #000;
+    text-decoration: none;
+}
