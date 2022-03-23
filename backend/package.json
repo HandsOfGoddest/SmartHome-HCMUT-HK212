@@ -1,0 +1,25 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "backend",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "data:import": "node seeder"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HandsOfGoddest/SmartHome-HCMUT-HK212.git"
+  },
+  "author": "Akatsuki",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HandsOfGoddest/SmartHome-HCMUT-HK212/issues"
+  },
+  "homepage": "https://github.com/HandsOfGoddest/SmartHome-HCMUT-HK212#readme",
+  "dependencies": {
+    "jq": "^1.7.2",
+    "moongose": "^1.0.0"
+  }
+}
