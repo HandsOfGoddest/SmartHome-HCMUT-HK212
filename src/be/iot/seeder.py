@@ -1,14 +1,17 @@
 import sys
 import required
-module= sys.path[0] + '\\' + 'models'
-sys.path.insert(0, module)
+# module= sys.path[0] + '\\' + 'models'
+# sys.path.insert(0, module)
 import datetime
+from rest_framework.renderers import JSONRenderer
 
 ## Import models class ##
-from UserModel import *
-from RoomModel import *
-from RecordsModel import *
-from DevicesModel import *
+# from UserModel import *
+# from RoomModel import *
+# from RecordsModel import *
+# from DevicesModel import *
+from models import *
+
 ##########################
 
 def create_rdata():
@@ -55,6 +58,8 @@ def create_rdata():
             password="TQV",
             homeTown="Nghệ An",
         ).save()
+
+        print(JSONRenderer.render(User.objects.all()))
 
         room1 = Room(
             Id=1,
