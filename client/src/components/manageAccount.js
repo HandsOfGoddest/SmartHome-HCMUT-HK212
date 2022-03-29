@@ -3,7 +3,26 @@ import "../css/devices.css"
 import "../css/adddevice.css"
 import "../css/manageaccount.css"
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import {useEffect,useState} from 'react';
+
+async function getUser() {
+    try {
+      const response = await axios.get('http://127.0.0.1:8000/users/');
+      return response.data;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
 function ManageAccount() {
+    const [user, setUser] = useState([]);
+    useEffect(() => {
+        getUser().then(data => {
+            setUser(data);
+        });
+    }, []);
+    console.log(user)
     return (
         <div className='manage-account'>
             <Header />
@@ -26,82 +45,17 @@ function ManageAccount() {
                                     <td>0323654981</td>
                                     <td>6253000416987</td>
                                 </tr>
-                                <tr>
-                                    <td>Nguyễn Đình Hiếu</td>
-                                    <td>0323654981</td>
-                                    <td>6253000416987</td>
-                                </tr>
-                                <tr>
-                                    <td>Võ Minh Toàn</td>
-                                    <td>0323654981</td>
-                                    <td>6253000416987</td>
-                                </tr>
-                                <tr>
-                                    <td>Nguyễn Hải Linh</td>
-                                    <td>0323654981</td>
-                                    <td>6253000416987</td>
-                                </tr>
-                                <tr>
-                                    <td>Võ Đình Cường</td>
-                                    <td>0323654981</td>
-                                    <td>6253000416987</td>
-                                </tr>
-                                <tr>
-                                    <td>Đặng Minh Linh</td>
-                                    <td>0323654981</td>
-                                    <td>6253000416987</td>
-                                </tr>
-                                <tr>
-                                    <td>Nguyễn Hùng Toàn</td>
-                                    <td>0323654981</td>
-                                    <td>6253000416987</td>
-                                </tr>
-                                <tr>
-                                    <td>Hiếu Wibu</td>
-                                    <td>0323654981</td>
-                                    <td>6253000416987</td>
-                                </tr>
-                                <tr>
-                                    <td>Đặng Hùng Cường</td>
-                                    <td>0323654981</td>
-                                    <td>6253000416987</td>
-                                </tr>
-                                <tr>
-                                    <td>Nguyễn Đình Hiếu</td>
-                                    <td>0323654981</td>
-                                    <td>6253000416987</td>
-                                </tr>
-                                <tr>
-                                    <td>Võ Minh Toàn</td>
-                                    <td>0323654981</td>
-                                    <td>6253000416987</td>
-                                </tr>
-                                <tr>
-                                    <td>Nguyễn Hải Linh</td>
-                                    <td>0323654981</td>
-                                    <td>6253000416987</td>
-                                </tr>
-                                <tr>
-                                    <td>Võ Đình Cường</td>
-                                    <td>0323654981</td>
-                                    <td>6253000416987</td>
-                                </tr>
-                                <tr>
-                                    <td>Đặng Minh Linh</td>
-                                    <td>0323654981</td>
-                                    <td>6253000416987</td>
-                                </tr>
-                                <tr>
-                                    <td>Nguyễn Hùng Toàn</td>
-                                    <td>0323654981</td>
-                                    <td>6253000416987</td>
-                                </tr>
-                                <tr>
-                                    <td>Hiếu Wibu</td>
-                                    <td>0323654981</td>
-                                    <td>6253000416987</td>
-                                </tr>
-
+                                {
+                                    user.map((item, index) => {
+                                        return (
+                                            <tr key={index}>
+                                                <td>{item.name}</td>
+                                                <td>{item.phoneNumber}</td>
+                                                <td>{item.userID}</td>
+                                            </tr>
+                                        )
+                                    })
+                                }
                             </tbody>
                         </table>
                     </div>
