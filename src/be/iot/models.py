@@ -37,8 +37,8 @@ class Devices(Document):
         "ordering": ["_date_created"],
     }
 
-    def __str__(self):
-        return self.Id + ":" + self.name
+    # def __str__(self):
+    #     return self.Id + ":" + self.name
 
 class Records(Document):
     data= FloatField()
@@ -81,8 +81,8 @@ class Room(Document):
         "ordering": ["_date_created"],
     }
 
-    def __str__(self):
-        return "Phòng " + str(self.Id)
+    # def __str__(self):
+    #     return "Phòng " + str(self.Id)
 
 class User(Document):
     name= StringField(required=True)
@@ -112,8 +112,8 @@ class User(Document):
         "ordering": ["-date_created"],
     }
 
-    def __str__(self):
-        return self.name + ' ' +self.userID
+    # def __str__(self):
+    #     return self.name + ' ' +self.userID
 
 # AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.user')
 #

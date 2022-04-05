@@ -23,7 +23,7 @@ class UserViewSet(APIView):
     def get(self, request):
         users = User.objects.all()
         user_serializer = UserSerializer(users, many=True)
-        return Response(user_serializer.data)
+        return JsonResponse(user_serializer.data, safe=False)
 
     def post(self, request):
         try:
@@ -68,51 +68,20 @@ class UserDetailViewSet(APIView):
         user.delete()
         return Response(status.HTTP_204_NO_CONTENT)
 
-# class UserViewSet(viewsets.ModelViewSet):
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
-#     lookup_field = "userID"
-#
-#     def create(self, request, *args, **kwargs):
-#         try:
-#             serializer = self.get_serializer(data=request.data)
-#             serializer.is_valid(raise_exception=True)
-#             self.perform_create(serializer)
-#             headers = self.get_success_headers(serializer.data)
-#             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-#         except:
-#             return Response(status.HTTP_406_NOT_ACCEPTABLE)
-#
-#     def retrieve(self, request, *args, **kwargs):
-#         try:
-#             instance = self.get_object()
-#             serializer = self.get_serializer(instance)
-#             return Response(serializer.data)
-#         except:
-#             return Response(status.HTTP_404_NOT_FOUND)
+class SearchUserView(APIView):
+    def get_object(self, userName):
+        try:
+            return User.objects(name__icontains = userName)
+        except User.DoesNotExist:
+            return Response(status.HTTP_404_NOT_FOUND)
 
-# class RoomViewSet(viewsets.ModelViewSet):
-#     queryset = Room.objects.all()
-#     serializer_class = RoomSerializer
-#     lookup_field = "Id"
-#
-#     def create(self, request, *args, **kwargs):
-#         try:
-#             serializer = self.get_serializer(data=request.data)
-#             serializer.is_valid(raise_exception=True)
-#             self.perform_create(serializer)
-#             headers = self.get_success_headers(serializer.data)
-#             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-#         except:
-#             return Response(status.HTTP_406_NOT_ACCEPTABLE)
-#
-#     def retrieve(self, request, *args, **kwargs):
-#         try:
-#             instance = self.get_object()
-#             serializer = self.get_serializer(instance)
-#             return Response(serializer.data)
-#         except:
-#             return Response(status.HTTP_404_NOT_FOUND)
+    def get(self, request, userName):
+        try:
+            users= self.get_object(userName)
+            user_serializer = UserSerializer(users, many=True)
+            return Response(user_serializer.data)
+        except:
+            return Response(status.HTTP_404_NOT_FOUND)
 
 class RoomViewSet(APIView):
     def get(self, request):
@@ -162,28 +131,7 @@ class RoomDetailViewSet(APIView):
         room.delete()
         return Response(status.HTTP_204_NO_CONTENT)
 
-# class DevicesViewSet(viewsets.ModelViewSet):
-#     queryset = Devices.objects.all()
-#     serializer_class = DevicesSerializer
-#     lookup_field = "Id"
-#
-#     def create(self, request, *args, **kwargs):
-#         try:
-#             serializer = self.get_serializer(data=request.data)
-#             serializer.is_valid(raise_exception=True)
-#             self.perform_create(serializer)
-#             headers = self.get_success_headers(serializer.data)
-#             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-#         except:
-#             return Response(status.HTTP_406_NOT_ACCEPTABLE)
-#
-#     def retrieve(self, request, *args, **kwargs):
-#         try:
-#             instance = self.get_object()
-#             serializer = self.get_serializer(instance)
-#             return Response(serializer.data)
-#         except:
-#             return Response(status.HTTP_404_NOT_FOUND)
+
 
 class DevicesViewSet(APIView):
     def get(self, request):
@@ -233,11 +181,7 @@ class DevicesDetailViewSet(APIView):
         device.delete()
         return Response(status.HTTP_204_NO_CONTENT)
 
-# class RecordsViewSet(viewsets.ModelViewSet):
-#     queryset = Records.objects.all()
-#     serializer_class = RecordsSerializer
-#     lookup_field = "Id"
-    # http_method_names= ['get']
+
 
 class RecordsViewSet(APIView):
     def get(self, request):
@@ -255,6 +199,98 @@ class RecordsViewSet(APIView):
         except:
             return Response(status.HTTP_409_CONFLICT)
 
+class RecordsDetailViewSet(APIView):
+    def get_objects(self, Id):
+        try:
+            device= Devices.objects.get(Id=Id)
+            device_id= device.id
+            return Records.objects(Id=device_id)
+        except Records.DoesNotExist:
+            return Response(status.HTTP_404_NOT_FOUND)
+
+    def get(self, request, Id):
+        try:
+            records = self.get_objects(Id)
+            records_serializer = RecordsSerializer(records, many=True)
+            return Response(records_serializer.data)
+        except:
+            return Response(status.HTTP_404_NOT_FOUND)
+
+
+# class DevicesViewSet(viewsets.ModelViewSet):
+#     queryset = Devices.objects.all()
+#     serializer_class = DevicesSerializer
+#     lookup_field = "Id"
+#
+#     def create(self, request, *args, **kwargs):
+#         try:
+#             serializer = self.get_serializer(data=request.data)
+#             serializer.is_valid(raise_exception=True)
+#             self.perform_create(serializer)
+#             headers = self.get_success_headers(serializer.data)
+#             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+#         except:
+#             return Response(status.HTTP_406_NOT_ACCEPTABLE)
+#
+#     def retrieve(self, request, *args, **kwargs):
+#         try:
+#             instance = self.get_object()
+#             serializer = self.get_serializer(instance)
+#             return Response(serializer.data)
+#         except:
+#             return Response(status.HTTP_404_NOT_FOUND)
+
+# class RecordsViewSet(viewsets.ModelViewSet):
+#     queryset = Records.objects.all()
+#     serializer_class = RecordsSerializer
+#     lookup_field = "Id"
+    # http_method_names= ['get']
+
+# class UserViewSet(viewsets.ModelViewSet):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
+#     lookup_field = "userID"
+#
+#     def create(self, request, *args, **kwargs):
+#         try:
+#             serializer = self.get_serializer(data=request.data)
+#             serializer.is_valid(raise_exception=True)
+#             self.perform_create(serializer)
+#             headers = self.get_success_headers(serializer.data)
+#             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+#         except:
+#             return Response(status.HTTP_406_NOT_ACCEPTABLE)
+#
+#     def retrieve(self, request, *args, **kwargs):
+#         try:
+#             instance = self.get_object()
+#             serializer = self.get_serializer(instance)
+#             return Response(serializer.data)
+#         except:
+#             return Response(status.HTTP_404_NOT_FOUND)
+
+# class RoomViewSet(viewsets.ModelViewSet):
+#     queryset = Room.objects.all()
+#     serializer_class = RoomSerializer
+#     lookup_field = "Id"
+#
+#     def create(self, request, *args, **kwargs):
+#         try:
+#             serializer = self.get_serializer(data=request.data)
+#             serializer.is_valid(raise_exception=True)
+#             self.perform_create(serializer)
+#             headers = self.get_success_headers(serializer.data)
+#             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+#         except:
+#             return Response(status.HTTP_406_NOT_ACCEPTABLE)
+#
+#     def retrieve(self, request, *args, **kwargs):
+#         try:
+#             instance = self.get_object()
+#             serializer = self.get_serializer(instance)
+#             return Response(serializer.data)
+#         except:
+#             return Response(status.HTTP_404_NOT_FOUND)
 
 
 # from rest_framework.authtoken.views import ObtainAuthToken
