@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import '../css/header.css'
-
+var TotalUser = JSON.parse(localStorage.getItem("user"));
 function Header() {
     return (
         <div className="manage-view">
@@ -17,7 +17,7 @@ function Header() {
                     </div>
                 </Link>
                 <div className="name">
-                    <h1>Nguyễn Văn A</h1>
+                    <h1>{TotalUser.name}</h1>
                     <img className="avt" src="../img/avt.jpg" alt="avtatar" />
                     <img className="nav" src="../img/nav.png" alt="nav" />
                 </div>

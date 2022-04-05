@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import '../css/wellcomepage.css'
+var TotalUser = JSON.parse(localStorage.getItem("user"));
 function wellcomePage() {
     return (
         <div className="wellcome-page">
@@ -9,7 +10,7 @@ function wellcomePage() {
                     <h2>Smart Home</h2>
                 </div>
                 <div className="name">
-                    <h1>Nguyễn Văn A</h1>
+                    <h1>{TotalUser.name}</h1>
                     <img className="avt" src="../img/avt.jpg" alt="avtatar" />
                     <img className="nav" src="../img/nav.png" alt="nav" />
 
@@ -18,7 +19,7 @@ function wellcomePage() {
             <div className="content">
                 <img className="avt" src="../img/avt.jpg" alt="avtatar" />
                 <div className="name-title">
-                <h1>Xin chào </h1><h1>Nguyễn Văn A</h1>
+                <h1>Xin chào </h1><h1>{TotalUser.name}</h1>
                 </div>
                 <div className="btn">
                     <Link to="/map-view"><button className='view-btn'>Map view</button></Link>
