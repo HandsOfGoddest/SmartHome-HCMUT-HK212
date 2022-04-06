@@ -291,4 +291,13 @@ th{
     border-radius: 20px;
     background-color: white;
 }
+.isAdmin{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 60%;
+}
+.isAdmin div{
+    display: flex;
+}
 

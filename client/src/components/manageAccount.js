@@ -63,8 +63,9 @@ function ManageAccount() {
     const [addPass, setAddPass] = useState("");
     const [addHomeTown, setAddHomeTown] = useState("");
     const [addRoom, setAddRoom] = useState("");
-    const [addAdmin, setAddAdmin] = useState("");
-
+    const [addAdmin, setAddAdmin] = useState("no");
+    var isNotAdminStyle = addAdmin == 'no'? {color: '#ff0000',fontWeight: '900'} : {color: '#000000'}
+    var isAdminStyle = addAdmin == 'yes'? {color: '#ff0000',fontWeight: '900'} : {color: '#000000'}
     useEffect(() => {
         getUser().then(data => {
             setUser(data);
@@ -93,8 +94,8 @@ function ManageAccount() {
             "dateOfBirth": addDate,
             "password": addPass,
             "homeTown": addHomeTown,
-            "room": [addRoom] ,
-            "isAdmin": addAdmin == ""?false:true
+            "room": [addRoom],
+            "isAdmin": addAdmin == 'no' ? false : true
         }
         await axios.post('http://127.0.0.1:8000/users/', userData);
         window.location.reload();
@@ -227,7 +228,7 @@ function ManageAccount() {
                                         </div>
                                         <div className='account-inf'>
                                             <span>SĐT:</span>
-                                            <input type="text" onChange={e => setAddPhone(e.target.value)} />
+                                            <input type="number" onChange={e => setAddPhone(e.target.value)} />
                                         </div>
                                         <div className='account-inf'>
                                             <span>Số phòng:</span>
@@ -260,7 +261,16 @@ function ManageAccount() {
                                         </div>
                                         <div className='account-inf'>
                                             <span>Quản trị viên: </span>
-                                            <input type="checkbox" name="choice" id="a-opt" onChange={e => setAddAdmin(e.target.value)} />
+                                            <div className='isAdmin'>
+                                                <div>
+                                                    <input type="radio" name="choice" id="b-opt" value="yes" onClick={e => setAddAdmin(e.target.value)} />
+                                                    <label htmlFor="b-opt" style={isAdminStyle}>Yes</label>
+                                                </div>
+                                                <div>
+                                                    <input type="radio" name="choice" id="a-opt" value="no" checked onClick={e => setAddAdmin(e.target.value)} />
+                                                    <label htmlFor="a-opt" style={isNotAdminStyle}>No</label>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div className='account-inf'>
                                             <button onClick={close}>Hủy bỏ</button>

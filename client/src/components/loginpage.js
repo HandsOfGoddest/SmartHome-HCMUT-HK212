@@ -27,9 +27,7 @@ function LoginPage() {
     const [phone, setPhone] = useState('');
     const [pass, setPass] = useState('');
     const [code, setCode] = useState('');
-    console.log(phone)
-    console.log(pass)
-    console.log(code)
+
     function ConfirmLogin(result){
         let temp = -1;
         user.map((item, index) => {
