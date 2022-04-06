@@ -6,7 +6,7 @@ from iot.DevicesController import DeviceController
 
 AIO_FEED_IDs = ["DEN","GAS","DOOR"]
 AIO_USERNAME = "DOAN_IoT"
-AIO_KEY = "aio_fKYz77wqTb2mM2W8ukFNMs4KTWZc"
+AIO_KEY = "aio_myTU35shTySa7gYAFBVGhqJvq3fI"
 client = MQTTClient ( AIO_USERNAME , AIO_KEY )
 
 def connected ( client ) :
@@ -32,7 +32,7 @@ def getPort():
     for i in range(0, N):
         port= ports[i]
         strPort= str(port)
-        if "COM10" in strPort:
+        if "USB Serial Device" in strPort:
             splitPort= strPort.split(" ")
             comPorts= splitPort[0]
             print(comPorts)
@@ -86,4 +86,4 @@ client.loop_background ()
 while True :
     readSerial()
     print("#############################################################################")
-    time.sleep(1)
+    time.sleep(5)

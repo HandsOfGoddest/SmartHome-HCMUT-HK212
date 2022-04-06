@@ -134,6 +134,7 @@ th{
     align-items: center;
     justify-content: space-around;
     border: 0px;
+    z-index: 2;
 
 }
 .right-header-title{
@@ -172,9 +173,10 @@ th{
     font-size: 22px;
     margin: 5px 0px;
 }
-.account-inf span{
+.popup-inf{
     font-size: 22px;
     font-weight: 600;
+    width: 170px;
 }
 .account-inf select{
     border-radius: 10px;
@@ -300,4 +302,33 @@ th{
 .isAdmin div{
     display: flex;
 }
+.popup_border{
+    height: max-content;
+    width: max-content;
+    font-weight: 900;
+    border-radius: 10px;
+    padding: 5px 10px;
+    background-color: rgb(255, 0, 0);
+    color: rgb(255, 255, 255);
+    animation: apear 3s ease-out 0s 1  ;
+}
+@keyframes apear{
+    0%{
+        opacity: 0;
+    }
+    50%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+    }
 
+    
+}
+.popup_trigger{
+    width: 0px;
+    height: 37px;
+}
+.close{
+    display: none;
+}

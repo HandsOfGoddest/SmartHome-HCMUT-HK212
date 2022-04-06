@@ -6,7 +6,7 @@ import Popup from 'reactjs-popup';
 function AddDevice() {
     return (
         <div className='add-device'>
-            <Header />
+            <Header/>
             <div className='add-device-content'>
                 <div className='add-device-content-left'>
                     <div className='content-top'>

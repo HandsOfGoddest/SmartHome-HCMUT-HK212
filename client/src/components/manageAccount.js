@@ -64,8 +64,8 @@ function ManageAccount() {
     const [addHomeTown, setAddHomeTown] = useState("");
     const [addRoom, setAddRoom] = useState("");
     const [addAdmin, setAddAdmin] = useState("no");
-    var isNotAdminStyle = addAdmin == 'no'? {color: '#ff0000',fontWeight: '900'} : {color: '#000000'}
-    var isAdminStyle = addAdmin == 'yes'? {color: '#ff0000',fontWeight: '900'} : {color: '#000000'}
+    var isNotAdminStyle = addAdmin == 'no' ? { color: '#ff0000', fontWeight: '900' } : { color: '#000000' }
+    var isAdminStyle = addAdmin == 'yes' ? { color: '#ff0000', fontWeight: '900' } : { color: '#000000' }
     useEffect(() => {
         getUser().then(data => {
             setUser(data);
@@ -87,18 +87,35 @@ function ManageAccount() {
         });
     }
     async function addUser() {
-        var userData = {
-            "name": addName,
-            "phoneNumber": addPhone,
-            "userID": addID,
-            "dateOfBirth": addDate,
-            "password": addPass,
-            "homeTown": addHomeTown,
-            "room": [addRoom],
-            "isAdmin": addAdmin == 'no' ? false : true
+        if(addName !== "" && addPhone !== "" && addID !== "" && addDate !== "" && addPass !== "" && addHomeTown !== "" && addRoom !== ""){
+            var userData = {
+                "name": addName,
+                "phoneNumber": addPhone,
+                "userID": addID,
+                "dateOfBirth": addDate,
+                "password": addPass,
+                "homeTown": addHomeTown,
+                "room": [addRoom],
+                "isAdmin": addAdmin == 'no' ? false : true
+            }
+            await axios.post('http://127.0.0.1:8000/users/', userData);
+            window.location.reload();
         }
-        await axios.post('http://127.0.0.1:8000/users/', userData);
-        window.location.reload();
+        else{
+            let addList = [addName, addPhone, addID, addDate, addPass, addHomeTown, addRoom];
+            let addListstr = ['addName', 'addPhone', 'addID', 'addDate', 'addPass', 'addHomeTown', 'addRoom'];
+            for (let data in addList){
+                if(addList[data] == ""){
+                    document.getElementById(addListstr[data]).click();
+                }
+            }
+            setTimeout(() => {
+                for (let data in addList){
+                    document.getElementsByClassName("close")[6-data].click();
+                }
+            } , 3000);
+
+        }
     }
     return (
         <div className='manage-account'>
@@ -223,17 +240,28 @@ function ManageAccount() {
                                         </div>
                                         <hr width="99%" align="center" color='black' />
                                         <div className='account-inf'>
-                                            <span>Họ và tên: </span>
+                                            <span className='popup-inf'>Họ và tên: </span>
                                             <input type="text" onChange={e => setAddName(e.target.value)} />
+                                            <Popup trigger={<div id='addName' className='popup_trigger'></div>} position="right center" nested>
+                                                {close => (
+                                                    <div className='popup_border'><div className="close" onClick={close}></div><p>Vui lòng nhập họ và tên</p></div>
+                                                    
+                                                )}
+                                            </Popup>
                                         </div>
                                         <div className='account-inf'>
-                                            <span>SĐT:</span>
+                                            <span className='popup-inf'>SĐT:</span>
                                             <input type="number" onChange={e => setAddPhone(e.target.value)} />
+                                            <Popup trigger={<div id='addPhone' className='popup_trigger'></div>} position="right center" nested>
+                                                {close => (
+                                                    <div className='popup_border'><div className="close" onClick={close}></div><p>Vui lòng nhập số điện thoại</p></div>
+                                                )}
+                                            </Popup>
                                         </div>
                                         <div className='account-inf'>
-                                            <span>Số phòng:</span>
+                                            <span className='popup-inf'>Số phòng:</span>
                                             <select onChange={e => setAddRoom(e.target.value)}>
-                                                <option>Chọn phòng</option>
+                                                <option selected value="">Chọn phòng</option>
                                                 {
                                                     room.map((rm, index) => {
                                                         return (
@@ -242,25 +270,50 @@ function ManageAccount() {
                                                     })
                                                 }
                                             </select>
+                                            <Popup trigger={<div id='addRoom' className='popup_trigger'></div>} position="right center" nested>
+                                                {close => (
+                                                    <div className='popup_border'><div className="close" onClick={close}></div><p>Vui lòng chọn số phòng</p></div>
+                                                )}
+                                            </Popup>
                                         </div>
                                         <div className='account-inf'>
-                                            <span>CMND/CCCD:</span>
+                                            <span className='popup-inf'>CMND/CCCD:</span>
                                             <input type="text" onChange={e => setAddID(e.target.value)} />
+                                            <Popup trigger={<div id='addID' className='popup_trigger'></div>} position="right center" nested>
+                                                {close => (
+                                                    <div className='popup_border'><div className="close" onClick={close}></div><p>Vui lòng nhập CMND/CCCD</p></div>
+                                                )}
+                                            </Popup>
                                         </div>
                                         <div className='account-inf'>
-                                            <span>Quê quán: </span>
+                                            <span className='popup-inf'>Quê quán: </span>
                                             <input type="text" onChange={e => setAddHomeTown(e.target.value)} />
+                                            <Popup trigger={<div id='addHomeTown' className='popup_trigger'></div>} position="right center" nested>
+                                                {close => (
+                                                    <div className='popup_border'><div className="close" onClick={close}></div><p>Vui lòng nhập Quê Quán</p></div>
+                                                )}
+                                            </Popup>
                                         </div>
                                         <div className='account-inf'>
-                                            <span>Ngày sinh: </span>
+                                            <span className='popup-inf'>Ngày sinh: </span>
                                             <input type="date" onChange={e => setAddDate(e.target.value)} />
+                                            <Popup trigger={<div id='addDate' className='popup_trigger'></div>} position="right center" nested>
+                                                {close => (
+                                                    <div className='popup_border'><div className="close" onClick={close}></div><p>Vui lòng nhập ngày tháng năm sinh</p></div>
+                                                )}
+                                            </Popup>
                                         </div>
                                         <div className='account-inf'>
-                                            <span>Mật khẩu: </span>
+                                            <span className='popup-inf'>Mật khẩu: </span>
                                             <input type="text" onChange={e => setAddPass(e.target.value)} />
+                                            <Popup trigger={<div id='addPass' className='popup_trigger'></div>} position="right center" nested>
+                                                {close => (
+                                                    <div className='popup_border'><div className="close" onClick={close}></div><p>Vui lòng nhập mật khẩu</p></div>
+                                                )}
+                                            </Popup>
                                         </div>
                                         <div className='account-inf'>
-                                            <span>Quản trị viên: </span>
+                                            <span className='popup-inf'>Quản trị viên: </span>
                                             <div className='isAdmin'>
                                                 <div>
                                                     <input type="radio" name="choice" id="b-opt" value="yes" onClick={e => setAddAdmin(e.target.value)} />

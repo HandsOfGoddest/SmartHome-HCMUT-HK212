@@ -1,7 +1,13 @@
 import { Link } from "react-router-dom";
 import '../css/wellcomepage.css'
+import React, { useState } from 'react';
 var TotalUser = JSON.parse(localStorage.getItem("user"));
-function wellcomePage() {
+function WellcomePage() {
+    const [logOut, setLogOut] = useState("")
+    if(logOut === "logout"){
+        window.location.replace("/login")
+        console.log("logout")
+    }
     return (
         <div className="wellcome-page">
             <div className="header">
@@ -12,7 +18,10 @@ function wellcomePage() {
                 <div className="name">
                     <h1>{TotalUser.name}</h1>
                     <img className="avt" src="../img/avt.jpg" alt="avtatar" />
-                    <img className="nav" src="../img/nav.png" alt="nav" />
+                    <select className='nav' onChange={(e)=>setLogOut(e.target.value)}>
+                        <option value="" selected></option>
+                        <option value="logout">Log Out</option>
+                    </select>
 
                 </div>
             </div>
@@ -29,4 +38,4 @@ function wellcomePage() {
         </div>
     )
 }
-export default wellcomePage;
+export default WellcomePage;
