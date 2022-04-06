@@ -10,4 +10,8 @@ def createRoom(Id, owner, userIDs, deviceIDs):
         users= users,
         devices= deviceIDs,
     ).save()
-def updateRoom(Id, owner=None, userIDs=[], deviceIDs=[]): pass
+    
+def updateRoom(userID):
+    room= Room.objects.get(users=userID)
+    print(room)
+    

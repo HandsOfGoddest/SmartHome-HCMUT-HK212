@@ -10,7 +10,7 @@ class RoomSerializer(serializers.Serializer):
     owner = serializers.CharField(max_length=400)
     users = serializers.SlugRelatedField(
         slug_field='userID',
-        queryset= User.objects.all(),
+        queryset=User.objects.all(),
         many=True,
         required=False,
         default=[],

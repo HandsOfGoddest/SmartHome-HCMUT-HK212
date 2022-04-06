@@ -6,6 +6,7 @@ import sys
 from django.views.decorators.csrf import csrf_exempt
 from .models import *
 from .serializers import *
+
 from rest_framework.parsers import JSONParser
 from rest_framework.response import  Response
 from rest_framework.decorators import api_view
@@ -14,7 +15,6 @@ from rest_framework.decorators import APIView
 from rest_framework import generics
 from rest_framework import mixins
 from rest_framework import viewsets
-
 
 # Create your views here.
 
@@ -26,14 +26,18 @@ class UserViewSet(APIView):
         return JsonResponse(user_serializer.data, safe=False)
 
     def post(self, request):
-        try:
+        # try:
             serializer = UserSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
+                userID= User.objects.get(userID= serializer.data["userID"]).id
+                room_lst= serializer.data["room"]
+                for room in room_lst:
+                    Room.objects.get(Id= room).update(add_to_set__users= userID)
                 return Response(serializer.data, status.HTTP_201_CREATED)
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-        except:
-            return Response(status.HTTP_409_CONFLICT)
+        # except:
+        #     return Response(status.HTTP_409_CONFLICT)
 
 
 class UserDetailViewSet(APIView):
@@ -45,12 +49,12 @@ class UserDetailViewSet(APIView):
             return Response(status.HTTP_404_NOT_FOUND)
 
     def get(self, request, userID):
-        try:
+        # try:
             user= self.get_object(userID)
             user_serializer = UserSerializer(user)
             return Response(user_serializer.data)
-        except:
-            return Response(status.HTTP_404_NOT_FOUND)
+        # except:
+        #     return Response(status.HTTP_404_NOT_FOUND)
 
     def put(self, request, userID):
         try:
@@ -65,6 +69,9 @@ class UserDetailViewSet(APIView):
 
     def delete(self, request, userID):
         user = self.get_object(userID)
+        rooms = Room.objects(users=user.id)
+        for rom in rooms:
+            rom.update(pull__users=user.id)
         user.delete()
         return Response(status.HTTP_204_NO_CONTENT)
 
@@ -86,6 +93,7 @@ class SearchUserView(APIView):
 class RoomViewSet(APIView):
     def get(self, request):
         rooms = Room.objects.all()
+        print(rooms)
         rooms_serializer = RoomSerializer(rooms, many=True)
         return Response(rooms_serializer.data)
 
