@@ -11,7 +11,7 @@ async function getDatagram(dvId) {
     }
 }
 
-function Datagram({ dvId,dvType }) {
+function Datagram({ dvId,dvType,close }) {
     var dulieu = [];
     const [plotType, setPlotType] = useState("hour");
     const [data, setData] = useState([]);
@@ -37,13 +37,16 @@ function Datagram({ dvId,dvType }) {
     }
     console.log(dulieu)
     return (
-        <div>
-            <select onChange={(e)=>setPlotType(e.target.value)}>
+        <React.Fragment >
+            <div>
+            <select onChange={(e)=>setPlotType(e.target.value)} style={{alignSelf:'flex-end'}}>
                 <option value="hour" selected>Giờ</option>
                 <option value="date">Ngày</option>
                 <option value="month">Tháng</option>
                 <option value="year">Năm</option>
             </select>
+            <button onClick={()=>close()} style={{alignSelf:'flex-end'}}>Đóng</button>
+            </div>
             <div style={{textAlign:'center'}}>Biểu đồ {dvType}</div>
             <LineChart width={600} height={300} data={dulieu} style={{ fontSize: "15px" }} margin={{ top: 5, right: 10, bottom: 5, left: 0 }} >
                 <XAxis dataKey={plotType} />
@@ -52,7 +55,7 @@ function Datagram({ dvId,dvType }) {
                 <Line type="monotone" dataKey="data" stroke="#8884d8" />
                 <Tooltip />
             </LineChart>
-        </div>
+        </React.Fragment>
     )
 }
 export default Datagram;

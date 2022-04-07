@@ -221,8 +221,8 @@ function ManageIotDevice() {
                                         <li>
                                             <h2>Information</h2>
                                             <ul>
-                                                <li>Location</li>
-                                                <li>Status: Off</li>
+                                            
+                                                <li>Status: {deviceInfo.status ? "On": "Off"}</li>
                                             </ul>
                                         </li>
                                         <li>
@@ -239,7 +239,7 @@ function ManageIotDevice() {
                                                     {close => (
                                                         <div className='popup-overlay'>
                                                             <div className='xoa-tb'>
-                                                                <Datagram dvId = {deviceInfo.Id} dvType = {deviceInfo.type} />
+                                                                <Datagram close={close} dvId = {deviceInfo.Id} dvType = {deviceInfo.type} />
                                                             </div>
                                                         </div>
                                                     )}
