@@ -6,7 +6,7 @@ from iot.DevicesController import DeviceController
 
 AIO_FEED_IDs = ["DEN","GAS","DOOR"]
 AIO_USERNAME = "DOAN_IoT"
-AIO_KEY = "aio_myTU35shTySa7gYAFBVGhqJvq3fI"
+AIO_KEY = "aio_cSEX44cnmDwF90QprbMTKGDSrIy9"
 client = MQTTClient ( AIO_USERNAME , AIO_KEY )
 
 def connected ( client ) :
@@ -32,7 +32,7 @@ def getPort():
     for i in range(0, N):
         port= ports[i]
         strPort= str(port)
-        if "USB Serial Device" in strPort:
+        if "COM10" in strPort:
             splitPort= strPort.split(" ")
             comPorts= splitPort[0]
             print(comPorts)
@@ -54,7 +54,7 @@ def processData(data): ## kiểu dữ liệu được gửi đi: !ID:FIELD:VALUE
         if splitData[1] == "GAS":
             DeviceController(splitData[0], splitData[2], splitData[1])
             client.publish(AIO_FEED_IDs[1], splitData[2])
-        elif splitData[1] == "DEN":
+        elif splitData[1] == "LIGHT":
             DeviceController(splitData[0], splitData[2], splitData[1])
             client.publish(AIO_FEED_IDs[0], splitData[2])
         elif splitData[1] == "DOOR":

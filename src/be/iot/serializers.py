@@ -1,4 +1,4 @@
-import inn as inn
+# import inn as inn
 import required
 from rest_framework import serializers
 from rest_framework.response import  Response
@@ -78,10 +78,10 @@ class UserSerializer(serializers.Serializer):
         instance.dateOfBirth= validated_data.get('dateOfBirth', instance.dateOfBirth)
         instance.password= validated_data.get('password', instance.password)
         instance.homeTown= validated_data.get('_home_town', instance.homeTown)
-        roomIDs= validated_data.get('room', instance.room)
-        room= set(roomIDs) - set(instance.room)
-        if(room):
-            instance.room+= room
+        instance.room= validated_data.get('room', instance.room)
+        # room= set(roomIDs) - set(instance.room)
+        # if(room):
+        #     instance.room+= room
         # roomID= "NDHR0011"
         # if(roomIDs):
         #     roomID = roomIDs[0]
