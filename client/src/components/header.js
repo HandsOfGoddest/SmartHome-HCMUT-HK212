@@ -17,7 +17,7 @@ function Header() {
                         {
                             TotalUser.room.map((rm, index) => {
                                 return (
-                                    <option key={index} >{rm}</option>
+                                    <option key={index} value={rm}>Phòng {rm}</option>
                                 )
                             })
                         }

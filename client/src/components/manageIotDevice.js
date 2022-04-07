@@ -34,9 +34,9 @@ async function getRoomDevices(roomId) {
         console.error(error);
     }
 }
-async function getDevices() {
+async function updateDevices(id, data) {
     try {
-        const response = await axios.get('http://127.0.0.1:8000/devices/');
+        const response = await axios.put('http://127.0.0.1:8000/devices/'+id+'/', data);
         return response.data;
     } catch (error) {
         console.error(error);
@@ -66,6 +66,7 @@ function ManageIotDevice() {
             setRoomDevices(data)
         })
     }, [curRoom])
+
     const [devices, setDevices] = useState([])
     useEffect(() => {
         if (roomDevices.devices) {
@@ -73,11 +74,34 @@ function ManageIotDevice() {
             roomDevices.devices.map((dv, index) => {
                 getDeviceDetail(dv).then(data => {
                     setDevices(devices => [...devices, data])
+
                 })
             })
         }
     }, [roomDevices.devices])
     const [deviceInfo, setDeviceInfo] = useState([])
+    const [deviceStatus, setDeviceStatus] = useState(false)
+
+    function ChangeDeviceStatus(dvinfo){
+        updateDevices(dvinfo.Id,{
+            "Id": dvinfo.Id,
+            "name": dvinfo.name,
+            "data": dvinfo.data,
+            "status": dvinfo.status,
+            "enabled": dvinfo.enabled?false:true,
+            "type": dvinfo.type,
+            "_date_created": dvinfo._date_created,
+        }).then(data=>{
+            setDeviceInfo(data)
+        })
+        setDevices([])
+            roomDevices.devices.map((dv, index) => {
+                getDeviceDetail(dv).then(data => {
+                    setDevices(devices => [...devices, data])
+                })
+            })
+    }
+    
     if (roomDevices.devices) {
         if (devices.length === roomDevices.devices.length) {
             return (
@@ -85,14 +109,16 @@ function ManageIotDevice() {
                     <div className="manage-view">
                         <div className="header">
                             <div className='sophong logo-click'>
-                                <select onChange={(e) => setCurRoom(e.target.value)}>
+                                
+                                <select onChange={(e) => {setCurRoom(e.target.value)}} value={curRoom}>
                                     {
                                         TotalUser.room.map((rm, index) => {
                                             return (
-                                                <option key={index}>{rm}</option>
+                                                <option key={index} value={rm}>Phòng {rm}   </option>
                                             )
                                         })
                                     }
+                                    {/* <option selected></option> */}
                                 </select>
                                 {/* <img className="nav" src="../img/nav.png" alt="nav" />
                                 <span>Phòng </span>
@@ -109,7 +135,7 @@ function ManageIotDevice() {
                                 <img className="avt" src="../img/avt.jpg" alt="avtatar" />
                                 {/* <img className="nav" src="../img/nav.png" alt="nav" /> */}
                                 <select className='nav' onChange={(e) => setLogOut(e.target.value)}>
-                                    <option value="" selected></option>
+                                    <option value="" selected disabled></option>
                                     <option value="logout">Log Out</option>
                                 </select>
                             </div>
@@ -221,7 +247,7 @@ function ManageIotDevice() {
                                         <li>
                                             <h2>Information</h2>
                                             <ul>
-                                            
+                                                                                                                                                  
                                                 <li>Status: {deviceInfo.status ? "On": "Off"}</li>
                                             </ul>
                                         </li>
@@ -230,8 +256,8 @@ function ManageIotDevice() {
                                             {/* <img className='stt-icon' src='../img/stt-on.jpg' alt="stt-icon"/> */}
                                         </li>
                                     </ul>
-                                    <div className='stt-icon'>
-                                        <div className='icon-btn'>
+                                    <div className='stt-icon' onClick={()=>ChangeDeviceStatus(deviceInfo)} style={deviceInfo.enabled?{backgroundColor: "rgb(46, 235, 62)"}:{backgroundColor: "rgb(235, 74, 46)"} }>
+                                        <div className='icon-btn' style={deviceInfo.enabled?{left: "98px"}:{left: "2px"}}>
                                         </div>
                                     </div>
                                     

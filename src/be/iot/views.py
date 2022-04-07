@@ -175,7 +175,7 @@ class DevicesDetailViewSet(APIView):
     def put(self, request, Id):
         try:
             device = self.get_object(Id)
-            serializer = UserSerializer(device, data=request.data)
+            serializer = DevicesSerializer(device, data=request.data)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data)

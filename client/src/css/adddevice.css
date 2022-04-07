@@ -115,9 +115,9 @@ span{
     cursor: pointer;
     margin-top: 20px;
 }
-.stt-icon:active{
+/* .stt-icon:active{
     background-color: rgb(46, 235, 62);
-}
+} */
 
 .icon-btn{
     top: 2px;
@@ -129,9 +129,9 @@ span{
     left: 2px;
     transition: linear 0.2s;
 }
-.icon-btn:active{
+/* .icon-btn:active{
     left: 98px;
-}
+} */
 li{
     margin: 10px auto;
     font-size: 25px;

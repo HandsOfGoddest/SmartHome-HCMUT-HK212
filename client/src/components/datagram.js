@@ -38,7 +38,7 @@ function Datagram({ dvId,dvType,close }) {
     console.log(dulieu)
     return (
         <React.Fragment >
-            <div>
+            <div style={{width:"100%",display:"flex", justifyContent:"space-between"}}>
             <select onChange={(e)=>setPlotType(e.target.value)} style={{alignSelf:'flex-end'}}>
                 <option value="hour" selected>Giờ</option>
                 <option value="date">Ngày</option>

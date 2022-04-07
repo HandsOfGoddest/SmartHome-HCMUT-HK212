@@ -9,6 +9,15 @@
     justify-content: center;
     padding: 5px 5px;
 }
+.sophong span{
+    border: 0px;
+    font-size: 20px;
+    margin-top: -2px;
+}
+.sophong select{
+    border: 0px;
+    font-size: 20px;
+}
 .name{
     margin: 0;
     width: max-content;
@@ -28,4 +37,8 @@
 .logo-click{
     color: #000;
     text-decoration: none;
+}
+.nav {
+    font-size: 20px;
+    border: 0px;
 }

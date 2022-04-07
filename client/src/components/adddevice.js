@@ -3,7 +3,9 @@ import "../css/devices.css"
 import "../css/adddevice.css"
 import { Link } from 'react-router-dom';
 import Popup from 'reactjs-popup';
+import { useState } from 'react';
 function AddDevice() {
+    const [clickHander, setClickHander] = useState(false)
     return (
         <div className='add-device'>
             <Header/>
@@ -50,7 +52,12 @@ function AddDevice() {
                                 <h2>Information</h2>
                                 <ul>
                                     <li>Location</li>
-                                    <li>Status: Off</li>
+                                    <li>Status: 
+                                        <select name="addDvStt" id="addDvStt" style={{fontSize:"22px",border:"0px"}}>
+                                            <option value="1">On</option>
+                                            <option value="2">Off</option>
+                                        </select>
+                                    </li>
                                 </ul>
                             </li>
                             <li>
@@ -58,10 +65,10 @@ function AddDevice() {
                                 {/* <img className='stt-icon' src='../img/stt-on.jpg' alt="stt-icon"/> */}
                             </li>
                         </ul>
-                        <div className='stt-icon'>
-                            <div className='icon-btn'>
-                            </div>
-                        </div>
+                        <div className='stt-icon' onClick={()=>setClickHander(clickHander?false:true)} style={clickHander?{backgroundColor: "rgb(46, 235, 62)"}:{backgroundColor: "rgb(235, 74, 46)"} }>
+                                        <div className='icon-btn' style={clickHander?{left: "98px"}:{left: "2px"}}>
+                                        </div>
+                                    </div>
                         <div className='data-gram'>Datagram</div>
 
                     </div>
