@@ -86,8 +86,8 @@ function ManageIotDevice() {
             "Id": dvinfo.Id,
             "name": dvinfo.name,
             "data": dvinfo.data,
-            "status": dvinfo.status,
-            "enabled": dvinfo.enabled?false:true,
+            "status": dvinfo.status?false:true,
+            "enabled": dvinfo.enabled,
             "type": dvinfo.type,
             "_date_created": dvinfo._date_created,
         }
@@ -95,12 +95,6 @@ function ManageIotDevice() {
             setDeviceInfo(data)
         })
         devices.fill(dataToUpdate,devices.findIndex(dv=>dv.Id===dvinfo.Id),devices.findIndex(dv=>dv.Id===dvinfo.Id)+1)
-        // setDevices([])
-        //     roomDevices.devices.map((dv, index) => {
-        //         getDeviceDetail(dv).then(data => {
-        //             setDevices(devices => [...devices, data])
-        //         })
-        //     })
     }
     
     if (roomDevices.devices) {
@@ -164,7 +158,7 @@ function ManageIotDevice() {
                         </div>
                         <div className='manage-iot-device-content-center'>
                             {
-                                devices.map((dv, index) => {
+                                devices.filter(d=>d.enabled == true).map((dv, index) => {
                                     if (dv.type === "LIGHT") {
                                         return (
                                             <div className='device-info' onClick={()=>setDeviceInfo(dv)}>
@@ -257,8 +251,8 @@ function ManageIotDevice() {
                                             {/* <img className='stt-icon' src='../img/stt-on.jpg' alt="stt-icon"/> */}
                                         </li>
                                     </ul>
-                                    <div className='stt-icon' onClick={()=>ChangeDeviceStatus(deviceInfo)} style={deviceInfo.enabled?{backgroundColor: "rgb(46, 235, 62)"}:{backgroundColor: "rgb(235, 74, 46)"} }>
-                                        <div className='icon-btn' style={deviceInfo.enabled?{left: "98px"}:{left: "2px"}}>
+                                    <div className='stt-icon' onClick={()=>ChangeDeviceStatus(deviceInfo)} style={deviceInfo.status?{backgroundColor: "rgb(46, 235, 62)"}:{backgroundColor: "rgb(235, 74, 46)"} }>
+                                        <div className='icon-btn' style={deviceInfo.status?{left: "98px"}:{left: "2px"}}>
                                         </div>
                                     </div>
                                     
