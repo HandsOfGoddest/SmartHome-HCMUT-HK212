@@ -72,7 +72,7 @@ function LoginPage() {
                     </div>
                     <div className="button">
                         <Link className='btn' to="/"><button>Hủy bỏ</button></Link>
-                        <div className='btn' ><button onClick={()=>ConfirmLogin(result)}>Xác nhận</button></div>
+                        <div className='btn' ><button autoFocus onClick={()=>ConfirmLogin(result)}>Xác nhận</button></div>
                     </div>
                     <div className='text'>
                         <Link to="forgot-password">Quên mật khẩu</Link>

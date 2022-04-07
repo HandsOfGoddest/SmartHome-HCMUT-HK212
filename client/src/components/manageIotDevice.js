@@ -80,10 +80,9 @@ function ManageIotDevice() {
         }
     }, [roomDevices.devices])
     const [deviceInfo, setDeviceInfo] = useState([])
-    const [deviceStatus, setDeviceStatus] = useState(false)
 
     function ChangeDeviceStatus(dvinfo){
-        updateDevices(dvinfo.Id,{
+        const dataToUpdate={
             "Id": dvinfo.Id,
             "name": dvinfo.name,
             "data": dvinfo.data,
@@ -91,15 +90,17 @@ function ManageIotDevice() {
             "enabled": dvinfo.enabled?false:true,
             "type": dvinfo.type,
             "_date_created": dvinfo._date_created,
-        }).then(data=>{
+        }
+        updateDevices(dvinfo.Id,dataToUpdate).then(data=>{
             setDeviceInfo(data)
         })
-        setDevices([])
-            roomDevices.devices.map((dv, index) => {
-                getDeviceDetail(dv).then(data => {
-                    setDevices(devices => [...devices, data])
-                })
-            })
+        devices.fill(dataToUpdate,devices.findIndex(dv=>dv.Id===dvinfo.Id),devices.findIndex(dv=>dv.Id===dvinfo.Id)+1)
+        // setDevices([])
+        //     roomDevices.devices.map((dv, index) => {
+        //         getDeviceDetail(dv).then(data => {
+        //             setDevices(devices => [...devices, data])
+        //         })
+        //     })
     }
     
     if (roomDevices.devices) {
