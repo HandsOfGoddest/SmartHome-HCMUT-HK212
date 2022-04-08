@@ -31,9 +31,15 @@ async function searchUser(keyword) {
         }
         else {
             const response = await axios.get('http://127.0.0.1:8000/users/search/' + keyword + '/');
-            console.log(response.data)
             return response.data;
         }
+    } catch (error) {
+        console.error(error);
+    }
+}
+async function updateUser(id, data) {
+    try {
+        await axios.put('http://127.0.0.1:8000/users/' + id + '/', data);
     } catch (error) {
         console.error(error);
     }
@@ -52,10 +58,28 @@ var clickStyle = {
 var UnclickStyle = {
     margin: '0px'
 }
+//return  array without subArray
+
+function subArray(array, subArray) {
+    var newArray = [];
+    for (var i = 0; i < array.length; i++) {
+        var isSub = false;
+        for (var j = 0; j < subArray.length; j++) {
+            if (array[i].Id == subArray[j]) {
+                isSub = true;
+            }
+        }
+        if (!isSub) {
+            newArray.push(array[i]);
+        }
+    }
+    return newArray;
+}
 function ManageAccount() {
     const [user, setUser] = useState([]);
     const [room, setRoom] = useState([]);
-
+    const [updateRoom, setUpdateRoom] = useState([]);
+    const [editClickHander, setEditClickHander] = useState(false);
     const [addName, setAddName] = useState("");
     const [addPhone, setAddPhone] = useState("");
     const [addID, setAddID] = useState("");
@@ -76,18 +100,26 @@ function ManageAccount() {
             setRoom(data);
         });
     }, []);
-    const [userInfo, setUserInfo] = useState("00001");
+    const [userInfo, setUserInfo] = useState({dateOfBirth: "2001-01-15",
+    homeTown: "Ninh Bình",
+    isAdmin: false,
+    name: "Híu",
+    password: "HOGS",
+    phoneNumber: "08882111999",
+    room:[11, 3],
+    userID: "00001"});
+    console.log(userInfo);
     function searching(e) {
         var keyword = e.target.value;
         searchUser(keyword).then(data => {
             setUser(data);
             if (data.length != 0) {
-                setUserInfo(data[0].userID);
+                setUserInfo(data[0]);
             }
         });
     }
     async function addUser() {
-        if(addName !== "" && addPhone !== "" && addID !== "" && addDate !== "" && addPass !== "" && addHomeTown !== "" && addRoom !== ""){
+        if (addName !== "" && addPhone !== "" && addID !== "" && addDate !== "" && addPass !== "" && addHomeTown !== "" && addRoom !== "") {
             var userData = {
                 "name": addName,
                 "phoneNumber": addPhone,
@@ -95,86 +127,217 @@ function ManageAccount() {
                 "dateOfBirth": addDate,
                 "password": addPass,
                 "homeTown": addHomeTown,
-                "room": [addRoom],
+                "room": addRoom,
                 "isAdmin": addAdmin == 'no' ? false : true
             }
             await axios.post('http://127.0.0.1:8000/users/', userData);
             window.location.reload();
         }
-        else{
+        else {
             let addList = [addName, addPhone, addID, addDate, addPass, addHomeTown, addRoom];
             let addListstr = ['addName', 'addPhone', 'addID', 'addDate', 'addPass', 'addHomeTown', 'addRoom'];
-            for (let data in addList){
-                if(addList[data] == ""){
+            for (let data in addList) {
+                if (addList[data] == "") {
                     document.getElementById(addListstr[data]).click();
                 }
             }
             setTimeout(() => {
-                for (let data in addList){
-                    document.getElementsByClassName("close")[6-data].click();
+                for (let data in addList) {
+                    document.getElementsByClassName("close")[6 - data].click();
                 }
-            } , 3000);
+            }, 3000);
 
         }
     }
-    return (
-        <div className='manage-account'>
-            <Header />
-            <div className='manage-account-content'>
-                <div className='manage-account-content-left'>
-                    <div className='table-content'>
-                        <table cellSpacing='0px'>
-                            <thead>
-                                <tr>
-                                    <th>Họ và tên</th>
-                                    <th>Số điện thoại</th>
-                                    <th>CCCD/CMND</th>
-                                    <th>Tài khoản Admin</th>
-                                </tr>
+    function closeForm() {
+        setAddName("");
+        setAddPhone("");
+        setAddID("");
+        setAddDate("");
+        setAddPass("");
+        setAddHomeTown("");
+        setAddRoom("");
+        setAddAdmin("no");
+    }
+    function updateUserRoom(user) {
+        user.room.push(Number(updateRoom))
+        console.log(user.room)
+        var userData = {
+            "name": user.name,
+            "phoneNumber": user.phoneNumber, 
+            "userID": user.userID,
+             "dateOfBirth": user.dateOfBirth,
+              "password": user.password, 
+              "homeTown": user.homeTown, 
+              "room": user.room,
+              "isAdmin": user.isAdmin
+        }
+        setUserInfo(userData);
+        updateUser(user.userID,userData).then(data => {
+            console.log(data)
+        });
+    }
 
-                            </thead>
+return (
+    <div className='manage-account'>
+        <Header />
+        <div className='manage-account-content'>
+            <div className='manage-account-content-left'>
+                <div className='table-content'>
+                    <table cellSpacing='0px'>
+                        <thead>
+                            <tr>
+                                <th>Họ và tên</th>
+                                <th>Số điện thoại</th>
+                                <th>CCCD/CMND</th>
+                                <th>Tài khoản Admin</th>
+                            </tr>
 
-                            <tbody>
-                                {
-                                    user.length == 0 ? <tr><td colSpan='4'>Không có dữ liệu</td></tr> : user.map((item, index) => {
-                                        return (
-                                            <tr key={index} className="account" onClick={() => setUserInfo(item.userID)} style={item.userID == userInfo ? clickStyle : UnclickStyle}>
-                                                <td>{item.name}</td>
-                                                <td>{item.phoneNumber}</td>
-                                                <td>{item.userID}</td>
-                                                <td>{item.isAdmin == true ? "Admin" : "User"}</td>
-                                            </tr>
-                                        )
-                                    })
-                                }
-                            </tbody>
-                        </table>
-                    </div>
+                        </thead>
+
+                        <tbody>
+                            {
+                                user.length == 0 ? <tr><td colSpan='4'>Không có dữ liệu</td></tr> : user.map((us, index) => {
+                                    return (
+                                        <tr key={index} className="account" onClick={() => setUserInfo(us)} style={us.userID == userInfo.userID ? clickStyle : UnclickStyle}>
+                                            <td>{us.name}</td>
+                                            <td>{us.phoneNumber}</td>
+                                            <td>{us.userID}</td>
+                                            <td>{us.isAdmin == true ? "Admin" : "User"}</td>
+                                        </tr>
+                                    )
+                                })
+                            }
+                        </tbody>
+                    </table>
                 </div>
-                {
-                    user.filter(it => it.userID == userInfo).map((item, index) => {
-                        return (
-                            <div className='manage-account-content-right'>
+            </div>
+            {
+                // user.filter(it => it.userID == userInfo.userID).map((item, index) => {
+                //     console.log(user.filter(it => it.userID == userInfo.userID))
+                //     if (editClickHander) {
+                //         return (
+                    editClickHander?<div className='manage-account-content-right'>
                                 <div className='dv-info-table'>
                                     <div className='right-header-title'>
-                                        <h2 className='dv-name'>Account Detail</h2>
-                                        <img className='edit-mem' src='../img/edit.png' alt='edit' />
+                                        <h2 className='dv-name'>Edit Account</h2>
+                                        <img className='edit-mem' src='../img/edit.png' alt='edit' onClick={() => setEditClickHander(false)} />
                                     </div>
                                     <hr width="99%" align="center" color='black' />
                                     <div className='account-inf'>
                                         <span>Họ và tên: </span>
-                                        <span className='account-inf-value'>{item.name}</span>
+                                        <input className='account-inf-value' placeholder={userInfo.name} />
                                     </div>
                                     <div className='account-inf'>
                                         <span>SĐT:</span>
-                                        <span className='account-inf-value'>{item.phoneNumber}</span>
+                                        <input className='account-inf-value' placeholder={userInfo.phoneNumber} />
+                                    </div>
+                                    <div className='account-inf'>
+                                        <span>Số phòng:</span>
+
+                                        <Popup trigger={<div className="account-inf-value">{userInfo.room[0] ? "Phòng: " + userInfo.room[0] : "Chưa có phòng"}</div>} position="top center" nested>
+                                            {
+                                                close => (
+                                                    <div className="account-inf-value-border">
+                                                        <div className="account-inf-value-top">
+                                                            <h5>Danh sách  phòng hiện tại</h5>
+                                                            <hr width="99%" align="center" color='black' />
+                                                            <div className="room-inf-list">
+                                                                {userInfo.room.map((rm, index) => {
+                                                                    return (
+                                                                        <div key={index} className="account-inf-value-ind">
+                                                                            <span>Phòng {rm}</span>
+                                                                            <button>xóa</button>
+                                                                        </div>
+                                                                    )
+                                                                })}
+                                                            </div>
+                                                        </div>
+                                                        <div className="account-inf-value-bottom">
+                                                            <hr width="99%" align="center" color='black' />
+                                                            <h5>Thêm phòng</h5>
+                                                            <select  onChange={(e)=>{setUpdateRoom(e.target.value)}} className="account-inf-value-input">
+                                                                <option>Chọn phòng</option>
+                                                                {
+                                                                    subArray(room, userInfo.room).sort().map((rm, index) => {
+                                                                        return (
+                                                                            <option key={index}>{rm.Id}</option>
+                                                                        )
+                                                                    })
+                                                                }
+                                                            </select>
+                                                            <button onClick={()=>updateUserRoom(userInfo)}>Xác nhận</button>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            }
+                                        </Popup>
+
+                                    </div>
+                                    <div className='account-inf'>
+                                        <span>CMND/CCCD:</span>
+                                        <input className='account-inf-value' placeholder={userInfo.userID} />
+                                    </div>
+                                    <div className='account-inf'>
+                                        <span>Quê quán: </span>
+                                        <input className='account-inf-value' placeholder={userInfo.homeTown} />
+
+                                    </div>
+                                    <div className='account-inf'>
+                                        <span>Ngày sinh: </span>
+                                        <input className='account-inf-value' placeholder={userInfo.dateOfBirth} />
+
+                                    </div>
+                                    <div className='account-inf'>
+                                        <span>Mật khẩu: </span>
+                                        <input className='account-inf-value' placeholder={userInfo.password} />
+                                    </div>
+                                </div>
+                                <div className='trash-border'>
+                                    <div className="confirm_edit">
+                                        <button className="huybo">Hủy bỏ</button>
+                                        <button className="xacnhan">Xác nhận</button>
+                                    </div>
+                                    <Popup trigger={<img src='../img/trash.png' alt='trash-img' className='trash-img' />} position="top center" nested>
+                                        {close => (
+                                            <div className='popup-overlay'>
+                                                <div className='xoa-tb'>
+                                                    <h2 style={{ fontSize: '40px' }}>Xác nhận xóa tài khoản?</h2>
+                                                    <div className='cf-btn'>
+                                                        <button className='cancel' onClick={close}>No</button>
+                                                        <button onClick={() => delUser(userInfo.userID)} className='ok'>Yes</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </Popup>
+                                </div>
+                            </div>
+                    //     )
+                    // }
+                    // else {
+                    //     return (
+                            :<div className='manage-account-content-right'>
+                                <div className='dv-info-table'>
+                                    <div className='right-header-title'>
+                                        <h2 className='dv-name'>Account Detail</h2>
+                                        <img className='edit-mem' src='../img/edit.png' alt='edit' onClick={() => setEditClickHander(true)} />
+                                    </div>
+                                    <hr width="99%" align="center" color='black' />
+                                    <div className='account-inf'>
+                                        <span>Họ và tên: </span>
+                                        <span className='account-inf-value'>{userInfo.name}</span>
+                                    </div>
+                                    <div className='account-inf'>
+                                        <span>SĐT:</span>
+                                        <span className='account-inf-value'>{userInfo.phoneNumber}</span>
                                     </div>
                                     <div className='account-inf'>
                                         <span>Số phòng:</span>
                                         <select>
                                             <option>Chọn phòng</option>
                                             {
-                                                item.room.map((rm, index) => {
+                                                userInfo.room.map((rm, index) => {
                                                     return (
                                                         <option key={index}>{rm}</option>
                                                     )
@@ -184,19 +347,19 @@ function ManageAccount() {
                                     </div>
                                     <div className='account-inf'>
                                         <span>CMND/CCCD:</span>
-                                        <span className='account-inf-value'>{item.userID}</span>
+                                        <span className='account-inf-value'>{userInfo.userID}</span>
                                     </div>
                                     <div className='account-inf'>
                                         <span>Quê quán: </span>
-                                        <span className='account-inf-value'>{item.homeTown}</span>
+                                        <span className='account-inf-value'>{userInfo.homeTown}</span>
                                     </div>
                                     <div className='account-inf'>
                                         <span>Ngày sinh: </span>
-                                        <span className='account-inf-value'>{item.dateOfBirth}</span>
+                                        <span className='account-inf-value'>{userInfo.dateOfBirth}</span>
                                     </div>
                                     <div className='account-inf'>
                                         <span>Mật khẩu: </span>
-                                        <span className='account-inf-value'>{item.password}</span>
+                                        <span className='account-inf-value'>{userInfo.password}</span>
                                     </div>
                                 </div>
                                 <div className='trash-border'>
@@ -207,7 +370,7 @@ function ManageAccount() {
                                                     <h2 style={{ fontSize: '40px' }}>Xác nhận xóa tài khoản?</h2>
                                                     <div className='cf-btn'>
                                                         <button className='cancel' onClick={close}>No</button>
-                                                        <button onClick={() => delUser(item.userID)} className='ok'>Yes</button>
+                                                        <button onClick={() => delUser(userInfo.userID)} className='ok'>Yes</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -215,139 +378,144 @@ function ManageAccount() {
                                     </Popup>
                                 </div>
                             </div>
-                        )
-                    })
-                }
+            //             )
+            //         }
+            //     })
+            }
+        </div>
+        <div className='manage-account-footer'>
+            <div className='map-view-part'>
+                <Link to='manage-view' className="map-view logo-click">
+                    <img className="nav2" src="../img/nav.png" alt="nav" />
+                    <div className='nav-border'>
+                        <p>Manage Device</p>
+                    </div>
+                </Link>
             </div>
-            <div className='manage-account-footer'>
-                <div className='map-view-part'>
-                    <Link to='manage-view' className="map-view logo-click">
-                        <img className="nav2" src="../img/nav.png" alt="nav" />
-                        <div className='nav-border'>
-                            <p>Manage Device</p>
-                        </div>
-                    </Link>
-                </div>
-                <div className='manage-account-center-part'>
+            <div className='manage-account-center-part'>
 
-                    <Popup trigger={<img className="add-mem" src="../img/add.png" alt="add" />} position="top center" nested>
-                        {close => (
-                            <div className='manage-account-popup-overlay'>
-                                <div className='manage-account-add-content-right'>
-                                    <div className='dv-info-table'>
-                                        <div className='right-header-title'>
-                                            <h2 className='dv-name'>Add account</h2>
-                                        </div>
-                                        <hr width="99%" align="center" color='black' />
-                                        <div className='account-inf'>
-                                            <span className='popup-inf'>Họ và tên: </span>
-                                            <input type="text" onChange={e => setAddName(e.target.value)} />
-                                            <Popup trigger={<div id='addName' className='popup_trigger'></div>} position="right center" nested>
-                                                {close => (
-                                                    <div className='popup_border'><div className="close" onClick={close}></div><p>Vui lòng nhập họ và tên</p></div>
-                                                    
-                                                )}
-                                            </Popup>
-                                        </div>
-                                        <div className='account-inf'>
-                                            <span className='popup-inf'>SĐT:</span>
-                                            <input type="number" onChange={e => setAddPhone(e.target.value)} />
-                                            <Popup trigger={<div id='addPhone' className='popup_trigger'></div>} position="right center" nested>
-                                                {close => (
-                                                    <div className='popup_border'><div className="close" onClick={close}></div><p>Vui lòng nhập số điện thoại</p></div>
-                                                )}
-                                            </Popup>
-                                        </div>
-                                        <div className='account-inf'>
-                                            <span className='popup-inf'>Số phòng:</span>
-                                            <select onChange={e => setAddRoom(e.target.value)}>
-                                                <option selected value="">Chọn phòng</option>
-                                                {
-                                                    room.map((rm, index) => {
-                                                        return (
-                                                            <option key={index}>{rm.Id}</option>
-                                                        )
-                                                    })
-                                                }
-                                            </select>
-                                            <Popup trigger={<div id='addRoom' className='popup_trigger'></div>} position="right center" nested>
-                                                {close => (
-                                                    <div className='popup_border'><div className="close" onClick={close}></div><p>Vui lòng chọn số phòng</p></div>
-                                                )}
-                                            </Popup>
-                                        </div>
-                                        <div className='account-inf'>
-                                            <span className='popup-inf'>CMND/CCCD:</span>
-                                            <input type="text" onChange={e => setAddID(e.target.value)} />
-                                            <Popup trigger={<div id='addID' className='popup_trigger'></div>} position="right center" nested>
-                                                {close => (
-                                                    <div className='popup_border'><div className="close" onClick={close}></div><p>Vui lòng nhập CMND/CCCD</p></div>
-                                                )}
-                                            </Popup>
-                                        </div>
-                                        <div className='account-inf'>
-                                            <span className='popup-inf'>Quê quán: </span>
-                                            <input type="text" onChange={e => setAddHomeTown(e.target.value)} />
-                                            <Popup trigger={<div id='addHomeTown' className='popup_trigger'></div>} position="right center" nested>
-                                                {close => (
-                                                    <div className='popup_border'><div className="close" onClick={close}></div><p>Vui lòng nhập Quê Quán</p></div>
-                                                )}
-                                            </Popup>
-                                        </div>
-                                        <div className='account-inf'>
-                                            <span className='popup-inf'>Ngày sinh: </span>
-                                            <input type="date" onChange={e => setAddDate(e.target.value)} />
-                                            <Popup trigger={<div id='addDate' className='popup_trigger'></div>} position="right center" nested>
-                                                {close => (
-                                                    <div className='popup_border'><div className="close" onClick={close}></div><p>Vui lòng nhập ngày tháng năm sinh</p></div>
-                                                )}
-                                            </Popup>
-                                        </div>
-                                        <div className='account-inf'>
-                                            <span className='popup-inf'>Mật khẩu: </span>
-                                            <input type="text" onChange={e => setAddPass(e.target.value)} />
-                                            <Popup trigger={<div id='addPass' className='popup_trigger'></div>} position="right center" nested>
-                                                {close => (
-                                                    <div className='popup_border'><div className="close" onClick={close}></div><p>Vui lòng nhập mật khẩu</p></div>
-                                                )}
-                                            </Popup>
-                                        </div>
-                                        <div className='account-inf'>
-                                            <span className='popup-inf'>Quản trị viên: </span>
-                                            <div className='isAdmin'>
-                                                <div>
-                                                    <input type="radio" name="choice" id="b-opt" value="yes" onClick={e => setAddAdmin(e.target.value)} />
-                                                    <label htmlFor="b-opt" style={isAdminStyle}>Yes</label>
-                                                </div>
-                                                <div>
-                                                    <input type="radio" name="choice" id="a-opt" value="no" checked onClick={e => setAddAdmin(e.target.value)} />
-                                                    <label htmlFor="a-opt" style={isNotAdminStyle}>No</label>
-                                                </div>
+                <Popup trigger={<img className="add-mem" src="../img/add.png" alt="add" />} position="top center" nested>
+                    {close => (
+                        <div className='manage-account-popup-overlay'>
+                            <div className='manage-account-add-content-right'>
+                                <div className='dv-info-table'>
+                                    <div className='right-header-title'>
+                                        <h2 className='dv-name'>Add account</h2>
+                                    </div>
+                                    <hr width="99%" align="center" color='black' />
+                                    <div className='account-inf'>
+                                        <span className='popup-inf'>Họ và tên: </span>
+                                        <input type="text" onChange={e => setAddName(e.target.value)} />
+                                        <Popup trigger={<div id='addName' className='popup_trigger'></div>} position="right center" nested>
+                                            {close => (
+                                                <div className='popup_border'><div className="close" onClick={close}></div><p>Vui lòng nhập họ và tên</p></div>
+
+                                            )}
+                                        </Popup>
+                                    </div>
+                                    <div className='account-inf'>
+                                        <span className='popup-inf'>SĐT:</span>
+                                        <input type="number" onChange={e => setAddPhone(e.target.value)} />
+                                        <Popup trigger={<div id='addPhone' className='popup_trigger'></div>} position="right center" nested>
+                                            {close => (
+                                                <div className='popup_border'><div className="close" onClick={close}></div><p>Vui lòng nhập số điện thoại</p></div>
+                                            )}
+                                        </Popup>
+                                    </div>
+                                    <div className='account-inf'>
+                                        <span className='popup-inf'>Số phòng:</span>
+                                        <select id="addroom" onChange={e => setAddRoom([e.target.value])} disabled={addAdmin == 'no' ? false : true}>
+                                            <option selected value="">Chọn phòng</option>
+                                            {
+                                                room.map((rm, index) => {
+                                                    return (
+                                                        <option key={index}>{rm.Id}</option>
+                                                    )
+                                                })
+                                            }
+                                        </select>
+                                        <Popup trigger={<div id='addRoom' className='popup_trigger'></div>} position="right center" nested>
+                                            {close => (
+                                                <div className='popup_border'><div className="close" onClick={close}></div><p>Vui lòng chọn số phòng</p></div>
+                                            )}
+                                        </Popup>
+                                    </div>
+                                    <div className='account-inf'>
+                                        <span className='popup-inf'>CMND/CCCD:</span>
+                                        <input type="text" onChange={e => setAddID(e.target.value)} />
+                                        <Popup trigger={<div id='addID' className='popup_trigger'></div>} position="right center" nested>
+                                            {close => (
+                                                <div className='popup_border'><div className="close" onClick={close}></div><p>Vui lòng nhập CMND/CCCD</p></div>
+                                            )}
+                                        </Popup>
+                                    </div>
+                                    <div className='account-inf'>
+                                        <span className='popup-inf'>Quê quán: </span>
+                                        <input type="text" onChange={e => setAddHomeTown(e.target.value)} />
+                                        <Popup trigger={<div id='addHomeTown' className='popup_trigger'></div>} position="right center" nested>
+                                            {close => (
+                                                <div className='popup_border'><div className="close" onClick={close}></div><p>Vui lòng nhập Quê Quán</p></div>
+                                            )}
+                                        </Popup>
+                                    </div>
+                                    <div className='account-inf'>
+                                        <span className='popup-inf'>Ngày sinh: </span>
+                                        <input type="date" onChange={e => setAddDate(e.target.value)} />
+                                        <Popup trigger={<div id='addDate' className='popup_trigger'></div>} position="right center" nested>
+                                            {close => (
+                                                <div className='popup_border'><div className="close" onClick={close}></div><p>Vui lòng nhập ngày tháng năm sinh</p></div>
+                                            )}
+                                        </Popup>
+                                    </div>
+                                    <div className='account-inf'>
+                                        <span className='popup-inf'>Mật khẩu: </span>
+                                        <input type="text" onChange={e => setAddPass(e.target.value)} />
+                                        <Popup trigger={<div id='addPass' className='popup_trigger'></div>} position="right center" nested>
+                                            {close => (
+                                                <div className='popup_border'><div className="close" onClick={close}></div><p>Vui lòng nhập mật khẩu</p></div>
+                                            )}
+                                        </Popup>
+                                    </div>
+                                    <div className='account-inf'>
+                                        <span className='popup-inf'>Quản trị viên: </span>
+                                        <div className='isAdmin'>
+                                            <div>
+                                                <input type="radio" name="choice" id="b-opt" value="yes" onClick={e => { setAddAdmin(e.target.value); { setAddRoom(room.map(a => a.Id)) } }} />
+                                                <label htmlFor="b-opt" style={isAdminStyle}>Yes</label>
+                                            </div>
+                                            <div>
+                                                <input type="radio" name="choice" id="a-opt" value="no" checked onClick={e => { setAddAdmin(e.target.value); setAddRoom([document.getElementById("addroom").value]) }} />
+                                                <label htmlFor="a-opt" style={isNotAdminStyle}>No</label>
                                             </div>
                                         </div>
-                                        <div className='account-inf'>
-                                            <button onClick={close}>Hủy bỏ</button>
+                                    </div>
+                                    <div className='account-inf'>
+                                        <div className='btn_border' onClick={close}>
+                                            <button onClick={() => closeForm()}>Hủy bỏ</button>
+                                        </div>
+                                        <div className='btn_border'>
                                             <button onClick={() => addUser()}>Xác nhận</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        )}
-                    </Popup>
-                    <div className="search">
-                        <img src="../img/search.png" alt="search" />
-                        <input type="text" placeholder="Search" onChange={e => searching(e)} />
-                    </div>
-                </div>
-                <div className='map-view-part'>
-                    <Link to='manage-account' className="manage-account-header logo-click">
-                        <div className='nav-border'>
-                            <p>Manage Account</p>
                         </div>
-                    </Link>
+                    )}
+                </Popup>
+                <div className="search">
+                    <img src="../img/search.png" alt="search" />
+                    <input type="text" placeholder="Search" onChange={e => searching(e)} />
                 </div>
             </div>
+            <div className='map-view-part'>
+                <Link to='manage-account' className="manage-account-header logo-click">
+                    <div className='nav-border'>
+                        <p>Manage Account</p>
+                    </div>
+                </Link>
+            </div>
         </div>
-    )
+    </div>
+)
 }
 export default ManageAccount;

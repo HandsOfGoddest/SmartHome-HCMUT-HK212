@@ -153,6 +153,7 @@ th{
     border-radius: 10px;
     justify-self: flex-end;
     margin-right: 10px;
+    cursor: pointer;
 }
 .trash-border{
     width: 100%;
@@ -193,18 +194,63 @@ th{
     padding: 4px 8px;
     width: 60%;
 }
+.account-inf-value-border{
+    border: #000 solid 2px;
+    border-radius: 10px;
+    font-size: 22px;
+    padding: 4px 8px;
+    width: 95%;
+    background-color: #fff;
+    height: 250px;
+}
+.account-inf-value-top h5{
+    font-size: 15px;
+    margin: 4px 5px;
+}
+.account-inf-value-bottom h5{
+    font-size: 18px;
+    margin: 0px 5px;
+}
+.account-inf-value-bottom button{
+    margin-left: 5px;
+}
+.account-inf-value-input{
+    width: 60%;
+    font-size: 15px;
+    padding: 4px 2px;
+}
+.room-inf-list{
+    height: 160px;
+    overflow-y: auto;
+
+}
+.account-inf-value-ind{
+    font-size: 15px;
+    border: 1px solid #adadad;
+    font-weight: 600;
+    padding: 2px 2px;
+    margin: 3px 10px;
+    display: flex;
+    justify-content: space-between;
+}
 .account-inf input{
     border-radius: 10px;
     font-size: 22px;
     padding: 4px 8px;
     width: 60%;
 }
-.account-inf button{
+.account-inf .btn_border{
     margin-top: 10px;
+    margin-bottom: 10px;
+
+    width: 40%;
+}
+.btn_border button{
+    padding: 4px 8px;
     border-radius: 10px;
     font-size: 22px;
-    padding: 4px 8px;
-    width: 40%;
+    width: 100%;
+
 }
 
 
@@ -331,4 +377,18 @@ th{
 }
 .close{
     display: none;
+}
+.confirm_edit{
+    width: 80%;
+    height: 50px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+
+}
+.confirm_edit button{
+    height: 35px;
+    width: 100px;
+    font-size: 15px;
+    cursor: pointer;
 }
