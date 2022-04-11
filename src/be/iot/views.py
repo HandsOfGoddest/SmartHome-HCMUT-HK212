@@ -178,6 +178,16 @@ class DevicesDetailViewSet(APIView):
             serializer = DevicesSerializer(device, data=request.data)
             if serializer.is_valid():
                 serializer.save()
+                if serializer.data["enabled"] == False:
+                    print("ÝE")
+                    rooms= Room.objects.all()
+                    # print(rooms)
+                    for room in rooms:
+                        print(room.devices)
+                        try:
+                            room.update(pull__devices=device.id)
+                        except:
+                            print("xóa cc")
                 return Response(serializer.data)
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
         except:
