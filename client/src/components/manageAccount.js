@@ -76,9 +76,30 @@ function subArray(array, subArray) {
     return newArray;
 }
 function ManageAccount() {
+    const [userInfo, setUserInfo] = useState({dateOfBirth: "2001-01-15",
+    homeTown: "Ninh Bình",
+    isAdmin: false,
+    name: "Híu",
+    password: "HOGS",
+    phoneNumber: "08882111999",
+    room:[11, 3],
+    userID: "00001"});
+
+
     const [user, setUser] = useState([]);
     const [room, setRoom] = useState([]);
     const [updateRoom, setUpdateRoom] = useState([]);
+
+    const [editName, setEditName] = useState(userInfo.name);
+    const [editPhone,setEditPhone] = useState(userInfo.phoneNumber);
+    const [editRoom, setEditRoom] = useState(userInfo.room);
+    const [editId, setEditId] = useState(userInfo.userID);
+    const [editHomeTown, setEditHomeTown] = useState(userInfo.homeTown);
+    const [editDate, setEditDate] = useState(userInfo.dateOfBirth);
+    const [editPassword, setEditPassword] = useState(userInfo.password);
+    const [editAdmin, setEditAdmin] = useState(userInfo.isAdmin);
+
+
     const [editClickHander, setEditClickHander] = useState(false);
     const [addName, setAddName] = useState("");
     const [addPhone, setAddPhone] = useState("");
@@ -100,15 +121,7 @@ function ManageAccount() {
             setRoom(data);
         });
     }, []);
-    const [userInfo, setUserInfo] = useState({dateOfBirth: "2001-01-15",
-    homeTown: "Ninh Bình",
-    isAdmin: false,
-    name: "Híu",
-    password: "HOGS",
-    phoneNumber: "08882111999",
-    room:[11, 3],
-    userID: "00001"});
-    console.log(userInfo);
+    
     function searching(e) {
         var keyword = e.target.value;
         searchUser(keyword).then(data => {
@@ -159,21 +172,62 @@ function ManageAccount() {
         setAddRoom("");
         setAddAdmin("no");
     }
-    function updateUserRoom(user) {
-        user.room.push(Number(updateRoom))
-        console.log(user.room)
-        var userData = {
-            "name": user.name,
-            "phoneNumber": user.phoneNumber, 
-            "userID": user.userID,
-             "dateOfBirth": user.dateOfBirth,
-              "password": user.password, 
-              "homeTown": user.homeTown, 
-              "room": user.room,
+    function addUserToUserInfo(user){
+        setUserInfo(user)
+        setEditName(user.name)
+        setEditPhone(user.phoneNumber)
+        setEditRoom(user.room)
+        setEditId(user.userID)
+        setEditHomeTown(user.homeTown)
+        setEditDate(user.dateOfBirth)
+        setEditPassword(user.password)
+        setEditAdmin(user.isAdmin)
+
+
+    }
+    function deleteUserRoom(room){
+        let r = userInfo.room.filter(data => data != room)
+        var userDataToDelRoom = {
+            "name": editName,
+            "phoneNumber": editPhone, 
+            "userID": editId,
+             "dateOfBirth": editDate,
+              "password": editPassword, 
+              "homeTown": editHomeTown, 
+              "room": r,
               "isAdmin": user.isAdmin
         }
-        setUserInfo(userData);
-        updateUser(user.userID,userData).then(data => {
+        setUserInfo(userDataToDelRoom);
+        setEditRoom(r);
+    }
+    function updateUserRoom(room) {
+        userInfo.room.push(Number(room))
+        var userDataToUpdateRoom = {
+            "name": editName,
+            "phoneNumber": editPhone, 
+            "userID": editId,
+             "dateOfBirth": editDate,
+              "password": editPassword, 
+              "homeTown": editHomeTown, 
+              "room": editRoom,
+              "isAdmin": userInfo.isAdmin
+        }
+        setUserInfo(userDataToUpdateRoom);
+
+    }
+    function UserToUpdate() {
+        var userDataToUpdateRoom = {
+            "name": editName,
+            "phoneNumber": editPhone, 
+            "userID": editId,
+            "dateOfBirth": editDate,
+            "password": editPassword, 
+            "homeTown": editHomeTown, 
+            "room": editRoom,
+            "isAdmin": editAdmin
+        }
+        console.log(userDataToUpdateRoom)
+            updateUser(userDataToUpdateRoom.userID,userDataToUpdateRoom).then(data => {
             console.log(data)
         });
     }
@@ -199,7 +253,7 @@ return (
                             {
                                 user.length == 0 ? <tr><td colSpan='4'>Không có dữ liệu</td></tr> : user.map((us, index) => {
                                     return (
-                                        <tr key={index} className="account" onClick={() => setUserInfo(us)} style={us.userID == userInfo.userID ? clickStyle : UnclickStyle}>
+                                        <tr key={index} className="account" onClick={() => addUserToUserInfo(us)} style={us.userID == userInfo.userID ? clickStyle : UnclickStyle}>
                                             <td>{us.name}</td>
                                             <td>{us.phoneNumber}</td>
                                             <td>{us.userID}</td>
@@ -226,11 +280,11 @@ return (
                                     <hr width="99%" align="center" color='black' />
                                     <div className='account-inf'>
                                         <span>Họ và tên: </span>
-                                        <input className='account-inf-value' placeholder={userInfo.name} />
+                                        <input className='account-inf-value' placeholder={userInfo.name} onChange={(e)=>setEditName(e.target.value)} />
                                     </div>
                                     <div className='account-inf'>
                                         <span>SĐT:</span>
-                                        <input className='account-inf-value' placeholder={userInfo.phoneNumber} />
+                                        <input className='account-inf-value' placeholder={userInfo.phoneNumber}  onChange={(e)=>setEditPhone(e.target.value)} />
                                     </div>
                                     <div className='account-inf'>
                                         <span>Số phòng:</span>
@@ -247,7 +301,7 @@ return (
                                                                     return (
                                                                         <div key={index} className="account-inf-value-ind">
                                                                             <span>Phòng {rm}</span>
-                                                                            <button>xóa</button>
+                                                                            <button onClick={()=>deleteUserRoom(rm)}>xóa</button>
                                                                         </div>
                                                                     )
                                                                 })}
@@ -256,7 +310,7 @@ return (
                                                         <div className="account-inf-value-bottom">
                                                             <hr width="99%" align="center" color='black' />
                                                             <h5>Thêm phòng</h5>
-                                                            <select  onChange={(e)=>{setUpdateRoom(e.target.value)}} className="account-inf-value-input">
+                                                            <select  onChange={(e)=>{updateUserRoom(e.target.value)}} className="account-inf-value-input">
                                                                 <option>Chọn phòng</option>
                                                                 {
                                                                     subArray(room, userInfo.room).sort().map((rm, index) => {
@@ -266,7 +320,7 @@ return (
                                                                     })
                                                                 }
                                                             </select>
-                                                            <button onClick={()=>updateUserRoom(userInfo)}>Xác nhận</button>
+                                                            <button onClick={close} >Xác nhận</button>
                                                         </div>
                                                     </div>
                                                 )
@@ -276,27 +330,27 @@ return (
                                     </div>
                                     <div className='account-inf'>
                                         <span>CMND/CCCD:</span>
-                                        <input className='account-inf-value' placeholder={userInfo.userID} />
+                                        <input className='account-inf-value' placeholder={userInfo.userID}  onChange={(e)=>setEditId(e.target.value)} />
                                     </div>
                                     <div className='account-inf'>
                                         <span>Quê quán: </span>
-                                        <input className='account-inf-value' placeholder={userInfo.homeTown} />
+                                        <input className='account-inf-value' placeholder={userInfo.homeTown}  onChange={(e)=>setEditHomeTown(e.target.value)} />
 
                                     </div>
                                     <div className='account-inf'>
                                         <span>Ngày sinh: </span>
-                                        <input className='account-inf-value' placeholder={userInfo.dateOfBirth} />
+                                        <input className='account-inf-value' placeholder={userInfo.dateOfBirth} type="date"  onChange={(e)=>setEditDate(e.target.value)} />
 
                                     </div>
                                     <div className='account-inf'>
                                         <span>Mật khẩu: </span>
-                                        <input className='account-inf-value' placeholder={userInfo.password} />
+                                        <input className='account-inf-value' placeholder={userInfo.password}  onChange={(e)=>setEditPassword(e.target.value)} />
                                     </div>
                                 </div>
                                 <div className='trash-border'>
                                     <div className="confirm_edit">
                                         <button className="huybo">Hủy bỏ</button>
-                                        <button className="xacnhan">Xác nhận</button>
+                                        <button className="xacnhan"onClick={()=>UserToUpdate()}>Xác nhận</button>
                                     </div>
                                     <Popup trigger={<img src='../img/trash.png' alt='trash-img' className='trash-img' />} position="top center" nested>
                                         {close => (

@@ -96,6 +96,21 @@ function ManageIotDevice() {
         })
         devices.fill(dataToUpdate,devices.findIndex(dv=>dv.Id===dvinfo.Id),devices.findIndex(dv=>dv.Id===dvinfo.Id)+1)
     }
+    function deleteDevice(dvinfo){
+        const dataToUpdate={
+            "Id": dvinfo.Id,
+            "name": dvinfo.name,
+            "data": dvinfo.data,
+            "status": dvinfo.status,
+            "enabled": dvinfo.enabled?false:true,
+            "type": dvinfo.type,
+            "_date_created": dvinfo._date_created,
+        }
+        updateDevices(dvinfo.Id,dataToUpdate).then(data=>{
+            setDeviceInfo(data)
+        })
+        devices.fill(dataToUpdate,devices.findIndex(dv=>dv.Id===dvinfo.Id),devices.findIndex(dv=>dv.Id===dvinfo.Id)+1)
+    }
     
     if (roomDevices.devices) {
         if (devices.length === roomDevices.devices.length) {
@@ -169,7 +184,7 @@ function ManageIotDevice() {
                                                                 <h2>Xóa thiết bị này?</h2>
                                                                 <div className='cf-btn'>
                                                                     <button className='cancel' onClick={close}>No</button>
-                                                                    <button className='ok'>Yes</button>
+                                                                    <button onClick={()=>deleteDevice(deviceInfo)}  className='ok'>Yes</button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -190,7 +205,7 @@ function ManageIotDevice() {
                                                                 <h2>Xóa thiết bị này?</h2>
                                                                 <div className='cf-btn'>
                                                                     <button className='cancel' onClick={close}>No</button>
-                                                                    <button className='ok'>Yes</button>
+                                                                    <button onClick={()=>deleteDevice(deviceInfo)}  className='ok'>Yes</button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -211,7 +226,7 @@ function ManageIotDevice() {
                                                                 <h2>Xóa thiết bị này?</h2>
                                                                 <div className='cf-btn'>
                                                                     <button className='cancel' onClick={close}>No</button>
-                                                                    <button className='ok'>Yes</button>
+                                                                    <button onClick={()=>deleteDevice(deviceInfo)} className='ok'>Yes</button>
                                                                 </div>
                                                             </div>
                                                         </div>

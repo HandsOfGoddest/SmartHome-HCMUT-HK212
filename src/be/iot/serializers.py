@@ -77,7 +77,7 @@ class UserSerializer(serializers.Serializer):
         instance.userID= validated_data.get('userID', instance.userID)
         instance.dateOfBirth= validated_data.get('dateOfBirth', instance.dateOfBirth)
         instance.password= validated_data.get('password', instance.password)
-        instance.homeTown= validated_data.get('_home_town', instance.homeTown)
+        instance.homeTown= validated_data.get('homeTown', instance.homeTown)
         instance.room= validated_data.get('room', instance.room)
         # room= set(roomIDs) - set(instance.room)
         # if(room):
