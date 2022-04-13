@@ -11,15 +11,7 @@ function Footer({isAdmin}) {
                 <div className='center-part'>
     
                 </div>
-                <Link to='map-view' className='map-view-part logo-click'>
-                    <div className="map-view">
-                        
-                        <div className='nav-border'>
-                        <p>Map view</p>
-                        </div>
-                        <img className="nav1" src="../img/nav.png" alt="nav" />
-                    </div>
-                </Link>
+               
             </div>
         )
     }

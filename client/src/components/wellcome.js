@@ -31,7 +31,7 @@ function WellcomePage() {
                 <h1>Xin chào </h1><h1>{TotalUser.name}</h1>
                 </div>
                 <div className="btn">
-                    <Link to="/map-view"><button className='view-btn'>Map view</button></Link>
+                    
                     <Link to="/manage-view"><button className='view-btn'>Manage view</button></Link>
                 </div>
             </div>
