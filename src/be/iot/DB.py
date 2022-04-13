@@ -6,9 +6,7 @@ class IDataBase(metaclass= ABCMeta):
     def get_data(): pass
         
 class DBSingleton(IDataBase):
-    
     __instance= None
-    
     @staticmethod
     def get_instance():
         if DBSingleton.__instance is None:
@@ -25,9 +23,9 @@ class DBSingleton(IDataBase):
     def connectDB(self):
         connect(host= DBSingleton.__instance.host)
         
+    def closeDB(self):
+        disconnect(DBSingleton.__instance.host)
+        
     @staticmethod
     def get_data():
         print(DBSingleton.__instance.host)
-    
-    
-    

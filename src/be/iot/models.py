@@ -8,11 +8,8 @@ import binascii
 import os
 from django.conf import settings
 from django.utils.timezone import now
-from .DB import DBSingleton
+# from .DB import DBSingleton
 
-# connect(host= "mongodb+srv://Akatsuki:akatsuki@cluster0.afgoj.mongodb.net/IOT_project?retryWrites=true&w=majority")
-db= DBSingleton.get_instance()
-db.connectDB()
 
 class Devices(Document):
     Id= StringField(required=True, unique=True)

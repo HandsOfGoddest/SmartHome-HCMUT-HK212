@@ -2,22 +2,25 @@ from django.contrib.admin.utils import lookup_field
 from django.db.migrations import serializer
 from django.shortcuts import render, HttpResponse, get_object_or_404
 from django.http import JsonResponse
-import sys
+# import sys
 from django.views.decorators.csrf import csrf_exempt
 from .models import *
 from .serializers import *
+from .DB import DBSingleton
 
-from rest_framework.parsers import JSONParser
+# from rest_framework.parsers import JSONParser
 from rest_framework.response import  Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.decorators import APIView
-from rest_framework import generics
-from rest_framework import mixins
-from rest_framework import viewsets
+# from rest_framework import generics
+# from rest_framework import mixins
+# from rest_framework import viewsets
 
+
+db= DBSingleton.get_instance()
+db.connectDB()
 # Create your views here.
-
 class UserViewSet(APIView):
 
     def get(self, request):
@@ -26,7 +29,7 @@ class UserViewSet(APIView):
         return JsonResponse(user_serializer.data, safe=False)
 
     def post(self, request):
-        # try:
+        try:
             serializer = UserSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
@@ -34,27 +37,32 @@ class UserViewSet(APIView):
                 room_lst= serializer.data["room"]
                 for room in room_lst:
                     Room.objects.get(Id= room).update(add_to_set__users= userID)
+    
                 return Response(serializer.data, status.HTTP_201_CREATED)
+
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-        # except:
-        #     return Response(status.HTTP_409_CONFLICT)
+        except:
+            return Response(status.HTTP_409_CONFLICT)
 
 
 class UserDetailViewSet(APIView):
 
     def get_object(self, userID):
         try:
-            return User.objects.get(userID=userID)
+            users= User.objects.get(userID=userID)
+
+            return users
         except User.DoesNotExist:
             return Response(status.HTTP_404_NOT_FOUND)
 
     def get(self, request, userID):
-        # try:
+        try:
             user= self.get_object(userID)
             user_serializer = UserSerializer(user)
+
             return Response(user_serializer.data)
-        # except:
-        #     return Response(status.HTTP_404_NOT_FOUND)
+        except:
+            return Response(status.HTTP_404_NOT_FOUND)
 
     def put(self, request, userID):
         try:
@@ -62,7 +70,9 @@ class UserDetailViewSet(APIView):
             serializer = UserSerializer(user, data=request.data)
             if serializer.is_valid():
                 serializer.save()
+    
                 return Response(serializer.data)
+
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
         except:
             return Response(serializer.errors, status.HTTP_403_FORBIDDEN)
@@ -78,7 +88,9 @@ class UserDetailViewSet(APIView):
 class SearchUserView(APIView):
     def get_object(self, userName):
         try:
-            return User.objects(name__icontains = userName)
+            users= User.objects(name__icontains = userName)
+
+            return users
         except User.DoesNotExist:
             return Response(status.HTTP_404_NOT_FOUND)
 
@@ -86,6 +98,7 @@ class SearchUserView(APIView):
         try:
             users= self.get_object(userName)
             user_serializer = UserSerializer(users, many=True)
+
             return Response(user_serializer.data)
         except:
             return Response(status.HTTP_404_NOT_FOUND)
@@ -93,24 +106,27 @@ class SearchUserView(APIView):
 class RoomViewSet(APIView):
     def get(self, request):
         rooms = Room.objects.all()
-        print(rooms)
         rooms_serializer = RoomSerializer(rooms, many=True)
         return Response(rooms_serializer.data)
 
     def post(self, request):
-        # try:
+        try:
             serializer = RoomSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
+    
                 return Response(serializer.data, status.HTTP_201_CREATED)
+
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-        # except:
-        #     return Response(status.HTTP_409_CONFLICT)
+        except:
+            return Response(status.HTTP_409_CONFLICT)
 
 class RoomDetailViewSet(APIView):
     def get_object(self, Id):
         try:
-            return Room.objects.get(Id=Id)
+            room= Room.objects.get(Id=Id)
+
+            return room
         except Room.DoesNotExist:
             return Response(status.HTTP_404_NOT_FOUND)
 
@@ -118,28 +134,29 @@ class RoomDetailViewSet(APIView):
         try:
             room= self.get_object(Id)
             room_serializer = RoomSerializer(room)
+
             return Response(room_serializer.data)
         except:
             return Response(status.HTTP_404_NOT_FOUND)
 
     def put(self, request, Id):
-        # try:
+        try:
             room = self.get_object(Id)
             serializer = RoomSerializer(room, data=request.data)
             if serializer.is_valid():
                 serializer.save()
+    
                 return Response(serializer.data)
+
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-        # except:
-        #     return Response(serializer.errors, status.HTTP_403_FORBIDDEN)
+        except:
+            return Response(serializer.errors, status.HTTP_403_FORBIDDEN)
 
 
     def delete(self, request, Id):
         room = self.get_object(Id)
         room.delete()
         return Response(status.HTTP_204_NO_CONTENT)
-
-
 
 class DevicesViewSet(APIView):
     def get(self, request):
@@ -152,7 +169,9 @@ class DevicesViewSet(APIView):
             serializer = DevicesSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
+    
                 return Response(serializer.data, status.HTTP_201_CREATED)
+
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
         except:
             return Response(status.HTTP_409_CONFLICT)
@@ -160,7 +179,9 @@ class DevicesViewSet(APIView):
 class DevicesDetailViewSet(APIView):
     def get_object(self, Id):
         try:
-            return Devices.objects.get(Id=Id)
+            devices= Devices.objects.get(Id=Id)
+
+            return devices
         except Devices.DoesNotExist:
             return Response(status.HTTP_404_NOT_FOUND)
 
@@ -168,6 +189,7 @@ class DevicesDetailViewSet(APIView):
         try:
             device= self.get_object(Id)
             device_serializer = DevicesSerializer(device)
+
             return Response(device_serializer.data)
         except:
             return Response(status.HTTP_404_NOT_FOUND)
@@ -179,16 +201,16 @@ class DevicesDetailViewSet(APIView):
             if serializer.is_valid():
                 serializer.save()
                 if serializer.data["enabled"] == False:
-                    print("ÝE")
                     rooms= Room.objects.all()
-                    # print(rooms)
                     for room in rooms:
                         print(room.devices)
                         try:
                             room.update(pull__devices=device.id)
                         except:
                             print("xóa cc")
+    
                 return Response(serializer.data)
+
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
         except:
             return Response(serializer.errors, status.HTTP_403_FORBIDDEN)
@@ -198,8 +220,6 @@ class DevicesDetailViewSet(APIView):
         device = self.get_object(Id)
         device.delete()
         return Response(status.HTTP_204_NO_CONTENT)
-
-
 
 class RecordsViewSet(APIView):
     def get(self, request):
@@ -212,7 +232,9 @@ class RecordsViewSet(APIView):
             serializer = RecordsSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
+    
                 return Response(serializer.data, status.HTTP_201_CREATED)
+
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
         except:
             return Response(status.HTTP_409_CONFLICT)
@@ -222,7 +244,9 @@ class RecordsDetailViewSet(APIView):
         try:
             device= Devices.objects.get(Id=Id)
             device_id= device.id
-            return Records.objects(Id=device_id)
+            device= Records.objects(Id=device_id)
+
+            return device
         except Records.DoesNotExist:
             return Response(status.HTTP_404_NOT_FOUND)
 
@@ -230,10 +254,10 @@ class RecordsDetailViewSet(APIView):
         try:
             records = self.get_objects(Id)
             records_serializer = RecordsSerializer(records, many=True)
+
             return Response(records_serializer.data)
         except:
             return Response(status.HTTP_404_NOT_FOUND)
-
 
 # class DevicesViewSet(viewsets.ModelViewSet):
 #     queryset = Devices.objects.all()
