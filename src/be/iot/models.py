@@ -8,8 +8,11 @@ import binascii
 import os
 from django.conf import settings
 from django.utils.timezone import now
+from .DB import DBSingleton
 
-connect(host= "mongodb+srv://Akatsuki:akatsuki@cluster0.afgoj.mongodb.net/IOT_project?retryWrites=true&w=majority")
+# connect(host= "mongodb+srv://Akatsuki:akatsuki@cluster0.afgoj.mongodb.net/IOT_project?retryWrites=true&w=majority")
+db= DBSingleton.get_instance()
+db.connectDB()
 
 class Devices(Document):
     Id= StringField(required=True, unique=True)
@@ -37,8 +40,8 @@ class Devices(Document):
         "ordering": ["_date_created"],
     }
 
-    # def __str__(self):
-    #     return self.Id + ":" + self.name
+    def __str__(self):
+        return self.Id + ":" + self.name
 
 class Records(Document):
     data= FloatField()

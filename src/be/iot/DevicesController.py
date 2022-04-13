@@ -1,5 +1,5 @@
 from .models import Devices, Records
-import requests
+# import requests
 import datetime
 
 def query_devices(Id):
