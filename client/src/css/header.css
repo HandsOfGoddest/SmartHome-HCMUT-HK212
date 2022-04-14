@@ -37,7 +37,10 @@
     color: #000;
     text-decoration: none;
 }
-.nav {
+.nav{
     font-size: 20px;
     border: 0px;
+    padding: 2px 10px;
+}
+.nav option{
 }

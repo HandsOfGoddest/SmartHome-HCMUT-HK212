@@ -4,8 +4,33 @@ import "../css/adddevice.css"
 import { Link } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import { useState } from 'react';
+import axios from 'axios';
+
+async function addDevice(device){
+    const res = await axios.post('http://localhost:8000/devices/', device);
+    console.log(res);
+}
 function AddDevice() {
     const [clickHander, setClickHander] = useState(false)
+    const [addId, setAddId] = useState('')
+    const [addName, setAddName] = useState('')
+    const [addType, setAddType] = useState('GAS')
+    function confirmAddDevice(){
+        const data ={
+            "Id": addId,
+            "name": addName,
+            "data": 0.0,
+            "status": clickHander,
+            "enabled": true,
+            "type": addType,
+        }
+        addDevice(data).then(e=>
+            {
+                alert("Thêm thiết bị thành công")
+                window.location.replace("manage-view")
+            }
+        )
+    }
     return (
         <div className='add-device'>
             <Header/>
@@ -14,32 +39,25 @@ function AddDevice() {
                     <div className='content-top'>
                         <div className='add-device-title'><p>Add device</p></div>
                         <div className='add-device-names'>
-                            <div className='add-device-icon'>
-                                <Popup trigger={<img src='../img/add.png' alt='img'/>} position="right top" nested>
-                                {close => (
-                                    <div className='icon-overlay'>
-                                        <img className='icon' src='../img/condition.png'  alt='icon'/>
-                                        <img className='icon' src='../img/door.png'  alt='icon'/>
-                                        <img className='icon' src='../img/fire.png'  alt='icon'/>
-                                        <img className='icon' src='../img/lamp.png'  alt='icon'/>
-                                        <img className='icon' src='../img/light.png'  alt='icon'/>
-                                        <img className='icon' src='../img/microwave.png'  alt='icon'/>
-                                        <img className='icon' src='../img/exit.png'  alt='icon'/>
-                                        <img className='icon' src='../img/close.png'  alt='icon'/>
-                                        <img className='icon' src='../img/webcam.png'  alt='icon'/>
-                                    </div>
-                                )}
-                            </Popup>
-                                <p> add icon </p>
-                            </div>
                             <div className='add-device-name'>
                                 <p>Device name</p>
-                                <input type='text'/>
+                                <input type='text' onChange={(e)=>setAddName(e.target.value)}/>
                             </div>
                         </div>
                     </div>
                     <div className='content-bottom'>
-
+                            <div className="device-id">
+                                <p>Device ID</p>
+                                <input type='text' onChange={(e)=>setAddId(e.target.value)}/>
+                            </div>
+                            <div className="device-type">
+                                <p>Device type</p>
+                                <select name="device-type" id="device-type" onChange={(e)=>setAddType(e.target.value)}>
+                                    <option value="GAS" selected>GAS</option>
+                                    <option value="LIGHT">LIGHT</option>
+                                    <option value="DOOR">DOOR</option>
+                                </select>
+                            </div>
                     </div>
 
                 </div>
@@ -53,10 +71,7 @@ function AddDevice() {
                                 <ul>
                                     <li>Location</li>
                                     <li>Status: 
-                                        <select name="addDvStt" id="addDvStt" style={{fontSize:"22px",border:"0px"}}>
-                                            <option value="1">On</option>
-                                            <option value="2">Off</option>
-                                        </select>
+                                        {clickHander? "On":"Off"}
                                     </li>
                                 </ul>
                             </li>
@@ -69,7 +84,7 @@ function AddDevice() {
                                         <div className='icon-btn' style={clickHander?{left: "98px"}:{left: "2px"}}>
                                         </div>
                                     </div>
-                        <div className='data-gram'>Datagram</div>
+                                    <br />
 
                     </div>
 
@@ -86,7 +101,7 @@ function AddDevice() {
                 </div>
                 <div className='center-part'>
                     <Link to="manage-view" className='logo-click'><button className='huybo'>Hủy bỏ</button></Link>
-                    <Link to="manage-view" className='logo-click'><button className='xacnhan'>Xác nhận</button></Link>
+                    <Link to="#" className='logo-click'><button className='xacnhan' onClick={()=>confirmAddDevice()}>Xác nhận</button></Link>
                     
                 </div>
                 <div className='power-part'>

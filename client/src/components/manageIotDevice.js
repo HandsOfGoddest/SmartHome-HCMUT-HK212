@@ -53,8 +53,12 @@ async function getDeviceDetail(dvId) {
 
 function ManageIotDevice() {
     const [logOut, setLogOut] = useState("")
-    if (logOut === "logout") {
+    if(logOut === "view-room"){
+        window.location.replace("/view-room-list")
+    }
+    if(logOut === "logout"){
         window.location.replace("/login")
+        console.log("logout")
     }
     // phong hien tai 
     const [curRoom, setCurRoom] = useState(TotalUser.room[0])
@@ -146,6 +150,7 @@ function ManageIotDevice() {
                                 {/* <img className="nav" src="../img/nav.png" alt="nav" /> */}
                                 <select className='nav' onChange={(e) => setLogOut(e.target.value)}>
                                     <option value="" selected disabled></option>
+                                    <option value="view-room">View room list</option> 
                                     <option value="logout">Log Out</option>
                                 </select>
                             </div>

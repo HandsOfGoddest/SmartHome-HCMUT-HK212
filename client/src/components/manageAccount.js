@@ -228,7 +228,7 @@ function ManageAccount() {
         }
         console.log(userDataToUpdateRoom)
             updateUser(userDataToUpdateRoom.userID,userDataToUpdateRoom).then(data => {
-            console.log(data)
+            window.location.reload()
         });
     }
 
@@ -349,7 +349,7 @@ return (
                                 </div>
                                 <div className='trash-border'>
                                     <div className="confirm_edit">
-                                        <button className="huybo">Hủy bỏ</button>
+                                        <button className="huybo" onClick={()=>setEditClickHander(false)}>Hủy bỏ</button>
                                         <button className="xacnhan"onClick={()=>UserToUpdate()}>Xác nhận</button>
                                     </div>
                                     <Popup trigger={<img src='../img/trash.png' alt='trash-img' className='trash-img' />} position="top center" nested>

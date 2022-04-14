@@ -3,7 +3,7 @@ import Popup from 'reactjs-popup';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-
+var TotalUser = JSON.parse(localStorage.getItem("user"));
 async function getRoomList() {
     try {
         const response = await axios.get('http://127.0.0.1:8000/rooms/');
@@ -23,6 +23,16 @@ async function getUser() {
 function ViewRoomList() {
     const [roomList, setRoomList] = useState([]);
     const [user, setUser] = useState([]);
+    const [logOut, setLogOut] = useState("")
+
+    if(logOut === "manage-account"){
+        window.location.replace("/manage-account")
+    }
+    if(logOut === "logout"){
+        window.location.replace("/login")
+        console.log("logout")
+    }
+
     useEffect(() => {
         getRoomList().then(data => {
             setRoomList(data);
@@ -44,10 +54,9 @@ function ViewRoomList() {
     return (
         <div className='view-room-list'>
             <div className="header">
-                <Link to='manage-account' className='sophong logo-click'>
-                    <img className="nav" src="../img/nav.png" alt="nav" />
-                    <span>Manage Account </span>
-                </Link>
+                <div style={{opacity:'0'}} className='sophong logo-click'>
+                    
+                </div>
                 <Link to='/' className='logo-click'>
                     <div className="logo">
                         <img className='homelogo' src='./img/homelogo.png' alt="logo" />
@@ -55,9 +64,14 @@ function ViewRoomList() {
                     </div>
                 </Link>
                 <div className="name">
-                    <h1>Nguyễn Văn A</h1>
+                    <h1>{TotalUser.name}</h1>
                     <img className="avt" src="../img/avt.jpg" alt="avtatar" />
-                    <img className="nav" src="../img/nav.png" alt="nav" />
+                    {/* <img className="nav" src="../img/nav.png" alt="nav" /> */}
+                    <select className='nav' onChange={(e)=>setLogOut(e.target.value)}>
+                        <option value="" selected></option>
+                        <option value="manage-account">Manage Account</option> 
+                        <option value="logout">Log Out</option> 
+                    </select>
                 </div>
             </div>
             <div className="list">

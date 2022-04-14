@@ -5,6 +5,9 @@ var TotalUser = JSON.parse(localStorage.getItem("user"));
 
 function Header() {
     const [logOut, setLogOut] = useState("")
+    if(logOut === "view-room"){
+        window.location.replace("/view-room-list")
+    }
     if(logOut === "logout"){
         window.location.replace("/login")
         console.log("logout")
@@ -38,7 +41,8 @@ function Header() {
                     {/* <img className="nav" src="../img/nav.png" alt="nav" /> */}
                     <select className='nav' onChange={(e)=>setLogOut(e.target.value)}>
                         <option value="" selected></option>
-                        <option value="logout">Log Out</option>
+                        <option value="view-room">View room list</option> 
+                        <option value="logout">Log Out</option> 
                     </select>
                 </div>
             </div>
