@@ -3,10 +3,10 @@ from django.urls import path
 from .views import UserViewSet, UserDetailViewSet, \
     RoomViewSet, RoomDetailViewSet, \
     DevicesViewSet, DevicesDetailViewSet, AvailidDevice, \
-    RecordsViewSet, RecordsDetailViewSet, SearchUserView
+    RecordsViewSet, RecordsDetailViewSet, SearchUserView,\
+    DevicesLogSearch, DevicesLogViewSet
 
 urlpatterns = [
-    # path("", include(router.urls)),
     path("users/", UserViewSet.as_view()),
     path("users/<str:userID>/", UserDetailViewSet.as_view()),
     path("users/search/<str:userName>/", SearchUserView.as_view()),
@@ -16,5 +16,7 @@ urlpatterns = [
     path("devices/<str:Id>/", DevicesDetailViewSet.as_view()),
     path("records/", RecordsViewSet.as_view()),
     path("records/<str:Id>/", RecordsDetailViewSet.as_view()),
-    path("addDeviceToRoom/", AvailidDevice.as_view())
+    path("addDeviceToRoom/", AvailidDevice.as_view()),
+    path("logs/", DevicesLogViewSet.as_view()),
+    path("logs/<str:a>/", DevicesLogSearch.as_view())
 ]

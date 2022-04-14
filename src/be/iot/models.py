@@ -115,27 +115,25 @@ class User(Document):
     def __str__(self):
         return self.name + ' ' +self.userID
 
-# AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.user')
-#
-#
-# class MongoToken(Document):
-#     key = StringField(max_length=44)
-#     user = ReferenceField('PortalUser', required=True)
-#     created = DateTimeField()
-#
-#     def __init__(self, *args, **values):
-#         super().__init__(*args, **values)
-#         if not self.key:
-#             self.key = self.generate_key()
-#
-#     def save(self, *args, **kwargs):
-#         if not self.id:
-#             self.created = now()
-#
-#         return super().save(*args, **kwargs)
-#
-#     def generate_key(self):
-#         return binascii.hexlify(os.urandom(22)).decode()
-#
-#     def __unicode__(self):
-#         return self.key
+class DevicesLog(Document):
+    deviceId= ReferenceField("Devices", required=True)
+    changeValue= StringField(required=True)
+    byUser= ReferenceField("User", required=True)
+    atRoom= ReferenceField("Room", required=True)
+    _date_changed= DateTimeField(default=datetime.datetime.now())
+    
+    def json(self):
+        dLog_dict= {
+            "deviceId": self.deviceId,
+            "changeValue": self.changeValue,
+            "_date_changed": self._date_changed,
+        }
+        return json.dumps(dLog_dict)
+
+    meta={
+        "indexes": ["deviceId", "changeValue"],
+        "ordering": ["-_date_changed"],
+    }
+
+    def __str__(self):
+        return self.deviceId + ' ' +self.changeValue  + "at" + self.atRoom + "on" + self._date_changed 

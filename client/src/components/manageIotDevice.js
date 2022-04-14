@@ -7,6 +7,7 @@ import axios from 'axios';
 import Datagram from './datagram';
 import React, { useEffect, useState } from 'react';
 var TotalUser = JSON.parse(localStorage.getItem("user"));
+// console.log(TotalUser)
 var isAdmin = TotalUser.isAdmin == false ? 0 : 1;
 let AdminStyle = {}
 let UserStyle = {}
