@@ -2,7 +2,7 @@ from django.urls import path
 
 from .views import UserViewSet, UserDetailViewSet, \
     RoomViewSet, RoomDetailViewSet, \
-    DevicesViewSet, DevicesDetailViewSet, \
+    DevicesViewSet, DevicesDetailViewSet, AvailidDevice, \
     RecordsViewSet, RecordsDetailViewSet, SearchUserView
 
 urlpatterns = [
@@ -15,5 +15,6 @@ urlpatterns = [
     path("devices/", DevicesViewSet.as_view()),
     path("devices/<str:Id>/", DevicesDetailViewSet.as_view()),
     path("records/", RecordsViewSet.as_view()),
-    path("records/<str:Id>/", RecordsDetailViewSet.as_view())
+    path("records/<str:Id>/", RecordsDetailViewSet.as_view()),
+    path("addDeviceToRoom/", AvailidDevice.as_view())
 ]

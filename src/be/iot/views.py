@@ -215,11 +215,29 @@ class DevicesDetailViewSet(APIView):
         except:
             return Response(serializer.errors, status.HTTP_403_FORBIDDEN)
 
-
     def delete(self, request, Id):
         device = self.get_object(Id)
         device.delete()
         return Response(status.HTTP_204_NO_CONTENT)
+
+class AvailidDevice(APIView):
+    def get_object(self):
+        try:
+            all_avalid_devices= Devices.objects(enabled=True)
+            return all_avalid_devices
+        except Devices.DoesNotExist:
+            return Response(status.HTTP_404_NOT_FOUND)
+        
+    # @api_view(['GET'])
+    def get(self, request):
+        all_avalid_devices= self.get_object()
+        rooms= Room.objects.all()
+        usedDevices= []
+        for room in rooms:
+            usedDevices+= room.devices
+        avalidDevices= set(all_avalid_devices) - set(usedDevices)
+        devices_serializer= DevicesSerializer(avalidDevices, many= True)
+        return Response(devices_serializer.data)
 
 class RecordsViewSet(APIView):
     def get(self, request):
@@ -258,6 +276,7 @@ class RecordsDetailViewSet(APIView):
             return Response(records_serializer.data)
         except:
             return Response(status.HTTP_404_NOT_FOUND)
+
 
 # class DevicesViewSet(viewsets.ModelViewSet):
 #     queryset = Devices.objects.all()
@@ -333,23 +352,6 @@ class RecordsDetailViewSet(APIView):
 #             return Response(serializer.data)
 #         except:
 #             return Response(status.HTTP_404_NOT_FOUND)
-
-
-# from rest_framework.authtoken.views import ObtainAuthToken
-# from rest_framework import status
-# from rest_framework.response import Response
-# from .models import MongoToken
-
-
-# class ObtainMongoAuthToken(ObtainAuthToken):
-#     model = MongoToken
-#
-#     def post(self, request):
-#         serializer = self.serializer_class(data=request.data)
-#         if serializer.is_valid():
-#             token, created = self.model.objects.get_or_create(user=serializer.object['user'])
-#             return Response({'token': token.key})
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # class UserListView(generics.GenericAPIView, mixins.ListModelMixin,
