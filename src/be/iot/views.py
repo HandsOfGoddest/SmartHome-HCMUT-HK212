@@ -329,7 +329,7 @@ class DevicesLogSearch(APIView):
             
         
     def get(self, request, paras):
-        paralst= paras.split("a")
+        paralst= paras.split("+")
         roomID= paralst[0]
         fday= int(paralst[1])
         lday= int(paralst[2])
