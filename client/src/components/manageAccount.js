@@ -439,12 +439,7 @@ return (
         </div>
         <div className='manage-account-footer'>
             <div className='map-view-part'>
-                <Link to='manage-view' className="map-view logo-click">
-                    <img className="nav2" src="../img/nav.png" alt="nav" />
-                    <div className='nav-border'>
-                        <p>Manage Device</p>
-                    </div>
-                </Link>
+
             </div>
             <div className='manage-account-center-part'>
 

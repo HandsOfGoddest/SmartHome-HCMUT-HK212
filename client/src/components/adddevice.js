@@ -92,12 +92,7 @@ function AddDevice() {
             </div>
             <div className='add-device-footer'>
                 <div className='map-view-part'>
-                <Link to='manage-view' className="map-view logo-click">
-                        <img className="nav2" src="../img/nav.png" alt="nav" />
-                        <div className='nav-border'>
-                        <p>Manage Device</p>
-                        </div>
-                    </Link>
+                
                 </div>
                 <div className='center-part'>
                     <Link to="manage-view" className='logo-click'><button className='huybo'>Hủy bỏ</button></Link>

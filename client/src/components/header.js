@@ -8,6 +8,15 @@ function Header() {
     if(logOut === "view-room"){
         window.location.replace("/view-room-list")
     }
+    if(logOut === "manage-account"){
+        window.location.replace("/manage-account")
+    }
+    if(logOut === "manage-device"){
+        window.location.replace("/manage-device")
+    }
+    if(logOut === "add-device"){
+        window.location.replace("/add-device")
+    }
     if(logOut === "logout"){
         window.location.replace("/login")
         console.log("logout")
@@ -15,19 +24,8 @@ function Header() {
     return (
         <div className="manage-view">
             <div className="header">
-                <div className='sophong logo-click'>
-                    <select>
-                        {
-                            TotalUser.room.map((rm, index) => {
-                                return (
-                                    <option key={index} value={rm}>Phòng {rm}</option>
-                                )
-                            })
-                        }
-                    </select>
-                        {/* <img className="nav" src="../img/nav.png" alt="nav" />
-                        <span>Phòng </span>
-                        <span>217</span> */}
+                <div className='sophong logo-click' style={{opacity:'0'}}>
+
                 </div>
                 <Link to='/' className='logo-click'>
                     <div className="logo">
@@ -42,6 +40,9 @@ function Header() {
                     <select className='nav' onChange={(e)=>setLogOut(e.target.value)}>
                         <option value="" selected></option>
                         <option value="view-room">View room list</option> 
+                        <option value="manage-account">Manage account</option> 
+                        <option value="manage-device">Manage Device</option> 
+                        <option value="add-device">Add Device</option> 
                         <option value="logout">Log Out</option> 
                     </select>
                 </div>

@@ -18,7 +18,7 @@ function App() {
         <Route path="/login" exact component={LoginPage} />
         <Route path="/forgot-password" exact component={ChangePassword} />
         <Route path="/wellcome" exact component={wellcomePage} />
-        <Route path="/manage-view" exact component={ManageIotDevice} />
+        <Route path="/manage-device" exact component={ManageIotDevice} />
         <Route path="/add-device" exact component={AddDevice} />
         <Route path="/view-room-list" exact component={ViewRoomList} />
         <Route path="/manage-account" exact component={ManageAccount} />

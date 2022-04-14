@@ -25,14 +25,22 @@ function ViewRoomList() {
     const [user, setUser] = useState([]);
     const [logOut, setLogOut] = useState("")
 
+    if(logOut === "view-room"){
+        window.location.replace("/view-room-list")
+    }
     if(logOut === "manage-account"){
         window.location.replace("/manage-account")
+    }
+    if(logOut === "manage-device"){
+        window.location.replace("/manage-device")
+    }
+    if(logOut === "add-device"){
+        window.location.replace("/add-device")
     }
     if(logOut === "logout"){
         window.location.replace("/login")
         console.log("logout")
     }
-
     useEffect(() => {
         getRoomList().then(data => {
             setRoomList(data);
@@ -68,9 +76,12 @@ function ViewRoomList() {
                     <img className="avt" src="../img/avt.jpg" alt="avtatar" />
                     {/* <img className="nav" src="../img/nav.png" alt="nav" /> */}
                     <select className='nav' onChange={(e)=>setLogOut(e.target.value)}>
-                        <option value="" selected></option>
-                        <option value="manage-account">Manage Account</option> 
-                        <option value="logout">Log Out</option> 
+                    <option value="" selected></option>
+                        <option value="view-room">View room list</option> 
+                        <option value="manage-account">Manage account</option> 
+                        <option value="manage-device">Manage Device</option> 
+                        <option value="add-device">Add Device</option> 
+                        <option value="logout">Log Out</option>   
                     </select>
                 </div>
             </div>

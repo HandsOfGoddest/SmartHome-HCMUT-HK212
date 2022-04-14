@@ -18,14 +18,7 @@ function Footer({isAdmin}) {
     else{
         return (
             <div className='footer'>
-                <Link to='manage-account' className='map-view-part logo-click'>
-                    <div className="map-view">
-                        <img className="nav2" src="../img/nav.png" alt="nav" />
-                        <div className='nav-border'>
-                        <p>Manage Account</p>
-                        </div>
-                    </div>
-                </Link>
+                
                 <div className='center-part'>
     
                 </div>
