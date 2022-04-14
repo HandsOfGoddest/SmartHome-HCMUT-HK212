@@ -18,5 +18,5 @@ urlpatterns = [
     path("records/<str:Id>/", RecordsDetailViewSet.as_view()),
     path("addDeviceToRoom/", AvailidDevice.as_view()),
     path("logs/", DevicesLogViewSet.as_view()),
-    path("logs/<str:a>/", DevicesLogSearch.as_view())
+    path("logs/<str:paras>/", DevicesLogSearch.as_view())
 ]

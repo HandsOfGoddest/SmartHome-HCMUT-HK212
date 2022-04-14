@@ -207,14 +207,15 @@ class DevicesDetailViewSet(APIView):
             return
         
         log= DevicesLog(
-            deviceId= device.id,
+            deviceId= device.Id,
             changeValue= changeValue,
-            byUser= user.id ,
-            atRoom= room.id,
+            byUserName= user.name,
+            userID= userID,
+            atRoom= roomID,
         ).save()
 
     def put(self, request, Id):
-        try:
+        # try:
             deviceID= Id.split('+')[0]
             userID= Id.split('+')[1]
             roomID= Id.split('+')[2]
@@ -240,8 +241,8 @@ class DevicesDetailViewSet(APIView):
                 return Response(serializer.data)
 
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-        except:
-            return Response(serializer.errors, status.HTTP_403_FORBIDDEN)
+        # except:
+        #     return Response(serializer.errors, status.HTTP_403_FORBIDDEN)
 
     def delete(self, request, Id):
         device = self.get_object(Id)
@@ -256,7 +257,6 @@ class AvailidDevice(APIView):
         except Devices.DoesNotExist:
             return Response(status.HTTP_404_NOT_FOUND)
         
-    # @api_view(['GET'])
     def get(self, request):
         all_avalid_devices= self.get_object()
         rooms= Room.objects.all()
@@ -313,14 +313,14 @@ class DevicesLogViewSet(APIView):
 
 class DevicesLogSearch(APIView):
     def get_object(self, roomID, fday, lday, deviceID):
-        room= Room.objects.get(Id= roomID)
+        # room= Room.objects.get(Id= roomID)
         logs=[]
         if deviceID != None:
-            device= Devices.objects.get(Id= deviceID)
-            logs= DevicesLog.objects(  Q(deviceId= device.id)
-                                      & Q(atRoom= room.id) )
+            # device= Devices.objects.get(Id= deviceID)
+            logs= DevicesLog.objects(  Q(deviceId= deviceID)
+                                      & Q(atRoom= roomID) )
         else:
-            logs= DevicesLog.objects(atRoom= room.id)
+            logs= DevicesLog.objects(atRoom= roomID)
         res=[]
         for log in logs:
             if log._date_changed.day>=fday and log._date_changed.day<=lday:

@@ -116,10 +116,11 @@ class User(Document):
         return self.name + ' ' +self.userID
 
 class DevicesLog(Document):
-    deviceId= ReferenceField("Devices", required=True)
+    deviceId= StringField(required=True)
     changeValue= StringField(required=True)
-    byUser= ReferenceField("User", required=True)
-    atRoom= ReferenceField("Room", required=True)
+    byUserName= StringField(required=True)
+    userID= StringField(required=True)
+    atRoom= IntField(required=True)
     _date_changed= DateTimeField(default=datetime.datetime.now())
     
     def json(self):

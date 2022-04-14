@@ -139,19 +139,11 @@ class DevicesSerializer(serializers.Serializer):
         return instance
 
 class DevicesLogSerializer(serializers.Serializer):
-    deviceId = serializers.SlugRelatedField(
-        slug_field='Id',
-        queryset=Devices.objects.all(),
-    )
+    deviceId = serializers.CharField(max_length=400)
     changeValue = serializers.CharField(max_length=400)
-    byUser= serializers.SlugRelatedField(
-        slug_field='userID',
-        queryset=User.objects.all(),
-    )
-    atRoom= serializers.SlugRelatedField(
-        slug_field='Id',
-        queryset=Room.objects.all(),
-    )
+    byUserName= serializers.CharField(max_length=400)
+    userID= serializers.CharField(max_length=400)
+    atRoom= serializers.IntegerField()
     _date_changed = serializers.DateTimeField(required=False)
 
     class Meta:
