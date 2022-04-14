@@ -1,4 +1,3 @@
-# import inn as inn
 import required
 from rest_framework import serializers
 from rest_framework.response import  Response
@@ -139,3 +138,17 @@ class DevicesSerializer(serializers.Serializer):
         instance.save()
         return instance
 
+class DevicesLogSerializer(serializers.Serializer):
+    deviceId = serializers.CharField(max_length=400)
+    changeValue = serializers.CharField(max_length=400)
+    byUserName= serializers.CharField(max_length=400)
+    userID= serializers.CharField(max_length=400)
+    atRoom= serializers.IntegerField()
+    _date_changed = serializers.DateTimeField(required=False)
+
+    class Meta:
+        model= Devices
+        fields= ['deviceId', 'changeValue', 'byUser', '_date_changed']
+
+    def create(self, validated_data):
+        return DevicesLogSerializer.objects.create(**validated_data)

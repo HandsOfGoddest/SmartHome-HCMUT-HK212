@@ -193,17 +193,46 @@ class DevicesDetailViewSet(APIView):
             return Response(device_serializer.data)
         except:
             return Response(status.HTTP_404_NOT_FOUND)
+        
+    def create_changed_log(self, userID, roomID, data, device):
+        
+        user= User.objects.get(userID= userID)
+        room= Room.objects.get(Id= roomID)
+        changeValue= None
+        if data[3] != device.status:
+            changeValue= "status:"+("On" if (data[3] == True) else "Off")
+        elif data[4] != device.enabled:
+            changeValue= "enabled:"+("On" if (data[4] == True) else "Off")
+        else:
+            return
+        
+        log= DevicesLog(
+            deviceId= device.Id,
+            changeValue= changeValue,
+            byUserName= user.name,
+            userID= userID,
+            atRoom= roomID,
+        ).save()
 
     def put(self, request, Id):
-        try:
-            device = self.get_object(Id)
+        # try:
+            deviceID= Id.split('+')[0]
+            userID= Id.split('+')[1]
+            roomID= Id.split('+')[2]
+            
+            device = self.get_object(deviceID)
             serializer = DevicesSerializer(device, data=request.data)
             if serializer.is_valid():
+                self.create_changed_log(
+                    userID, 
+                    roomID,
+                    list(serializer.validated_data.values()), 
+                    device, 
+                )
                 serializer.save()
                 if serializer.data["enabled"] == False:
                     rooms= Room.objects.all()
                     for room in rooms:
-                        print(room.devices)
                         try:
                             room.update(pull__devices=device.id)
                         except:
@@ -212,14 +241,31 @@ class DevicesDetailViewSet(APIView):
                 return Response(serializer.data)
 
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-        except:
-            return Response(serializer.errors, status.HTTP_403_FORBIDDEN)
-
+        # except:
+        #     return Response(serializer.errors, status.HTTP_403_FORBIDDEN)
 
     def delete(self, request, Id):
         device = self.get_object(Id)
         device.delete()
         return Response(status.HTTP_204_NO_CONTENT)
+
+class AvailidDevice(APIView):
+    def get_object(self):
+        try:
+            all_avalid_devices= Devices.objects(enabled=True)
+            return all_avalid_devices
+        except Devices.DoesNotExist:
+            return Response(status.HTTP_404_NOT_FOUND)
+        
+    def get(self, request):
+        all_avalid_devices= self.get_object()
+        rooms= Room.objects.all()
+        usedDevices= []
+        for room in rooms:
+            usedDevices+= room.devices
+        avalidDevices= set(all_avalid_devices) - set(usedDevices)
+        devices_serializer= DevicesSerializer(avalidDevices, many= True)
+        return Response(devices_serializer.data)
 
 class RecordsViewSet(APIView):
     def get(self, request):
@@ -258,6 +304,40 @@ class RecordsDetailViewSet(APIView):
             return Response(records_serializer.data)
         except:
             return Response(status.HTTP_404_NOT_FOUND)
+        
+class DevicesLogViewSet(APIView):
+    def get(self, request):
+        logs = DevicesLog.objects.all()
+        logs_serializer = DevicesLogSerializer(logs, many=True)
+        return Response(logs_serializer.data)
+
+class DevicesLogSearch(APIView):
+    def get_object(self, roomID, fday, lday, deviceID):
+        # room= Room.objects.get(Id= roomID)
+        logs=[]
+        if deviceID != None:
+            # device= Devices.objects.get(Id= deviceID)
+            logs= DevicesLog.objects(  Q(deviceId= deviceID)
+                                      & Q(atRoom= roomID) )
+        else:
+            logs= DevicesLog.objects(atRoom= roomID)
+        res=[]
+        for log in logs:
+            if log._date_changed.day>=fday and log._date_changed.day<=lday:
+                res.append(log)
+        return res
+            
+        
+    def get(self, request, paras):
+        paralst= paras.split("+")
+        roomID= paralst[0]
+        fday= int(paralst[1])
+        lday= int(paralst[2])
+        deviceID= paralst[3] if (len(paralst) == 4) else None
+        logs= self.get_object(roomID, fday, lday, deviceID)
+        logs_serializer= DevicesLogSerializer(logs, many=True)
+        return Response(logs_serializer.data)
+
 
 # class DevicesViewSet(viewsets.ModelViewSet):
 #     queryset = Devices.objects.all()
@@ -333,23 +413,6 @@ class RecordsDetailViewSet(APIView):
 #             return Response(serializer.data)
 #         except:
 #             return Response(status.HTTP_404_NOT_FOUND)
-
-
-# from rest_framework.authtoken.views import ObtainAuthToken
-# from rest_framework import status
-# from rest_framework.response import Response
-# from .models import MongoToken
-
-
-# class ObtainMongoAuthToken(ObtainAuthToken):
-#     model = MongoToken
-#
-#     def post(self, request):
-#         serializer = self.serializer_class(data=request.data)
-#         if serializer.is_valid():
-#             token, created = self.model.objects.get_or_create(user=serializer.object['user'])
-#             return Response({'token': token.key})
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # class UserListView(generics.GenericAPIView, mixins.ListModelMixin,
