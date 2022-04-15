@@ -228,7 +228,7 @@ function ManageIotDevice({ match }) {
                                         <div className="account-inf-value-border1">
                                             <div className="account-inf-value-top">
                                                 <h5>Danh sách phòng hiện tại</h5>
-                                                <hr width="99%" align="center" color='black' />
+                                                <hr width="100%" align="center" color='black' />
                                                 <div className="room-inf-list">
                                                     {
                                                         TotalUser.room.map((rm, index) => {
