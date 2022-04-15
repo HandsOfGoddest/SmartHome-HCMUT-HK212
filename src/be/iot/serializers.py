@@ -32,14 +32,9 @@ class RoomSerializer(serializers.Serializer):
         instance.Id = validated_data.get('Id', instance.Id)
         instance.owner= validated_data.get('owner', instance.owner)
         userIDs= validated_data.get('users', instance.users)
-        # userID= "NDH001"
         user= set(userIDs) - set(instance.users)
         if(user):
             instance.users+= user
-        # if userIDs:
-        #     userID= userIDs[0]
-        # if not userID in instance.users:
-        #     instance.users+= userID
         deviceIDs= validated_data.get('devices', instance.devices)
         device= set(deviceIDs) - set(instance.devices)
         if device:
@@ -78,14 +73,6 @@ class UserSerializer(serializers.Serializer):
         instance.password= validated_data.get('password', instance.password)
         instance.homeTown= validated_data.get('homeTown', instance.homeTown)
         instance.room= validated_data.get('room', instance.room)
-        # room= set(roomIDs) - set(instance.room)
-        # if(room):
-        #     instance.room+= room
-        # roomID= "NDHR0011"
-        # if(roomIDs):
-        #     roomID = roomIDs[0]
-        # if roomID != instance.rooms:
-        #     instance.room+= roomIDs
         instance.isAdmin= validated_data.get('isAdmin', instance.isAdmin)
         instance.save()
         return instance

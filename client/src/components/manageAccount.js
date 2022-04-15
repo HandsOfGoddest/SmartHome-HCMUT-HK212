@@ -143,8 +143,9 @@ function ManageAccount() {
                 "room": addRoom,
                 "isAdmin": addAdmin == 'no' ? false : true
             }
+            console.log(userData)
             await axios.post('http://127.0.0.1:8000/users/', userData);
-            window.location.reload();
+            // window.location.reload();
         }
         else {
             let addList = [addName, addPhone, addID, addDate, addPass, addHomeTown, addRoom];

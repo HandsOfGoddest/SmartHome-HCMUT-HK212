@@ -215,7 +215,7 @@ class DevicesDetailViewSet(APIView):
         ).save()
 
     def put(self, request, Id):
-        # try:
+        try:
             deviceID= Id.split('+')[0]
             userID= Id.split('+')[1]
             roomID= Id.split('+')[2]
@@ -241,8 +241,8 @@ class DevicesDetailViewSet(APIView):
                 return Response(serializer.data)
 
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-        # except:
-        #     return Response(serializer.errors, status.HTTP_403_FORBIDDEN)
+        except:
+            return Response(serializer.errors, status.HTTP_403_FORBIDDEN)
 
     def delete(self, request, Id):
         device = self.get_object(Id)
@@ -312,18 +312,17 @@ class DevicesLogViewSet(APIView):
         return Response(logs_serializer.data)
 
 class DevicesLogSearch(APIView):
-    def get_object(self, roomID, fday, lday, deviceID):
-        # room= Room.objects.get(Id= roomID)
+    def get_object(self, roomID, fdate, ldate, deviceID):
+        # d1= fdate
         logs=[]
         if deviceID != None:
-            # device= Devices.objects.get(Id= deviceID)
             logs= DevicesLog.objects(  Q(deviceId= deviceID)
                                       & Q(atRoom= roomID) )
         else:
             logs= DevicesLog.objects(atRoom= roomID)
         res=[]
         for log in logs:
-            if log._date_changed.day>=fday and log._date_changed.day<=lday:
+            if log._date_changed.day>=fdate and log._date_changed.day<=ldate:
                 res.append(log)
         return res
             

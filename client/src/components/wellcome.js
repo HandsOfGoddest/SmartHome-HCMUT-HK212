@@ -9,7 +9,7 @@ function WellcomePage() {
         console.log("logout")
     }
     return (
-        <div className="wellcome-page">
+        <div className="welcome-page">
             <div className="header">
                 <div className="logo">
                     <img className='homelogo' src='./img/homelogo.png' alt="logo" />
@@ -32,7 +32,7 @@ function WellcomePage() {
                 </div>
                 <div className="btn">
                     
-                    <Link to="/manage-view"><button className='view-btn'>Manage view</button></Link>
+                    <Link to="/manage-device"><button className='view-btn'>Manage view</button></Link>
                 </div>
             </div>
         </div>
