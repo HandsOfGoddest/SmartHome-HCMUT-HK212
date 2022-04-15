@@ -52,7 +52,7 @@ function ViewRoomList() {
         window.location.replace("/manage-account")
     }
     if (logOut === "manage-device") {
-        window.location.replace("/manage-device")
+        window.location.replace("/manage-device/"+TotalUser.room[0])
     }
     if (logOut === "add-device") {
         window.location.replace("/add-device")
@@ -172,7 +172,7 @@ function ViewRoomList() {
                                             )
                                             }
                                         </td>
-                                        <td className="room"><p className="chitiet">Xem chi tiết phòng</p></td>
+                                        <td className="room"><Link to={`manage-device/${room.Id}`} className="logo-click"><p className="chitiet">Xem chi tiết phòng</p></Link></td>
                                         {/* <td className="room"><img className="icon1-ls" src='../img/edit.png' alt="img" /></td> */}
 
                                         <Popup trigger={<td className="room"><img className="icon2-ls" src="../img/x.png" alt="img" /></td>} position="top center" nested>

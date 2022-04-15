@@ -229,5 +229,13 @@ li{
 .admin{
     display: unset;
 }
+.account-inf-value-border1{
+    border: #000 solid 2px;
+    border-radius: 10px;
+    font-size: 22px;
+    padding: 4px 8px;
+    background-color: #fff;
+    max-height: 200px;
+}
 
 

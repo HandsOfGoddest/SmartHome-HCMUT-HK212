@@ -115,7 +115,7 @@ var Unclick_devices = {
 }
 
 
-function ManageIotDevice() {
+function ManageIotDevice({ match }) {
     const [logOut, setLogOut] = useState("")
     if (logOut === "view-room") {
         window.location.replace("/view-room-list")
@@ -124,7 +124,7 @@ function ManageIotDevice() {
         window.location.replace("/manage-account")
     }
     if (logOut === "manage-device") {
-        window.location.replace("/manage-device")
+        window.location.replace("/manage-device/"+TotalUser.room[0])
     }
     if (logOut === "add-device") {
         window.location.replace("/add-device")
@@ -134,7 +134,8 @@ function ManageIotDevice() {
         console.log("logout")
     }
     // phong hien tai 
-    const [curRoom, setCurRoom] = useState(TotalUser.room[0])
+    const [curRoom, setCurRoom] = useState(match.params.id)
+
     const [deviceType, setDeviceType] = useState('GAS')
     const [selectMyDevice, setSelectMyDevice] = useState('')
 
@@ -221,23 +222,33 @@ function ManageIotDevice() {
                 <div className='manage-iot-device'>
                     <div className="manage-view">
                         <div className="header">
-                            <div className='sophong logo-click'>
+                            
+                                <Popup trigger={<div className='sophong logo-click'><p>Phòng {curRoom}</p></div>} position="bottom center" nested>
+                                    {close => (
+                                        <div className="account-inf-value-border1">
+                                            <div className="account-inf-value-top">
+                                                <h5>Danh sách phòng hiện tại</h5>
+                                                <hr width="99%" align="center" color='black' />
+                                                <div className="room-inf-list">
+                                                    {
+                                                        TotalUser.room.map((rm, index) => {
+                                                            return (
+                                                                <div onClick={close}>
+                                                                    <Link to={`/manage-device/${rm}`} onClick={()=>{setCurRoom(rm);setDeviceInfo([])}} className="logo-click account-inf-value-ind" >
+                                                                    <span>Phòng {rm}</span>
+                                                                </Link>
+                                                                </div>
+                                                            )
+                                                        })
 
-                                <select onChange={(e) => { setCurRoom(e.target.value); setDeviceInfo([])}} value={curRoom}>
-                                    {
-                                        TotalUser.room.map((rm, index) => {
-                                            return (
-                                                <option key={index} value={rm}>Phòng {rm}   </option>
-                                            )
-                                        })
+                                                    }
+                                                </div>
+                                            </div>
 
-                                    }
-                                    {/* <option selected></option> */}
-                                </select>
-                                {/* <img className="nav" src="../img/nav.png" alt="nav" />
-                                <span>Phòng </span>
-                                <span>217</span> */}
-                            </div>
+                                        </div>
+                                    )}
+                                </Popup>
+                            
                             <Link to='/' className='logo-click'>
                                 <div className="logo">
                                     <img className='homelogo' src='./img/homelogo.png' alt="logo" />
@@ -283,7 +294,7 @@ function ManageIotDevice() {
                                 </div>
                                 <div className='devices' onClick={() => setSelectMyDevice('GAS')} style={selectMyDevice === 'GAS' ? clicked_type : Unclick_type}>
                                     <img className='device-icon' src='../img/fire.png' alt="icon" />
-                                    <span className='device-name' style={{whiteSpace: 'nowrap'}}>Cảm biến khí gas</span>
+                                    <span className='device-name' style={{ whiteSpace: 'nowrap' }}>Cảm biến khí gas</span>
                                 </div>
                                 <div className='devices' onClick={() => setSelectMyDevice('DOOR')} style={selectMyDevice === 'DOOR' ? clicked_type : Unclick_type}>
                                     <img className='device-icon' src='../img/exit.png' alt="icon" />
@@ -361,8 +372,8 @@ function ManageIotDevice() {
                                         }
                                         else { }
                                     })
-                                ):(
-                                    devices.filter(d => d.enabled == true).filter(d=>d.type == selectMyDevice).map((dv, index) => {
+                                ) : (
+                                    devices.filter(d => d.enabled == true).filter(d => d.type == selectMyDevice).map((dv, index) => {
                                         if (dv.type === "LIGHT") {
                                             return (
                                                 <div className='device-info' onClick={() => setDeviceInfo(dv)} style={deviceInfo === dv ? clicked_devices : Unclick_devices}>

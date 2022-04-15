@@ -14,7 +14,7 @@ function Header() {
         window.location.replace("/manage-account")
     }
     if (logOut === "manage-device") {
-        window.location.replace("/manage-device")
+        window.location.replace("/manage-device/"+TotalUser.room[0])
     }
     if (logOut === "add-device") {
         window.location.replace("/add-device")
