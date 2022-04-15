@@ -286,24 +286,40 @@ class RecordsViewSet(APIView):
             return Response(status.HTTP_409_CONFLICT)
 
 class RecordsDetailViewSet(APIView):
-    def get_objects(self, Id):
-        try:
+    def get_objects(self, Id, fDate= None, toDate= None):
+        # try:
             device= Devices.objects.get(Id=Id)
             device_id= device.id
-            device= Records.objects(Id=device_id)
-
-            return device
-        except Records.DoesNotExist:
-            return Response(status.HTTP_404_NOT_FOUND)
+            records= Records.objects(Id=device_id)
+            res=[]
+            if fDate and toDate:
+                for record in records:
+                    if (record._date_created.date() >= fDate and record._date_created.date() <= toDate):
+                        res.append(record)
+            else:
+                return records
+            return res
+        # except Records.DoesNotExist:
+        #     return Response(status.HTTP_404_NOT_FOUND)
 
     def get(self, request, Id):
-        try:
-            records = self.get_objects(Id)
+        # try:
+            paras= Id.split("+")
+            records= None
+            if len(paras) == 3:
+                d1= paras[1].split("-")
+                d2= paras[2].split("-")
+                fdate= datetime.date(int(d1[0]), int(d1[1]), int(d1[2]))
+                ldate= datetime.date(int(d2[0]), int(d2[1]), int(d2[2]))
+                print("yes")
+                records = self.get_objects(paras[0], fdate, ldate)    
+            else:
+                records = self.get_objects(Id)
             records_serializer = RecordsSerializer(records, many=True)
 
             return Response(records_serializer.data)
-        except:
-            return Response(status.HTTP_404_NOT_FOUND)
+        # except:
+        #     return Response(status.HTTP_404_NOT_FOUND)
         
 class DevicesLogViewSet(APIView):
     def get(self, request):
