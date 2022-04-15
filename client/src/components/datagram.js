@@ -35,7 +35,8 @@ function Datagram({ dvId,dvType,close }) {
             }
         })
     }
-    console.log(dulieu)
+    console.log(dulieu)      
+
     return (
         <React.Fragment >
             <div style={{width:"100%",display:"flex", justifyContent:"space-between"}}>

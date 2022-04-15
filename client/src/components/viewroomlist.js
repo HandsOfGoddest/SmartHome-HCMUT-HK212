@@ -3,7 +3,10 @@ import Popup from 'reactjs-popup';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-var TotalUser = JSON.parse(localStorage.getItem("user"));
+var TotalUser = false;
+if(localStorage.getItem("user") != null){
+    TotalUser = JSON.parse(localStorage.getItem("user"));
+}
 async function getRoomList() {
     try {
         const response = await axios.get('http://127.0.0.1:8000/rooms/');

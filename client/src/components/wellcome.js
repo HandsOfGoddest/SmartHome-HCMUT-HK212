@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import '../css/wellcomepage.css'
 import React, { useState } from 'react';
-var TotalUser = JSON.parse(localStorage.getItem("user"));
+var TotalUser = false;
+if(localStorage.getItem("user") != null){
+    TotalUser = JSON.parse(localStorage.getItem("user"));
+}
 function WellcomePage() {
     const [logOut, setLogOut] = useState("")
     if(logOut === "logout"){

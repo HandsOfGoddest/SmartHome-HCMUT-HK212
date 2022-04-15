@@ -5,9 +5,13 @@ import { Link } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import axios from 'axios';
 import Datagram from './datagram';
-import React, { useEffect, useState } from 'react';
-var TotalUser = JSON.parse(localStorage.getItem("user"));
-// console.log(TotalUser)
+import React, { useEffect, useState } from 'react'; 
+
+var TotalUser = false;
+if(localStorage.getItem("user") != null){
+    TotalUser = JSON.parse(localStorage.getItem("user"));
+}
+
 var isAdmin = TotalUser.isAdmin == false ? 0 : 1;
 let AdminStyle = {}
 let UserStyle = {}
@@ -152,19 +156,25 @@ function ManageIotDevice() {
         })
     }
     function ChangeDeviceStatus(dvinfo) {
-        const dataToUpdate = {
-            "Id": dvinfo.Id,
-            "name": dvinfo.name,
-            "data": dvinfo.data,
-            "status": dvinfo.status ? false : true,
-            "enabled": dvinfo.enabled,
-            "type": dvinfo.type,
-            "_date_created": dvinfo._date_created,
+        if (dvinfo.length == 0) {  
+            console.log("Cho Hiu ngoas")
+            window.alert("Please choose device to change status")
         }
-        updateDevices(dvinfo.Id, TotalUser.userID, curRoom, dataToUpdate).then(data => {
-            setDeviceInfo(data)
-        })
-        devices.fill(dataToUpdate, devices.findIndex(dv => dv.Id === dvinfo.Id), devices.findIndex(dv => dv.Id === dvinfo.Id) + 1)
+        else {
+            const dataToUpdate = {
+                "Id": dvinfo.Id,
+                "name": dvinfo.name,
+                "data": dvinfo.data,
+                "status": dvinfo.status ? false : true,
+                "enabled": dvinfo.enabled,
+                "type": dvinfo.type,
+                "_date_created": dvinfo._date_created,
+            }
+            updateDevices(dvinfo.Id, TotalUser.userID, curRoom, dataToUpdate).then(data => {
+                setDeviceInfo(data)
+            })
+            devices.fill(dataToUpdate, devices.findIndex(dv => dv.Id === dvinfo.Id), devices.findIndex(dv => dv.Id === dvinfo.Id) + 1)
+        }
     }
     function deleteDevice(dvinfo) {
         const dataToUpdate = {
@@ -189,13 +199,14 @@ function ManageIotDevice() {
                         <div className="header">
                             <div className='sophong logo-click'>
 
-                                <select onChange={(e) => { setCurRoom(e.target.value) }} value={curRoom}>
-                                    {
+                                <select onChange={(e) => {setCurRoom(e.target.value);}} value={curRoom}>
+                                    {    
                                         TotalUser.room.map((rm, index) => {
                                             return (
                                                 <option key={index} value={rm}>Phòng {rm}   </option>
                                             )
                                         })
+
                                     }
                                     {/* <option selected></option> */}
                                 </select>
@@ -367,7 +378,7 @@ function ManageIotDevice() {
 
                         </div>
 
-                        <div className='manage-iot-device-content-right'>
+                        {deviceInfo.length != 0 ? (<div className='manage-iot-device-content-right'>
                             <div className='dv-info-table'>
                                 <h2 className='dv-name'>{deviceInfo.name}</h2>
                                 <hr width="99%" align="center" color='black' />
@@ -389,20 +400,23 @@ function ManageIotDevice() {
                                     </div>
                                 </div>
 
+                                
                                 <Popup trigger={<div className='data-gram'>Datagram</div>} position="top center" nested>
                                     {close => (
                                         <div className='popup-overlay'>
                                             <div className='xoa-tb'>
                                                 <Datagram close={close} dvId={deviceInfo.Id} dvType={deviceInfo.type} />
-                                            </div>
+                                            </div>                                            
                                         </div>
                                     )}
                                 </Popup>
-
                             </div>
-
+                        </div>): (
+                        <div className='manage-iot-device-content-right'>
+                            <div className='dv-info-table'> </div>
                         </div>
-
+                        )}        
+                        
                     </div>
                     <Footer isAdmin={isAdmin} style={UserStyle} />
                 </div>
@@ -422,4 +436,5 @@ function ManageIotDevice() {
 
 
 }
+
 export default ManageIotDevice;

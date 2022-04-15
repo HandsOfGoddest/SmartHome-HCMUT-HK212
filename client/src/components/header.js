@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom'
 import '../css/header.css'
 import React, { useState } from 'react'
-var TotalUser = JSON.parse(localStorage.getItem("user"));
-
+var TotalUser = false;
+if(localStorage.getItem("user") != null){
+    TotalUser = JSON.parse(localStorage.getItem("user"));
+}
 function Header() {
     const [logOut, setLogOut] = useState("")
     if(logOut === "view-room"){
