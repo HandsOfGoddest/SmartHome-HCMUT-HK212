@@ -155,8 +155,11 @@ class RoomDetailViewSet(APIView):
 
     def delete(self, request, Id):
         room = self.get_object(Id)
-        room.delete()
-        return Response(status.HTTP_204_NO_CONTENT)
+        if len(room.users) == 0:
+            room.delete()
+            return Response(status.HTTP_204_NO_CONTENT)
+        else:
+            return Response(status.HTTP_400_BAD_REQUEST)
 
 class DevicesViewSet(APIView):
     def get(self, request):
