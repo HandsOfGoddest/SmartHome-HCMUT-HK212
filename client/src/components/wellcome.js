@@ -2,12 +2,12 @@ import { Link } from "react-router-dom";
 import '../css/wellcomepage.css'
 import React, { useState } from 'react';
 var TotalUser = false;
-if(localStorage.getItem("user") != null){
+if (localStorage.getItem("user") != null) {
     TotalUser = JSON.parse(localStorage.getItem("user"));
 }
 function WellcomePage() {
     const [logOut, setLogOut] = useState("")
-    if(logOut === "logout"){
+    if (logOut === "logout") {
         window.location.replace("/login")
         console.log("logout")
     }
@@ -21,9 +21,9 @@ function WellcomePage() {
                 <div className="name">
                     <h1>{TotalUser.name}</h1>
                     <img className="avt" src="../img/avt.jpg" alt="avtatar" />
-                    <select className='nav' onChange={(e)=>setLogOut(e.target.value)}>
+                    <select className='nav' onChange={(e) => setLogOut(e.target.value)}>
                         <option value="" selected></option>
-                        <option value="logout">Log Out</option>
+                        <option value="logout">Log Out </option>
                     </select>
 
                 </div>
@@ -31,11 +31,11 @@ function WellcomePage() {
             <div className="content">
                 <img className="avt" src="../img/avt.jpg" alt="avtatar" />
                 <div className="name-title">
-                <h1>Xin chào </h1><h1>{TotalUser.name}</h1>
+                    <h1>Xin chào </h1><h1>{TotalUser.name}</h1>
                 </div>
                 <div className="btn">
-                    
-                    <Link to="/manage-device"><button className='view-btn'>Manage view</button></Link>
+
+                    <Link to="/manage-device"><button className='view-btn'>Vào hệ thống</button></Link>
                 </div>
             </div>
         </div>

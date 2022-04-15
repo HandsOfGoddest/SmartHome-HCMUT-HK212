@@ -28,8 +28,10 @@ span{
 }
 .dv-name{
     font-size: 40px;
-    margin: 10px auto;
+    margin: 10px 10px;
 }
+
+
 .devices{
     display: flex;
     align-items: center;
@@ -51,6 +53,7 @@ span{
 }
 .manage-iot-device-content-center{
     width: 50%;
+    min-height: 200px;
     height:max-content;
     background-color: white;
     margin-top: 50px;
@@ -106,13 +109,17 @@ span{
     background-color: white;
 
 }
+
+.dv-info-table li{
+    margin-right: 40px;
+}
 .stt-icon{
     width: 150px;
     height: 54px;
     border-radius: 50px;
     background-color: rgb(235, 74, 46);
     cursor: pointer;
-    margin-top: 20px;
+    margin: 20px 0px;
 }
 .stt-icon:active{
     background-color: rgb(46, 235, 62);
@@ -194,3 +201,5 @@ li{
 .admin{
     display: unset;
 }
+
+

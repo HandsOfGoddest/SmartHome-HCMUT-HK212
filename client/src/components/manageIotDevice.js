@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import axios from 'axios';
 import Datagram from './datagram';
-import React, { useEffect, useState } from 'react'; 
+import React, { useEffect, useState } from 'react';
 
 var TotalUser = false;
-if(localStorage.getItem("user") != null){
+if (localStorage.getItem("user") != null) {
     TotalUser = JSON.parse(localStorage.getItem("user"));
 }
 
@@ -156,7 +156,7 @@ function ManageIotDevice() {
         })
     }
     function ChangeDeviceStatus(dvinfo) {
-        if (dvinfo.length == 0) {  
+        if (dvinfo.length == 0) {
             console.log("Cho Hiu ngoas")
             window.alert("Please choose device to change status")
         }
@@ -199,8 +199,8 @@ function ManageIotDevice() {
                         <div className="header">
                             <div className='sophong logo-click'>
 
-                                <select onChange={(e) => {setCurRoom(e.target.value);}} value={curRoom}>
-                                    {    
+                                <select onChange={(e) => { setCurRoom(e.target.value); }} value={curRoom}>
+                                    {
                                         TotalUser.room.map((rm, index) => {
                                             return (
                                                 <option key={index} value={rm}>Phòng {rm}   </option>
@@ -224,14 +224,23 @@ function ManageIotDevice() {
                                 <h1>{TotalUser.name}</h1>
                                 <img className="avt" src="../img/avt.jpg" alt="avtatar" />
                                 {/* <img className="nav" src="../img/nav.png" alt="nav" /> */}
-                                <select className='nav' onChange={(e) => setLogOut(e.target.value)}>
-                                    <option value="" selected></option>
-                                    <option value="view-room">View room list</option>
-                                    <option value="manage-account">Manage account</option>
-                                    <option value="manage-device">Manage Device</option>
-                                    <option value="add-device">Add Device</option>
-                                    <option value="logout">Log Out</option>
-                                </select>
+                                {TotalUser.isAdmin === true ? (
+                                    <select className='nav' onChange={(e) => setLogOut(e.target.value)}>
+                                        <option value="" selected></option>
+                                        <option value="view-room">View room list</option>
+                                        <option value="manage-account">Manage account</option>
+                                        <option value="manage-device">Manage Device</option>
+                                        <option value="add-device">Add Device</option>
+                                        <option value="logout">Log Out</option>
+                                    </select>
+                                ) : (
+                                    <select className='nav' onChange={(e) => setLogOut(e.target.value)}>
+                                        <option value="" selected></option>
+                                        <option value="logout">Log Out</option>
+                                    </select>
+                                )}
+
+
                             </div>
                         </div>
 
@@ -400,25 +409,43 @@ function ManageIotDevice() {
                                     </div>
                                 </div>
 
-                                
+
                                 <Popup trigger={<div className='data-gram'>Datagram</div>} position="top center" nested>
                                     {close => (
                                         <div className='popup-overlay'>
                                             <div className='xoa-tb'>
                                                 <Datagram close={close} dvId={deviceInfo.Id} dvType={deviceInfo.type} />
-                                            </div>                                            
+                                            </div>
                                         </div>
                                     )}
                                 </Popup>
                             </div>
-                        </div>): (
-                        <div className='manage-iot-device-content-right'>
-                            <div className='dv-info-table'> </div>
-                        </div>
-                        )}        
-                        
+                        </div>) : (
+                            <div className='manage-iot-device-content-right'>
+                                <div className='dv-info-table'>
+                                    <h2 className='dv-name'>Device</h2>
+                                    <hr width="99%" align="center" color='black' />
+                                    <ul>
+                                        <li>
+                                            <h2>Information</h2>
+                                            <ul>
+                                                <li>No devices selected yet</li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <h2>Control</h2>
+                                            {/* <img className='stt-icon' src='../img/stt-on.jpg' alt="stt-icon"/> */}
+                                        </li>
+                                    </ul>
+                                    <div className='stt-icon' onClick={() => ChangeDeviceStatus(deviceInfo)} style={deviceInfo.status ? { backgroundColor: "rgb(46, 235, 62)" } : { backgroundColor: "rgb(235, 74, 46)" }}>
+                                        <div className='icon-btn' style={deviceInfo.status ? { left: "98px" } : { left: "2px" }}>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
                     </div>
-                    <Footer isAdmin={isAdmin} style={UserStyle} />
                 </div>
             )
         }
