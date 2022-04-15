@@ -239,7 +239,7 @@ class DevicesDetailViewSet(APIView):
                         try:
                             room.update(pull__devices=device.id)
                         except:
-                            print("xóa cc")
+                            print("can't del") #???
     
                 return Response(serializer.data)
 

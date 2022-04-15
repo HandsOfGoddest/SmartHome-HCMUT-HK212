@@ -25,7 +25,7 @@ async function addRoomList(data) {
 }
 async function delRoomList(data) {
     try {
-        const response = await axios.post('http://127.0.0.1:8000/rooms/', data);
+        const response = await axios.delete('http://127.0.0.1:8000/rooms/'+ data +'/');
         return response.data;
     } catch (error) {
         console.error(error);
@@ -106,7 +106,17 @@ function ViewRoomList() {
         else{
             alert("Vui lòng nhập đủ các thông tin")
         }
-
+    }
+    function delRoom(id){
+        delRoomList(id).then(data => {
+            if(data == 400){
+                alert("Không thể xóa phòng có người")
+            }
+            else{
+                alert("Xóa phòng " + id + " thành công")
+                window.location.reload()
+            }
+        })
     }
     return (
         <div className='view-room-list'>
@@ -163,7 +173,7 @@ function ViewRoomList() {
                                             }
                                         </td>
                                         <td className="room"><p className="chitiet">Xem chi tiết phòng</p></td>
-                                        <td className="room"><img className="icon1-ls" src='../img/copy.png' alt="img" /></td>
+                                        {/* <td className="room"><img className="icon1-ls" src='../img/edit.png' alt="img" /></td> */}
 
                                         <Popup trigger={<td className="room"><img className="icon2-ls" src="../img/x.png" alt="img" /></td>} position="top center" nested>
                                             {close => (
@@ -172,13 +182,14 @@ function ViewRoomList() {
                                                         <h2>Xóa phòng {room.Id}</h2>
                                                         <div className='cf-btn'>
                                                             <button className='cancel' onClick={close}>No</button>
-                                                            <button className='ok'>Yes</button>
+                                                            <button className='ok' onClick={()=>{delRoom(room.Id)}}>Yes</button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             )}
                                         </Popup>
                                     </tr>
+                                    
                                 )
                             })
                         }
