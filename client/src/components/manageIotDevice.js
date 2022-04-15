@@ -12,6 +12,8 @@ if (localStorage.getItem("user") != null) {
     TotalUser = JSON.parse(localStorage.getItem("user"));
 }
 
+
+
 var isAdmin = TotalUser.isAdmin == false ? 0 : 1;
 let AdminStyle = {}
 let UserStyle = {}
@@ -92,6 +94,27 @@ var UnclickStyle = {
     display: 'flex',
     justifyContent: 'space-between',
 }
+
+
+var clicked_type = {
+    backgroundColor: '#428af7',
+    color: 'white',
+    cursor: 'pointer',
+}
+var Unclick_type = {
+    backgroundColor: '#fff',
+    color: 'black',
+    cursor: 'pointer',
+}
+
+var clicked_devices = {
+    border: '4px solid rgb(0, 54, 148)',
+}
+var Unclick_devices = {
+    border: '1px solid rgb(0, 0, 0)',
+}
+
+
 function ManageIotDevice() {
     const [logOut, setLogOut] = useState("")
     if (logOut === "view-room") {
@@ -111,6 +134,7 @@ function ManageIotDevice() {
         console.log("logout")
     }
     // phong hien tai 
+    const [checked, setChecked] = useState(0);
     const [curRoom, setCurRoom] = useState(TotalUser.room[0])
     const [deviceType, setDeviceType] = useState('GAS');
     // lay ds thiet bi trong phong 
@@ -157,7 +181,6 @@ function ManageIotDevice() {
     }
     function ChangeDeviceStatus(dvinfo) {
         if (dvinfo.length == 0) {
-            console.log("Cho Hiu ngoas")
             window.alert("Please choose device to change status")
         }
         else {
@@ -249,15 +272,15 @@ function ManageIotDevice() {
                         <div className='manage-iot-device-content-left'>
                             <div className='dv-table'>
                                 <h2 className='dv-name'>My device</h2>
-                                <div className='devices'>
+                                <div className='devices' onClick={() => setChecked(1)} style={checked === 1 ? clicked_type : Unclick_type}>
                                     <img className='device-icon' src='../img/light.png' alt="icon" />
                                     <span className='device-name'>Bóng đèn</span>
                                 </div>
-                                <div className='devices'>
+                                <div className='devices' onClick={() => setChecked(2)} style={checked === 2 ? clicked_type : Unclick_type}>
                                     <img className='device-icon' src='../img/fire.png' alt="icon" />
                                     <span className='device-name'>Cảm biến khí gas</span>
                                 </div>
-                                <div className='devices'>
+                                <div className='devices' onClick={() => setChecked(3)} style={checked === 3 ? clicked_type : Unclick_type}>
                                     <img className='device-icon' src='../img/exit.png' alt="icon" />
                                     <span className='device-name'>Cảm biến đột nhập</span>
                                 </div>
@@ -269,7 +292,7 @@ function ManageIotDevice() {
                                 devices.filter(d => d.enabled == true).map((dv, index) => {
                                     if (dv.type === "LIGHT") {
                                         return (
-                                            <div className='device-info' onClick={() => setDeviceInfo(dv)}>
+                                            <div className='device-info' onClick={() => setDeviceInfo(dv)} style={deviceInfo === dv ? clicked_devices : Unclick_devices}>
                                                 <Popup trigger={<img className='close' style={AdminStyle} src='../img/close.png' alt='close' />} position="top center" nested>
                                                     {close => (
                                                         <div className='popup-overlay'>
@@ -290,7 +313,7 @@ function ManageIotDevice() {
                                     }
                                     else if (dv.type === "GAS") {
                                         return (
-                                            <div className='device-info' onClick={() => setDeviceInfo(dv)}>
+                                            <div className='device-info' onClick={() => setDeviceInfo(dv)} style={deviceInfo === dv ? clicked_devices : Unclick_devices}>
                                                 <Popup trigger={<img className='close' style={AdminStyle} src='../img/close.png' alt='close' />} position="top center" nested>
                                                     {close => (
                                                         <div className='popup-overlay'>
@@ -311,7 +334,7 @@ function ManageIotDevice() {
                                     }
                                     else if (dv.type === "DOOR") {
                                         return (
-                                            <div className='device-info' onClick={() => setDeviceInfo(dv)}>
+                                            <div className='device-info' onClick={() => setDeviceInfo(dv)} style={deviceInfo === dv ? clicked_devices : Unclick_devices}>
                                                 <Popup trigger={<img className='close' style={AdminStyle} src='../img/close.png' alt='close' />} position="top center" nested>
                                                     {close => (
                                                         <div className='popup-overlay'>
