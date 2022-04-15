@@ -38,7 +38,7 @@ span{
     width: 100%;
     justify-content: center;
     padding: 10px auto;
-    border: #000 1px  solid;
+    border: rgb(85, 255, 0) 1px  solid;
 }
 .devices:last-child{
     margin-bottom: 20px;

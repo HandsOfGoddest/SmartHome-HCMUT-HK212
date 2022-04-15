@@ -15,6 +15,22 @@ async function getRoomList() {
         console.error(error);
     }
 }
+async function addRoomList(data) {
+    try {
+        const response = await axios.post('http://127.0.0.1:8000/rooms/', data);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+    }
+}
+async function delRoomList(data) {
+    try {
+        const response = await axios.post('http://127.0.0.1:8000/rooms/', data);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+    }
+}
 async function getUser() {
     try {
         const response = await axios.get('http://127.0.0.1:8000/users/');
@@ -27,6 +43,7 @@ function ViewRoomList() {
     const [roomList, setRoomList] = useState([]);
     const [user, setUser] = useState([]);
     const [logOut, setLogOut] = useState("")
+
 
     if (logOut === "view-room") {
         window.location.replace("/view-room-list")
@@ -46,7 +63,7 @@ function ViewRoomList() {
     }
     useEffect(() => {
         getRoomList().then(data => {
-            setRoomList(data);
+            setRoomList(data.reverse());
         });
     }, []);
     useEffect(() => {
@@ -62,6 +79,35 @@ function ViewRoomList() {
         }
     }
 
+    const [addRoomId, setAddRoomId] = useState("");
+    const [addRoomOwner, setAddRoomOwner] = useState("");
+    function addRoom() {
+        if (addRoomId !== "" || addRoomOwner !== "") {
+            const d = new Date();
+            const data = {
+                "Id": addRoomId,
+                "owner": addRoomOwner,
+                "users": [],
+                "devices": [],
+                "_date_created": d.toISOString()
+            }
+            addRoomList(data).then(data1 => {
+                // console.log(data1)
+                if(data1 == 409){
+                    alert("Phòng " + data.Id + " đã tồn tại")
+                }
+                else{
+                    alert("thêm phòng " + data1.Id + " thành công")
+                    window.location.reload()
+
+                }
+            })
+        }
+        else{
+            alert("Vui lòng nhập đủ các thông tin")
+        }
+
+    }
     return (
         <div className='view-room-list'>
             <div className="header">
@@ -148,16 +194,16 @@ function ViewRoomList() {
                             <div className='xoa-tb'>
                                 <div className="inf">
                                     <p>Số phòng</p>
-                                    <input type='text' />
+                                    <input type='text' onChange={(e) => { setAddRoomId(e.target.value) }} />
                                 </div>
                                 <br />
                                 <div className="inf">
                                     <p>Chủ sở hữu</p>
-                                    <input type='text' />
+                                    <input type='text' onChange={(e) => { setAddRoomOwner(e.target.value) }} />
                                 </div>
                                 <div className='cf-btn'>
-                                    <button className='ok'>Xác nhận</button>
-                                    <button className='cancel' onClick={close}>Hủy bỏ</button>
+                                    <button className='ok' onClick={()=>{addRoom()}}>Xác nhận</button>
+                                    <button className='cancel' onClick={()=>{setAddRoomId('');setAddRoomOwner('')}}><p onClick={close}>Hủy bỏ</p></button>
                                 </div>
                             </div>
                         </div>

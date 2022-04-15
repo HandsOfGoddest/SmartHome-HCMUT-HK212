@@ -112,7 +112,9 @@ function ManageIotDevice() {
     }
     // phong hien tai 
     const [curRoom, setCurRoom] = useState(TotalUser.room[0])
-    const [deviceType, setDeviceType] = useState('GAS');
+    const [deviceType, setDeviceType] = useState('GAS')
+    const [seclectMyDevice, setSeclectMyDevice] = useState('')
+
     // lay ds thiet bi trong phong 
     const [roomDevices, setRoomDevices] = useState([])
     const [device, setDevice] = useState([]);
@@ -199,7 +201,7 @@ function ManageIotDevice() {
                         <div className="header">
                             <div className='sophong logo-click'>
 
-                                <select onChange={(e) => { setCurRoom(e.target.value); }} value={curRoom}>
+                                <select onChange={(e) => { setCurRoom(e.target.value); setDeviceInfo([])}} value={curRoom}>
                                     {
                                         TotalUser.room.map((rm, index) => {
                                             return (
@@ -248,90 +250,159 @@ function ManageIotDevice() {
                     <div className='manage-iot-device-content'>
                         <div className='manage-iot-device-content-left'>
                             <div className='dv-table'>
-                                <h2 className='dv-name'>My device</h2>
-                                <div className='devices'>
+                                <h2 className='dv-name'  style={seclectMyDevice==''?{border:' rgb(255, 0, 0) 1px  solid'}:{border:' 0px'}} onClick={()=>setSeclectMyDevice('')}>My device</h2>
+                                <div className='devices' style={seclectMyDevice=='LIGHT'?{border:' rgb(255, 0, 0) 1px  solid'}:{border:' rgb(0, 0, 0) 1px  solid'}} onClick={()=>setSeclectMyDevice('LIGHT')}>
                                     <img className='device-icon' src='../img/light.png' alt="icon" />
                                     <span className='device-name'>Bóng đèn</span>
                                 </div>
-                                <div className='devices'>
+                                <div className='devices' style={seclectMyDevice=='GAS'?{border:' rgb(255, 0, 0) 1px  solid'}:{border:' rgb(0, 0, 0) 1px  solid'}} onClick={()=>setSeclectMyDevice('GAS')}>
                                     <img className='device-icon' src='../img/fire.png' alt="icon" />
                                     <span className='device-name'>Cảm biến khí gas</span>
                                 </div>
-                                <div className='devices'>
+                                <div className='devices' style={seclectMyDevice=='DOOR'?{border:' rgb(255, 0, 0) 1px  solid'}:{border:' rgb(0, 0, 0) 1px  solid'}} onClick={()=>setSeclectMyDevice('DOOR')}>
                                     <img className='device-icon' src='../img/exit.png' alt="icon" />
-                                    <span className='device-name'>Cảm biến đột nhập</span>
+                                    <span className='device-name' >Cảm biến đột nhập</span>
                                 </div>
                             </div>
 
                         </div>
                         <div className='manage-iot-device-content-center'>
                             {
-                                devices.filter(d => d.enabled == true).map((dv, index) => {
-                                    if (dv.type === "LIGHT") {
-                                        return (
-                                            <div className='device-info' onClick={() => setDeviceInfo(dv)}>
-                                                <Popup trigger={<img className='close' style={AdminStyle} src='../img/close.png' alt='close' />} position="top center" nested>
-                                                    {close => (
-                                                        <div className='popup-overlay'>
-                                                            <div className='xoa-tb'>
-                                                                <h2>Xóa thiết bị này?</h2>
-                                                                <div className='cf-btn'>
-                                                                    <button className='cancel' onClick={close}>No</button>
-                                                                    <button onClick={() => deleteDevice(deviceInfo)} className='ok'>Yes</button>
+                                seclectMyDevice === '' ? (
+                                    devices.filter(d => d.enabled == true).map((dv, index) => {
+                                        if (dv.type === "LIGHT") {
+                                            return (
+                                                <div className='device-info' onClick={() => setDeviceInfo(dv)}>
+                                                    <Popup trigger={<img className='close' style={AdminStyle} src='../img/close.png' alt='close' />} position="top center" nested>
+                                                        {close => (
+                                                            <div className='popup-overlay'>
+                                                                <div className='xoa-tb'>
+                                                                    <h2>Xóa thiết bị này?</h2>
+                                                                    <div className='cf-btn'>
+                                                                        <button className='cancel' onClick={close}>No</button>
+                                                                        <button onClick={() => deleteDevice(deviceInfo)} className='ok'>Yes</button>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    )}
-                                                </Popup>
-                                                <img className='device-info-img' src='../img/led.jpg' alt='img' />
-                                                <p className='device-info-name'>{dv.name}</p>
-                                            </div>
-                                        )
-                                    }
-                                    else if (dv.type === "GAS") {
-                                        return (
-                                            <div className='device-info' onClick={() => setDeviceInfo(dv)}>
-                                                <Popup trigger={<img className='close' style={AdminStyle} src='../img/close.png' alt='close' />} position="top center" nested>
-                                                    {close => (
-                                                        <div className='popup-overlay'>
-                                                            <div className='xoa-tb'>
-                                                                <h2>Xóa thiết bị này?</h2>
-                                                                <div className='cf-btn'>
-                                                                    <button className='cancel' onClick={close}>No</button>
-                                                                    <button onClick={() => deleteDevice(deviceInfo)} className='ok'>Yes</button>
+                                                        )}
+                                                    </Popup>
+                                                    <img className='device-info-img' src='../img/led.jpg' alt='img' />
+                                                    <p className='device-info-name'>{dv.name}</p>
+                                                </div>
+                                            )
+                                        }
+                                        else if (dv.type === "GAS") {
+                                            return (
+                                                <div className='device-info' onClick={() => setDeviceInfo(dv)}>
+                                                    <Popup trigger={<img className='close' style={AdminStyle} src='../img/close.png' alt='close' />} position="top center" nested>
+                                                        {close => (
+                                                            <div className='popup-overlay'>
+                                                                <div className='xoa-tb'>
+                                                                    <h2>Xóa thiết bị này?</h2>
+                                                                    <div className='cf-btn'>
+                                                                        <button className='cancel' onClick={close}>No</button>
+                                                                        <button onClick={() => deleteDevice(deviceInfo)} className='ok'>Yes</button>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    )}
-                                                </Popup>
-                                                <img className='device-info-img' src='../img/gas.jpg' alt='img' />
-                                                <p className='device-info-name'>{dv.name}</p>
-                                            </div>
-                                        )
-                                    }
-                                    else if (dv.type === "DOOR") {
-                                        return (
-                                            <div className='device-info' onClick={() => setDeviceInfo(dv)}>
-                                                <Popup trigger={<img className='close' style={AdminStyle} src='../img/close.png' alt='close' />} position="top center" nested>
-                                                    {close => (
-                                                        <div className='popup-overlay'>
-                                                            <div className='xoa-tb'>
-                                                                <h2>Xóa thiết bị này?</h2>
-                                                                <div className='cf-btn'>
-                                                                    <button className='cancel' onClick={close}>No</button>
-                                                                    <button onClick={() => deleteDevice(deviceInfo)} className='ok'>Yes</button>
+                                                        )}
+                                                    </Popup>
+                                                    <img className='device-info-img' src='../img/gas.jpg' alt='img' />
+                                                    <p className='device-info-name'>{dv.name}</p>
+                                                </div>
+                                            )
+                                        }
+                                        else if (dv.type === "DOOR") {
+                                            return (
+                                                <div className='device-info' onClick={() => setDeviceInfo(dv)}>
+                                                    <Popup trigger={<img className='close' style={AdminStyle} src='../img/close.png' alt='close' />} position="top center" nested>
+                                                        {close => (
+                                                            <div className='popup-overlay'>
+                                                                <div className='xoa-tb'>
+                                                                    <h2>Xóa thiết bị này?</h2>
+                                                                    <div className='cf-btn'>
+                                                                        <button className='cancel' onClick={close}>No</button>
+                                                                        <button onClick={() => deleteDevice(deviceInfo)} className='ok'>Yes</button>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    )}
-                                                </Popup>
-                                                <img className='device-info-img' src='../img/door.jpg' alt='img' />
-                                                <p className='device-info-name'>{dv.name}</p>
-                                            </div>
-                                        )
-                                    }
-                                    else { }
-                                })
+                                                        )}
+                                                    </Popup>
+                                                    <img className='device-info-img' src='../img/door.jpg' alt='img' />
+                                                    <p className='device-info-name'>{dv.name}</p>
+                                                </div>
+                                            )
+                                        }
+                                        else { }
+                                    })
+                                ):(
+                                    devices.filter(d => d.enabled == true).filter(d=>d.type == seclectMyDevice).map((dv, index) => {
+                                        if (dv.type === "LIGHT") {
+                                            return (
+                                                <div className='device-info' onClick={() => setDeviceInfo(dv)}>
+                                                    <Popup trigger={<img className='close' style={AdminStyle} src='../img/close.png' alt='close' />} position="top center" nested>
+                                                        {close => (
+                                                            <div className='popup-overlay'>
+                                                                <div className='xoa-tb'>
+                                                                    <h2>Xóa thiết bị này?</h2>
+                                                                    <div className='cf-btn'>
+                                                                        <button className='cancel' onClick={close}>No</button>
+                                                                        <button onClick={() => deleteDevice(deviceInfo)} className='ok'>Yes</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </Popup>
+                                                    <img className='device-info-img' src='../img/led.jpg' alt='img' />
+                                                    <p className='device-info-name'>{dv.name}</p>
+                                                </div>
+                                            )
+                                        }
+                                        else if (dv.type === "GAS") {
+                                            return (
+                                                <div className='device-info' onClick={() => setDeviceInfo(dv)}>
+                                                    <Popup trigger={<img className='close' style={AdminStyle} src='../img/close.png' alt='close' />} position="top center" nested>
+                                                        {close => (
+                                                            <div className='popup-overlay'>
+                                                                <div className='xoa-tb'>
+                                                                    <h2>Xóa thiết bị này?</h2>
+                                                                    <div className='cf-btn'>
+                                                                        <button className='cancel' onClick={close}>No</button>
+                                                                        <button onClick={() => deleteDevice(deviceInfo)} className='ok'>Yes</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </Popup>
+                                                    <img className='device-info-img' src='../img/gas.jpg' alt='img' />
+                                                    <p className='device-info-name'>{dv.name}</p>
+                                                </div>
+                                            )
+                                        }
+                                        else if (dv.type === "DOOR") {
+                                            return (
+                                                <div className='device-info' onClick={() => setDeviceInfo(dv)}>
+                                                    <Popup trigger={<img className='close' style={AdminStyle} src='../img/close.png' alt='close' />} position="top center" nested>
+                                                        {close => (
+                                                            <div className='popup-overlay'>
+                                                                <div className='xoa-tb'>
+                                                                    <h2>Xóa thiết bị này?</h2>
+                                                                    <div className='cf-btn'>
+                                                                        <button className='cancel' onClick={close}>No</button>
+                                                                        <button onClick={() => deleteDevice(deviceInfo)} className='ok'>Yes</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </Popup>
+                                                    <img className='device-info-img' src='../img/door.jpg' alt='img' />
+                                                    <p className='device-info-name'>{dv.name}</p>
+                                                </div>
+                                            )
+                                        }
+                                        else { }
+                                    })
+                                )
                             }
 
 
