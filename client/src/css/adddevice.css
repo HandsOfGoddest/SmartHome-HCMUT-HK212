@@ -140,14 +140,13 @@ li{
     width: 150px;
     height: 54px;
     border-radius: 50px;
-    background-color: rgb(235, 169, 46);
+    background-color: rgb(46, 137, 235); 
     color: white;
     text-align: center;
     font-size: 25px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: #000 solid 1px;
     margin: 20px auto;
 }
 .popup-overlay{

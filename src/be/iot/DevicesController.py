@@ -31,7 +31,7 @@ def DeviceController(Id, data, type):
     device= query_devices(Id)
     if(device):
         deviceId= device[0].id
-        if(device[0].type == type):
+        if(device[0].type == type and device[0].status == True):
             create_Record(deviceId, data)
     else:
         print("Unknown device")
