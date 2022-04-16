@@ -111,9 +111,7 @@ tbody{
 .list thead tr:before{
     content: " ";  
     position: absolute;  
-    display: inline-block;  
-    left: 10%;  
-    width: 80%;  
+    display: inline-block;    
     margin-top: -10px;
 }
 
@@ -121,8 +119,8 @@ tbody{
     content: " ";  
     position: absolute;  
     display: inline-block;  
-    left: 10%;  
-    border-bottom: 1px solid #333;  
-    width: 80%;  
+    left: 13%;  
+    border-bottom: 1px solid rgba(104, 104, 104,0.4);  
+    width: 74%;  
     margin-top: -10px;
 }
