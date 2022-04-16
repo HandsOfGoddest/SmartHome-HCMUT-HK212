@@ -441,9 +441,6 @@ function ManageAccount() {
                 }
             </div>
             <div className='manage-account-footer'>
-                <div className='map-view-part'>
-
-                </div>
                 <div className='manage-account-center-part'>
 
                     <Popup trigger={<img className="add-mem" src="../img/add.png" alt="add" />} position="top center" nested>
