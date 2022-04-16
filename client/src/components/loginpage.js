@@ -10,7 +10,7 @@ async function getUser() {
         console.error(error);
     }
 }
-var characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+var characters = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTYUVWXYZ';
 var result = ""
 var chaactersLength = characters.length;
 
