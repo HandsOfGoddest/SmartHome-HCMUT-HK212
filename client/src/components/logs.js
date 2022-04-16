@@ -55,8 +55,19 @@ function formatDate(date) {
     if (second.length < 2) second = '0' + second
     return  [hour, minute, second].join(':') + ' ngày ' + [day,month,year].join('/') 
 }
-function Logs({ close, roomID, deviceID }) {
+function checkDate(date,dateFrom,dateTo) {
+    var d = new Date(date.split("T")[0])
+    var df = new Date(dateFrom)
+    var dt = new Date(dateTo)
+    if(dateFrom == '' && dateTo == '') return true
+    else if(dateFrom == '' && dateTo != '') return d <= dt
+    else if(dateFrom != '' && dateTo == '') return d >= df
+    else return d >= df && d <= dt
+}
+function Logs({ close, deviceID }) {
     const [Logs, setLogs] = useState([]);
+    const [dateFrom, setDateFrom] = useState('');
+    const [dateTo, setDateTo] = useState('');
     useEffect(() => {
         getLogs(deviceID).then(data => {
             setLogs(data);
@@ -68,9 +79,9 @@ function Logs({ close, roomID, deviceID }) {
             <h2>Nhật ký điều khiển thiết bị</h2>
             <div className="date-input"> 
                 <label htmlFor="date-start">From</label>
-                <input name='date-start' id='date-start' type="date" />
+                <input name='date-start' id='date-start' type="date" onChange={(e)=>setDateFrom(e.target.value)}/>
                 <label htmlFor="date-end">to</label>
-                <input name='date-end' id='date-end' type="date" />
+                <input name='date-end' id='date-end' type="date" onChange={(e)=>setDateTo(e.target.value)} />
             </div>
             <div className="logs-table"> 
                 <table cellSpacing='0px' border='1px' >
@@ -88,8 +99,8 @@ function Logs({ close, roomID, deviceID }) {
 
                     <tbody>
 
-                        {Logs.filter(log => log.deviceId == deviceID).length !== 0 ? (
-                            Logs.filter(log => log.deviceId == deviceID).map((log, index) => (
+                        {Logs.filter(log => log.deviceId == deviceID && checkDate(log._date_changed,dateFrom,dateTo)).length !== 0 ? (
+                            Logs.filter(log => log.deviceId == deviceID && checkDate(log._date_changed,dateFrom,dateTo)).map((log, index) => (
                                 <tr key={index} className="account">
                                     <td>{index+1}</td>
                                     <td>{log.deviceId}</td>
@@ -100,7 +111,7 @@ function Logs({ close, roomID, deviceID }) {
                                 </tr>
                             ))
                         ) :
-                            <td colSpan='6' style={{ textAlign: 'center', width: '100%' }}>Chưa có dữ liệu</td>
+                            <td colSpan='6' style={{ textAlign: 'center', width: '100%' }}>Không có dữ liệu</td>
                         }
 
                     </tbody>

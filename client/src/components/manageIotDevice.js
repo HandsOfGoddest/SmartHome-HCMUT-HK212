@@ -143,8 +143,9 @@ function ManageIotDevice({ match }) {
         window.location.replace("/manage-device/" + TotalUser.room[0])
     }
     if (logOut === "logout") {
+        localStorage.removeItem("user");
         window.location.replace("/login")
-        console.log("logout")
+
     }
     // phong hien tai 
     const [curRoom, setCurRoom] = useState(match.params.id)
@@ -637,7 +638,7 @@ function ManageIotDevice({ match }) {
                                     {close => (
                                         <div className='popup-overlay'>
                                             <div className='log-tb'>
-                                                <Logs close={close} deviceID={deviceInfo.Id} roomID={curRoom.Id} />
+                                                <Logs close={close} deviceID={deviceInfo.Id}/>
                                             </div>
                                         </div>
                                     )}

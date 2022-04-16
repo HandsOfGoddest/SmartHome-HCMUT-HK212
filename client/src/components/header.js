@@ -17,8 +17,8 @@ function Header() {
         window.location.replace("/manage-device/"+TotalUser.room[0])
     }
     if (logOut === "logout") {
+        localStorage.removeItem("user");
         window.location.replace("/login")
-        console.log("logout")
     }
     return (
         <div className="manage-view">

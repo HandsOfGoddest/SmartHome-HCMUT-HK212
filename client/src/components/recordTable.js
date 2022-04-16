@@ -9,7 +9,15 @@ async function getRecords(dvId) {
         console.error(error);
     }
 }
-
+function checkDate(date,dateFrom,dateTo) {
+    var d = new Date(date.split("T")[0])
+    var df = new Date(dateFrom)
+    var dt = new Date(dateTo)
+    if(dateFrom == '' && dateTo == '') return true
+    else if(dateFrom == '' && dateTo != '') return d <= dt
+    else if(dateFrom != '' && dateTo == '') return d >= df
+    else return d >= df && d <= dt
+}
 function formatDate(date) {
     var d = new Date(date)
     var month = '' + (d.getMonth() + 1)
@@ -48,9 +56,11 @@ function formatDate(date) {
 }
 function Records({ close, deviceID }) {
     const [Records, setRecords] = useState([]);
+    const [dateFrom, setDateFrom] = useState('');
+    const [dateTo, setDateTo] = useState('');
     useEffect(() => {
         getRecords(deviceID).then(data => {
-            setRecords(data);
+            setRecords(data.reverse());
         });
     }, []);
     return (
@@ -59,9 +69,9 @@ function Records({ close, deviceID }) {
             <h2>Nhật ký hoạt động thiết bị</h2>
             <div className="date-input"> 
                 <label htmlFor="date-start">From</label>
-                <input name='date-start' id='date-start' type="date" />
+                <input name='date-start' id='date-start' type="date" onChange={(e)=>setDateFrom(e.target.value)}/>
                 <label htmlFor="date-end">to</label>
-                <input name='date-end' id='date-end' type="date" />
+                <input name='date-end' id='date-end' type="date" onChange={(e)=>setDateTo(e.target.value)} />
             </div>
             <div className="logs-table">
                 <table cellSpacing='0px' border='1px'>
@@ -76,8 +86,8 @@ function Records({ close, deviceID }) {
                     </thead>
                     <tbody>
 
-                        {Records.length !== 0 ? (
-                            Records.map((record, index) => (
+                        {Records.filter(r=>checkDate(r._date_created,dateFrom,dateTo)).length !== 0 ? (
+                            Records.filter(r=>checkDate(r._date_created,dateFrom,dateTo)).map((record, index) => (
                                 <tr key={index} className="account">
                                     <td>{index+1}</td>
                                     <td>{record.Id}</td>
