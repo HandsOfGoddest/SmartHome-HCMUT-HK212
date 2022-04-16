@@ -153,8 +153,13 @@ th{
     border-radius: 10px;
     justify-self: flex-end;
     margin-right: 10px;
+}
+
+.edit-mem:hover{
+    opacity: 0.7;
     cursor: pointer;
 }
+
 .trash-border{
     width: 100%;
     display: flex;
@@ -167,6 +172,12 @@ th{
     margin-right: 10px;
     margin-top: 10px;
 }
+
+.trash-img:hover{
+    cursor: pointer;
+    opacity: 0.7;
+}
+
 .account-inf{
     width: 94%;
     display: flex;
@@ -271,14 +282,21 @@ th{
 .manage-account-center-part{
     display: flex;
     width: 40%;
+    margin-left: 10%;
+    margin-bottom: 50px;
 }
 .add-mem{
     height: 50px;
     border: #000 1px solid;
     border-radius: 10px;
-    margin-right: 10%;
-
+    margin: 5px 20px 0 0;
 }
+
+.add-mem:hover{
+    cursor: pointer;
+    opacity: 0.7;
+}
+
 .table-bd{
     height: 200px;
 }
