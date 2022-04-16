@@ -38,18 +38,27 @@ span{
     width: 100%;
     justify-content: center;
     padding: 10px auto;
-    border: #000 1px  solid;
+    border: rgb(0, 0, 0) 1px  solid;
 }
+
+.devices:hover{
+    border: 4px solid rgb(0, 54, 148);
+}
+
+
 .devices:last-child{
     margin-bottom: 20px;
 }
 .device-icon{
     height: 80px;
-    margin: 10px 0px;
+    margin: 10px 10px;
+    width: 30%;
+    text-align: center;
 }
 .device-name{
-    font-size: 30px;
+    font-size: 28px;
     width: 70%;
+    margin-right: 10px;
 }
 .manage-iot-device-content-center{
     width: 50%;
@@ -76,6 +85,12 @@ span{
     justify-content: space-around;
     align-items: center;
 }
+
+.device-info:hover{
+    opacity: 0.6;
+    cursor: pointer;
+}
+
 .close{
     height: 28px;
     align-self: flex-end;
@@ -98,6 +113,15 @@ span{
     height:max-content;
     width: 20%;
 }
+
+.manage-iot-device-content-right ul{
+    list-style: none;
+    text-align: center;
+}
+
+.manage-iot-device-content-right li{
+    font-size : 24px
+}
 .dv-info-table{
     width: 100%;
     border: 1px solid #000;
@@ -110,8 +134,12 @@ span{
 
 }
 
+.dv-info-table ul{
+    padding-left: 10px;
+}
 .dv-info-table li{
-    margin-right: 40px;
+    margin-right: 10px;
+    width: 100%;
 }
 .stt-icon{
     width: 150px;
@@ -156,6 +184,13 @@ li{
     border: #000 solid 1px;
     margin: 20px auto;
 }
+.data-gram:hover{
+    border: rgb(46, 137, 235) solid 4px;
+    font-weight: 600;
+    background-color: white;
+    color: rgb(46, 137, 235); 
+    cursor: pointer;
+}
 .popup-overlay{
     position: fixed;
     top: 0;
@@ -174,6 +209,19 @@ li{
     height: max-content;
     border: 1px solid #000;
     border-radius: 20px;
+    font-size: 35px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 10px;
+}
+.log-tb{
+    background-color: white;
+    width: max-content;
+    height: max-content;
+    border: 1px solid #000;
+    
     font-size: 35px;
     display: flex;
     flex-direction: column;
@@ -201,5 +249,50 @@ li{
 .admin{
     display: unset;
 }
-
+.account-inf-value-border1{
+    border: #000 solid 2px;
+    border-radius: 10px;
+    font-size: 22px;
+    padding: 4px 8px;
+    background-color: #fff;
+    max-height: 200px;
+}
+.account-inf-value-border2{
+    border: #000 solid 2px;
+    border-radius: 10px;
+    font-size: 22px;
+    padding: 4px 8px;
+    background-color: #fff;
+    max-height: 265px;
+}
+.account-inf-value-border2 h4{
+    text-align: center;
+}
+.add-dv{
+    display: flex;
+    margin: 10px 0px;
+}
+.add-dv p{
+    width: 130px;
+}
+.add-dv input{
+    margin-left: 20px;
+    font-size: 20px;
+    width: 200px;
+}
+.add-dv select{
+    width: 200px;
+    margin-left: 20px;
+    font-size: 20px;
+}
+.add-dv-cf{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+.add-dv-cf button{
+    font-size: 20px;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
 

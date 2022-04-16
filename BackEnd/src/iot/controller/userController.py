@@ -53,20 +53,26 @@ class UserDetailViewSet(APIView):
             return Response(status.HTTP_404_NOT_FOUND)
 
     def put(self, request, userID):
-        try:
+        # try:
             user = self.get_object(userID)
+            prev_room= user.room
             serializer = UserSerializer(user, data=request.data)
             if serializer.is_valid():
                 serializer.save()
-                upUser= self.get_object(userID)
-                for room in upUser.room:
-                    if upUser.id not in room.users:
-                        room.update(add_to_set__users= upUser.id)
+                sameRoom= set(prev_room)&set(user.room)
+                removedRoom= set(prev_room) - sameRoom
+                newRoom= set(user.room) - sameRoom
+                # print(user.room)
+                for room in newRoom:
+                    if user.id not in room.users:
+                        room.update(add_to_set__users= user.id)
+                for room in removedRoom:
+                    room.update(pull__users= user.id)
                 return Response(serializer.data)
 
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-        except:
-            return Response(serializer.errors, status.HTTP_403_FORBIDDEN)
+        # except:
+        #     return Response(serializer.errors, status.HTTP_403_FORBIDDEN)
 
     def delete(self, request, userID):
         user = self.get_object(userID)

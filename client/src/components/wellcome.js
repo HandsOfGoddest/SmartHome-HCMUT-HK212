@@ -35,7 +35,7 @@ function WellcomePage() {
                 </div>
                 <div className="btn">
 
-                    <Link to="/manage-device"><button className='view-btn'>Vào hệ thống</button></Link>
+                    <Link to={`/manage-device/${TotalUser.room[0]}`}><button className='view-btn'>Vào hệ thống</button></Link>
                 </div>
             </div>
         </div>

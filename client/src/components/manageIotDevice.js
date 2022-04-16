@@ -5,12 +5,15 @@ import { Link } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import axios from 'axios';
 import Datagram from './datagram';
+import Logs from './logs';
 import React, { useEffect, useState } from 'react';
 
 var TotalUser = false;
 if (localStorage.getItem("user") != null) {
     TotalUser = JSON.parse(localStorage.getItem("user"));
 }
+
+
 
 var isAdmin = TotalUser.isAdmin == false ? 0 : 1;
 let AdminStyle = {}
@@ -39,7 +42,14 @@ async function getRoomDevices(roomId) {
         console.error(error);
     }
 }
-
+async function addDevice(device) {
+    try {
+        const response = await axios.post('http://localhost:8000/devices/', device);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+    }
+}
 async function getDeviceAvailable() {
     try {
         const response = await axios.get('http://127.0.0.1:8000/addDeviceToRoom/');
@@ -51,6 +61,14 @@ async function getDeviceAvailable() {
 async function addDeviceToRoom(roomId, data) {
     try {
         const response = await axios.put('http://127.0.0.1:8000/rooms/' + roomId + '/', data);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+    }
+}
+async function getCurRecord(dvId) {
+    try {
+        const response = await axios.get('http://127.0.0.1:8000/records/' + dvId + '/');
         return response.data;
     } catch (error) {
         console.error(error);
@@ -92,7 +110,28 @@ var UnclickStyle = {
     display: 'flex',
     justifyContent: 'space-between',
 }
-function ManageIotDevice() {
+
+
+var clicked_type = {
+    backgroundColor: '#428af7',
+    color: 'white',
+    cursor: 'pointer',
+}
+var Unclick_type = {
+    backgroundColor: '#fff',
+    color: 'black',
+    cursor: 'pointer',
+}
+
+var clicked_devices = {
+    border: '4px solid rgb(0, 54, 148)',
+}
+var Unclick_devices = {
+    border: '1px solid rgb(0, 0, 0)',
+}
+
+
+function ManageIotDevice({ match }) {
     const [logOut, setLogOut] = useState("")
     if (logOut === "view-room") {
         window.location.replace("/view-room-list")
@@ -101,18 +140,24 @@ function ManageIotDevice() {
         window.location.replace("/manage-account")
     }
     if (logOut === "manage-device") {
-        window.location.replace("/manage-device")
-    }
-    if (logOut === "add-device") {
-        window.location.replace("/add-device")
+        window.location.replace("/manage-device/" + TotalUser.room[0])
     }
     if (logOut === "logout") {
         window.location.replace("/login")
         console.log("logout")
     }
     // phong hien tai 
-    const [curRoom, setCurRoom] = useState(TotalUser.room[0])
-    const [deviceType, setDeviceType] = useState('GAS');
+    const [curRoom, setCurRoom] = useState(match.params.id)
+    const [curValue, setCurValue] = useState({'data':0})
+    const [deviceType, setDeviceType] = useState('GAS')
+    const [selectMyDevice, setSelectMyDevice] = useState('')
+
+    const [deviceInfo, setDeviceInfo] = useState([])
+    const [deviceIdToAdd, setDeviceIdToAdd] = useState('')
+    const [devices, setDevices] = useState([])
+    const [addId, setAddId] = useState('')
+    const [addName, setAddName] = useState('')
+    const [addType, setAddType] = useState('GAS')
     // lay ds thiet bi trong phong 
     const [roomDevices, setRoomDevices] = useState([])
     const [device, setDevice] = useState([]);
@@ -121,13 +166,29 @@ function ManageIotDevice() {
             setRoomDevices(data)
         })
     }, [curRoom])
+    // useEffect(() => {
+    //     getCurRecord(deviceInfo.Id?deviceInfo.Id:0).then(data => {
+    //         console.log(deviceInfo.Id)
+    //         console.log(data)
+    //         // setCurValue(data)
+    //     })
+    // }, [])
+    console.log(curValue)
+
+    // setInterval(() => {
+    //     axios.get('http://127.0.0.1:8000/records/' + deviceInfo.Id + '/').then(res => {
+    //         if (res.data.length > 0) {
+    //             setCurValue(res.data[res.data.length - 1])
+    //         }
+    //     })
+    // }, 500)
 
     useEffect(() => {
         getDeviceAvailable().then(data => {
             setDevice(data);
         });
     }, []);
-    const [devices, setDevices] = useState([])
+
     useEffect(() => {
         if (roomDevices.devices) {
             setDevices([])
@@ -139,8 +200,8 @@ function ManageIotDevice() {
             })
         }
     }, [roomDevices.devices])
-    const [deviceInfo, setDeviceInfo] = useState([])
-    const [deviceIdToAdd, setDeviceIdToAdd] = useState('')
+
+
     function updateRoom() {
         const data = {
             "Id": roomDevices.Id,
@@ -157,7 +218,6 @@ function ManageIotDevice() {
     }
     function ChangeDeviceStatus(dvinfo) {
         if (dvinfo.length == 0) {
-            console.log("Cho Hiu ngoas")
             window.alert("Please choose device to change status")
         }
         else {
@@ -191,32 +251,70 @@ function ManageIotDevice() {
         })
         devices.fill(dataToUpdate, devices.findIndex(dv => dv.Id === dvinfo.Id), devices.findIndex(dv => dv.Id === dvinfo.Id) + 1)
     }
+    function confirmAddDevice() {
+        const newDv = {
+            "Id": addId,
+            "name": addName,
+            "data": 0.0,
+            "status": false,
+            "enabled": true,
+            "type": addType,
+        }
+        if (addId !== '' && addName !== '' && addType !== '') {
+            addDevice(newDv).then((res) => {
+                if(res === 409){
+                    alert("Thiết bị đã tồn tại")
+                }
+                else{
+                    alert("Thêm thiết bị thành công")
+                }
+            })
+        }
+        else {
+            alert("Vui lòng nhập đầy đủ thông tin")
+        }
+    }
+    function ClearAddDvInfo() {
+        setAddId('')
+        setAddName('')
+        setAddType('GAS')
+    }
     if (roomDevices.devices) {
         if (devices.length === roomDevices.devices.length) {
             return (
                 <div className='manage-iot-device'>
                     <div className="manage-view">
                         <div className="header">
-                            <div className='sophong logo-click'>
 
-                                <select onChange={(e) => { setCurRoom(e.target.value); }} value={curRoom}>
-                                    {
-                                        TotalUser.room.map((rm, index) => {
-                                            return (
-                                                <option key={index} value={rm}>Phòng {rm}   </option>
-                                            )
-                                        })
+                            <Popup trigger={<div className='sophong logo-click'><p>Phòng {curRoom}</p></div>} position="bottom center" nested>
+                                {close => (
+                                    <div className="account-inf-value-border1">
+                                        <div className="account-inf-value-top">
+                                            <h5>Danh sách phòng hiện tại</h5>
+                                            <hr width="100%" align="center" color='black' />
+                                            <div className="room-inf-list">
+                                                {
+                                                    TotalUser.room.map((rm, index) => {
+                                                        return (
+                                                            <div onClick={close}>
+                                                                <Link to={`/manage-device/${rm}`} onClick={() => { setCurRoom(rm); setDeviceInfo([]) }} className="logo-click account-inf-value-ind" >
+                                                                    <span>Phòng {rm}</span>
+                                                                </Link>
+                                                            </div>
+                                                        )
+                                                    })
 
-                                    }
-                                    {/* <option selected></option> */}
-                                </select>
-                                {/* <img className="nav" src="../img/nav.png" alt="nav" />
-                                <span>Phòng </span>
-                                <span>217</span> */}
-                            </div>
+                                                }
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                )}
+                            </Popup>
+
                             <Link to='/' className='logo-click'>
                                 <div className="logo">
-                                    <img className='homelogo' src='./img/homelogo.png' alt="logo" />
+                                    <img className='homelogo' src='../img/homelogo.png' alt="logo" />
                                     <h2>Smart Home</h2>
                                 </div>
                             </Link>
@@ -230,7 +328,6 @@ function ManageIotDevice() {
                                         <option value="view-room">View room list</option>
                                         <option value="manage-account">Manage account</option>
                                         <option value="manage-device">Manage Device</option>
-                                        <option value="add-device">Add Device</option>
                                         <option value="logout">Log Out</option>
                                     </select>
                                 ) : (
@@ -249,89 +346,195 @@ function ManageIotDevice() {
                         <div className='manage-iot-device-content-left'>
                             <div className='dv-table'>
                                 <h2 className='dv-name'>My device</h2>
-                                <div className='devices'>
+                                <div className='devices' onClick={() => setSelectMyDevice('')} style={selectMyDevice === '' ? clicked_type : Unclick_type}>
+                                    <img className='device-icon' src='../img/alldv.png' alt="icon" />
+                                    <span className='device-name' >Tất cả thiết bị</span>
+                                </div>
+                                <div className='devices' onClick={() => setSelectMyDevice('LIGHT')} style={selectMyDevice === 'LIGHT' ? clicked_type : Unclick_type}>
                                     <img className='device-icon' src='../img/light.png' alt="icon" />
                                     <span className='device-name'>Bóng đèn</span>
                                 </div>
-                                <div className='devices'>
+                                <div className='devices' onClick={() => setSelectMyDevice('GAS')} style={selectMyDevice === 'GAS' ? clicked_type : Unclick_type}>
                                     <img className='device-icon' src='../img/fire.png' alt="icon" />
-                                    <span className='device-name'>Cảm biến khí gas</span>
+                                    <span className='device-name' style={{ whiteSpace: 'nowrap' }}>Cảm biến khí gas</span>
                                 </div>
-                                <div className='devices'>
+                                <div className='devices' onClick={() => setSelectMyDevice('DOOR')} style={selectMyDevice === 'DOOR' ? clicked_type : Unclick_type}>
                                     <img className='device-icon' src='../img/exit.png' alt="icon" />
-                                    <span className='device-name'>Cảm biến đột nhập</span>
+                                    <span className='device-name' >Cảm biến đột nhập</span>
                                 </div>
+                                <Popup trigger={
+                                    <div className='devices' onClick={() => setSelectMyDevice('ADD')} style={selectMyDevice === 'ADD' ? clicked_type : Unclick_type}>
+                                        <img className='device-icon' src='../img/add.png' alt="icon" />
+                                        <span className='device-name' >Thêm thiết bị mới</span>
+                                    </div>
+                                } position='right bottom' onClose={ClearAddDvInfo} nested>
+                                    {close => (
+                                        <div className="account-inf-value-border2">
+                                            <h4>Thêm thiết bị mới</h4>
+                                            <hr width="100%" align="center" color='black' />
+                                            <div className='add-dv'>
+                                                <p>Device name</p>
+                                                <input type='text' onChange={(e) => setAddName(e.target.value)} />
+                                            </div>
+                                            <div className="add-dv">
+                                                <p>Device ID</p>
+                                                <input type='text' onChange={(e) => setAddId(e.target.value)} />
+                                            </div>
+                                            <div className="add-dv">
+                                                <p>Device type</p>
+                                                <select name="device-type" id="device-type" onChange={(e) => setAddType(e.target.value)}>
+                                                    <option value="GAS" selected>GAS</option>
+                                                    <option value="LIGHT">LIGHT</option>
+                                                    <option value="DOOR">DOOR</option>
+                                                </select>
+                                            </div>
+                                            <div className='add-dv-cf'>
+                                                <button className='add-dv-huy' onClick={close}>Hủy bỏ</button>
+                                                <button className='add-dv-ok' onClick={() => confirmAddDevice()}>Xác nhận</button>
+                                            </div>
+                                        </div>
+                                    )}
+                                </Popup>
                             </div>
 
                         </div>
                         <div className='manage-iot-device-content-center'>
                             {
-                                devices.filter(d => d.enabled == true).map((dv, index) => {
-                                    if (dv.type === "LIGHT") {
-                                        return (
-                                            <div className='device-info' onClick={() => setDeviceInfo(dv)}>
-                                                <Popup trigger={<img className='close' style={AdminStyle} src='../img/close.png' alt='close' />} position="top center" nested>
-                                                    {close => (
-                                                        <div className='popup-overlay'>
-                                                            <div className='xoa-tb'>
-                                                                <h2>Xóa thiết bị này?</h2>
-                                                                <div className='cf-btn'>
-                                                                    <button className='cancel' onClick={close}>No</button>
-                                                                    <button onClick={() => deleteDevice(deviceInfo)} className='ok'>Yes</button>
+                                selectMyDevice === '' ? (
+                                    devices.filter(d => d.enabled == true).map((dv, index) => {
+                                        if (dv.type === "LIGHT") {
+                                            return (
+                                                <div className='device-info' onClick={() => setDeviceInfo(dv)} style={deviceInfo === dv ? clicked_devices : Unclick_devices}>
+                                                    <Popup trigger={<img className='close' style={AdminStyle} src='../img/close.png' alt='close' />} position="top center" nested>
+                                                        {close => (
+                                                            <div className='popup-overlay'>
+                                                                <div className='xoa-tb'>
+                                                                    <h2>Xóa thiết bị này?</h2>
+                                                                    <div className='cf-btn'>
+                                                                        <button className='cancel' onClick={close}>No</button>
+                                                                        <button onClick={() => deleteDevice(deviceInfo)} className='ok'>Yes</button>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    )}
-                                                </Popup>
-                                                <img className='device-info-img' src='../img/led.jpg' alt='img' />
-                                                <p className='device-info-name'>{dv.name}</p>
-                                            </div>
-                                        )
-                                    }
-                                    else if (dv.type === "GAS") {
-                                        return (
-                                            <div className='device-info' onClick={() => setDeviceInfo(dv)}>
-                                                <Popup trigger={<img className='close' style={AdminStyle} src='../img/close.png' alt='close' />} position="top center" nested>
-                                                    {close => (
-                                                        <div className='popup-overlay'>
-                                                            <div className='xoa-tb'>
-                                                                <h2>Xóa thiết bị này?</h2>
-                                                                <div className='cf-btn'>
-                                                                    <button className='cancel' onClick={close}>No</button>
-                                                                    <button onClick={() => deleteDevice(deviceInfo)} className='ok'>Yes</button>
+                                                        )}
+                                                    </Popup>
+                                                    <img className='device-info-img' src='../img/led.jpg' alt='img' />
+                                                    <p className='device-info-name'>{dv.name}</p>
+                                                </div>
+                                            )
+                                        }
+                                        else if (dv.type === "GAS") {
+                                            return (
+                                                <div className='device-info' onClick={() => setDeviceInfo(dv)} style={deviceInfo === dv ? clicked_devices : Unclick_devices}>
+                                                    <Popup trigger={<img className='close' style={AdminStyle} src='../img/close.png' alt='close' />} position="top center" nested>
+                                                        {close => (
+                                                            <div className='popup-overlay'>
+                                                                <div className='xoa-tb'>
+                                                                    <h2>Xóa thiết bị này?</h2>
+                                                                    <div className='cf-btn'>
+                                                                        <button className='cancel' onClick={close}>No</button>
+                                                                        <button onClick={() => deleteDevice(deviceInfo)} className='ok'>Yes</button>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    )}
-                                                </Popup>
-                                                <img className='device-info-img' src='../img/gas.jpg' alt='img' />
-                                                <p className='device-info-name'>{dv.name}</p>
-                                            </div>
-                                        )
-                                    }
-                                    else if (dv.type === "DOOR") {
-                                        return (
-                                            <div className='device-info' onClick={() => setDeviceInfo(dv)}>
-                                                <Popup trigger={<img className='close' style={AdminStyle} src='../img/close.png' alt='close' />} position="top center" nested>
-                                                    {close => (
-                                                        <div className='popup-overlay'>
-                                                            <div className='xoa-tb'>
-                                                                <h2>Xóa thiết bị này?</h2>
-                                                                <div className='cf-btn'>
-                                                                    <button className='cancel' onClick={close}>No</button>
-                                                                    <button onClick={() => deleteDevice(deviceInfo)} className='ok'>Yes</button>
+                                                        )}
+                                                    </Popup>
+                                                    <img className='device-info-img' src='../img/gas.jpg' alt='img' />
+                                                    <p className='device-info-name'>{dv.name}</p>
+                                                </div>
+                                            )
+                                        }
+                                        else if (dv.type === "DOOR") {
+                                            return (
+                                                <div className='device-info' onClick={() => setDeviceInfo(dv)} style={deviceInfo === dv ? clicked_devices : Unclick_devices}>
+                                                    <Popup trigger={<img className='close' style={AdminStyle} src='../img/close.png' alt='close' />} position="top center" nested>
+                                                        {close => (
+                                                            <div className='popup-overlay'>
+                                                                <div className='xoa-tb'>
+                                                                    <h2>Xóa thiết bị này?</h2>
+                                                                    <div className='cf-btn'>
+                                                                        <button className='cancel' onClick={close}>No</button>
+                                                                        <button onClick={() => deleteDevice(deviceInfo)} className='ok'>Yes</button>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    )}
-                                                </Popup>
-                                                <img className='device-info-img' src='../img/door.jpg' alt='img' />
-                                                <p className='device-info-name'>{dv.name}</p>
-                                            </div>
-                                        )
-                                    }
-                                    else { }
-                                })
+                                                        )}
+                                                    </Popup>
+                                                    <img className='device-info-img' src='../img/door.jpg' alt='img' />
+                                                    <p className='device-info-name'>{dv.name}</p>
+                                                </div>
+                                            )
+                                        }
+                                        else { }
+                                    })
+                                ) : (
+                                    devices.filter(d => d.enabled == true).filter(d => d.type == selectMyDevice).map((dv, index) => {
+                                        if (dv.type === "LIGHT") {
+                                            return (
+                                                <div className='device-info' onClick={() => setDeviceInfo(dv)} style={deviceInfo === dv ? clicked_devices : Unclick_devices}>
+                                                    <Popup trigger={<img className='close' style={AdminStyle} src='../img/close.png' alt='close' />} position="top center" nested>
+                                                        {close => (
+                                                            <div className='popup-overlay'>
+                                                                <div className='xoa-tb'>
+                                                                    <h2>Xóa thiết bị này?</h2>
+                                                                    <div className='cf-btn'>
+                                                                        <button className='cancel' onClick={close}>No</button>
+                                                                        <button onClick={() => deleteDevice(deviceInfo)} className='ok'>Yes</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </Popup>
+                                                    <img className='device-info-img' src='../img/led.jpg' alt='img' />
+                                                    <p className='device-info-name'>{dv.name}</p>
+                                                </div>
+                                            )
+                                        }
+                                        else if (dv.type === "GAS") {
+                                            return (
+                                                <div className='device-info' onClick={() => setDeviceInfo(dv)} style={deviceInfo === dv ? clicked_devices : Unclick_devices}>
+                                                    <Popup trigger={<img className='close' style={AdminStyle} src='../img/close.png' alt='close' />} position="top center" nested>
+                                                        {close => (
+                                                            <div className='popup-overlay'>
+                                                                <div className='xoa-tb'>
+                                                                    <h2>Xóa thiết bị này?</h2>
+                                                                    <div className='cf-btn'>
+                                                                        <button className='cancel' onClick={close}>No</button>
+                                                                        <button onClick={() => deleteDevice(deviceInfo)} className='ok'>Yes</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </Popup>
+                                                    <img className='device-info-img' src='../img/gas.jpg' alt='img' />
+                                                    <p className='device-info-name'>{dv.name}</p>
+                                                </div>
+                                            )
+                                        }
+                                        else if (dv.type === "DOOR") {
+                                            return (
+                                                <div className='device-info' onClick={() => setDeviceInfo(dv)} style={deviceInfo === dv ? clicked_devices : Unclick_devices}>
+                                                    <Popup trigger={<img className='close' style={AdminStyle} src='../img/close.png' alt='close' />} position="top center" nested>
+                                                        {close => (
+                                                            <div className='popup-overlay'>
+                                                                <div className='xoa-tb'>
+                                                                    <h2>Xóa thiết bị này?</h2>
+                                                                    <div className='cf-btn'>
+                                                                        <button className='cancel' onClick={close}>No</button>
+                                                                        <button onClick={() => deleteDevice(deviceInfo)} className='ok'>Yes</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </Popup>
+                                                    <img className='device-info-img' src='../img/door.jpg' alt='img' />
+                                                    <p className='device-info-name'>{dv.name}</p>
+                                                </div>
+                                            )
+                                        }
+                                        else { }
+                                    })
+                                )
                             }
 
 
@@ -340,7 +543,7 @@ function ManageIotDevice() {
                                 <Popup trigger={<img className='add-device-img' src='../img/add.png' alt='img' />} position="bottom center" nested>
                                     {
                                         close => (
-                                            <div className="account-inf-value-border">
+                                            <div className="account-inf-value-border2">
                                                 <div className="account-inf-value-top">
                                                     <h5>Danh sách thiết bị hiện tại</h5>
                                                     <hr width="99%" align="center" color='black' />
@@ -376,7 +579,7 @@ function ManageIotDevice() {
                                                             })
                                                         }
                                                     </select>
-                                                    <div onClick={() => updateRoom()}><button onClick={close} >Xác nhận</button></div>
+                                                    <div style={{ display: 'inline' }} onClick={() => updateRoom()}><button onClick={close} >Xác nhận</button></div>
 
                                                 </div>
                                             </div>
@@ -395,7 +598,7 @@ function ManageIotDevice() {
                                     <li>
                                         <h2>Information</h2>
                                         <ul>
-
+                                            <li>Giá trị hiện tại: {curValue.data}</li>
                                             <li>Status: {deviceInfo.status ? "On" : "Off"}</li>
                                         </ul>
                                     </li>
@@ -415,6 +618,15 @@ function ManageIotDevice() {
                                         <div className='popup-overlay'>
                                             <div className='xoa-tb'>
                                                 <Datagram close={close} dvId={deviceInfo.Id} dvType={deviceInfo.type} />
+                                            </div>
+                                        </div>
+                                    )}
+                                </Popup>
+                                <Popup trigger={<div className='data-gram'>Logs</div>} position="top center" nested>
+                                    {close => (
+                                        <div className='popup-overlay'>
+                                            <div className='log-tb'>
+                                                <Logs close={close} deviceID={deviceInfo.Id} roomID={curRoom.Id} />
                                             </div>
                                         </div>
                                     )}

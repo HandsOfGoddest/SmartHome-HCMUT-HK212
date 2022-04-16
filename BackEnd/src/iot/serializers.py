@@ -46,9 +46,9 @@ class RoomSerializer(serializers.Serializer):
         instance.save()
         return instance
 
-    class Meta:
-        model = Room
-        fields = ['Id', 'owner', 'users', 'devices', '_date_created']
+    # class Meta:
+    #     model = Room
+    #     fields = ['Id', 'owner', 'users', 'devices', '_date_created']
 
 class UserSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=400)
@@ -81,9 +81,9 @@ class UserSerializer(serializers.Serializer):
         return instance
 
 
-    class Meta:
-        model= User
-        fields=['name', 'phoneNumber', 'userID', 'dateOfBirth', 'password', 'homeTown', 'room', 'isAdmin']
+    # class Meta:
+    #     model= User
+    #     fields=['name', 'phoneNumber', 'userID', 'dateOfBirth', 'password', 'homeTown', 'room', 'isAdmin']
 
 class RecordsSerializer(serializers.Serializer):
     data = serializers.FloatField()
@@ -93,9 +93,9 @@ class RecordsSerializer(serializers.Serializer):
     )
     _date_created = serializers.DateTimeField(required=False)
     _date_updated = serializers.DateTimeField(required=False)
-    class Meta:
-        model= Records
-        fields= {'data', 'Id', '_date_created', '_date_updated'}
+    # class Meta:
+    #     model= Records
+    #     fields= {'data', 'Id', '_date_created', '_date_updated'}
 
     def create(self, validated_data):
         return Records.objects.create(**validated_data)
@@ -110,9 +110,9 @@ class DevicesSerializer(serializers.Serializer):
     type = serializers.CharField(max_length=400)
     _date_created = serializers.DateTimeField(required=False)
 
-    class Meta:
-        model= Devices
-        fields= ['Id', 'name', 'data', 'status', 'enabled', 'type', '_date_created']
+    # class Meta:
+    #     model= Devices
+    #     fields= ['Id', 'name', 'data', 'status', 'enabled', 'type', '_date_created']
 
     def create(self, validated_data):
         return Devices.objects.create(**validated_data)
@@ -136,9 +136,9 @@ class DevicesLogSerializer(serializers.Serializer):
     atRoom= serializers.IntegerField()
     _date_changed = serializers.DateTimeField(required=False)
 
-    class Meta:
-        model= Devices
-        fields= ['deviceId', 'changeValue', 'byUser', '_date_changed']
+    # class Meta:
+    #     model= Devices
+    #     fields= ['deviceId', 'changeValue', 'byUser', '_date_changed']
 
     def create(self, validated_data):
         return DevicesLogSerializer.objects.create(**validated_data)

@@ -11,6 +11,7 @@ async function getDatagram(dvId) {
     }
 }
 
+
 function Datagram({ dvId,dvType,close }) {
     var dulieu = [];
     const [plotType, setPlotType] = useState("hour");
@@ -35,7 +36,8 @@ function Datagram({ dvId,dvType,close }) {
             }
         })
     }
-    console.log(dulieu)      
+    
+
 
     return (
         <React.Fragment >
@@ -46,6 +48,10 @@ function Datagram({ dvId,dvType,close }) {
                 <option value="month">Tháng</option>
                 <option value="year">Năm</option>
             </select>
+            <label htmlFor="date-start">Ngày bắt đầu</label>
+            <input name='date-start' id='date-start' type="date" />
+            <label htmlFor="date-end">Ngày kết thúc</label>
+            <input name='date-end' id='date-end' type="date" />
             <button onClick={()=>close()} style={{alignSelf:'flex-end'}}>Đóng</button>
             </div>
             <div style={{textAlign:'center'}}>Biểu đồ {dvType}</div>
