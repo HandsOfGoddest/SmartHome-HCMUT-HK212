@@ -27,7 +27,7 @@ span{
     border-radius: 20px;
 }
 .dv-name{
-    font-size: 40px;
+    font-size: 35px;
     margin: 10px 10px;
 }
 
@@ -50,13 +50,12 @@ span{
     margin-bottom: 20px;
 }
 .device-icon{
-    height: 80px;
+    height: 60px;
     margin: 10px 10px;
-    width: 30%;
     text-align: center;
 }
 .device-name{
-    font-size: 28px;
+    font-size: 25px;
     width: 70%;
     margin-right: 10px;
 }
@@ -131,13 +130,15 @@ span{
     align-items: center;
     justify-content: space-around;
     background-color: white;
-
+    padding-bottom: 10px;
 }
 
 .dv-info-table ul{
+    font-size: 22px;
     padding-left: 10px;
 }
 .dv-info-table li{
+    font-size: 22px;
     margin-right: 10px;
     width: 100%;
 }
@@ -147,7 +148,7 @@ span{
     border-radius: 50px;
     background-color: rgb(235, 74, 46);
     cursor: pointer;
-    margin: 20px 0px;
+    margin: 10px 0px;
 }
 .stt-icon:active{
     background-color: rgb(46, 235, 62);
@@ -181,8 +182,7 @@ li{
     display: flex;
     align-items: center;
     justify-content: center;
-    border: #000 solid 1px;
-    margin: 20px auto;
+    margin: 10px auto;
 }
 .data-gram:hover{
     border: rgb(46, 137, 235) solid 4px;
