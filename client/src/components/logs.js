@@ -33,6 +33,7 @@ function Logs({ close, roomID, deviceID }) {
             <table cellSpacing='0px' border='1px' >
                 <thead>
                     <tr>
+                        <th>Số thứ tự</th>
                         <th>Id thiết bị</th>
                         <th>Giá trị thay đổi</th>
                         <th>Người thay đổi</th>
@@ -48,6 +49,7 @@ function Logs({ close, roomID, deviceID }) {
                     {Logs.filter(log => log.deviceId == deviceID).length !== 0 ? (
                         Logs.filter(log => log.deviceId == deviceID).map((log, index) => (
                             <tr key={index} className="account">
+                                <td>{index+1}</td>
                                 <td>{log.deviceId}</td>
                                 <td>{log.changeValue}</td>
                                 <td>{log.byUserName}</td>
