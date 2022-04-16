@@ -221,7 +221,7 @@ li{
     width: max-content;
     height: max-content;
     border: 1px solid #000;
-    
+    border-radius: 20px;
     font-size: 35px;
     display: flex;
     flex-direction: column;
