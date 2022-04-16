@@ -202,6 +202,7 @@ li{
     align-items: center;
     width: 100%;
     height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
 }
 .xoa-tb{
     background-color: white;
@@ -267,12 +268,17 @@ li{
     color:white;
 }
 
-
-.datagram-tb .date-input input{
-    width: 32%;
-    height: 40px;
-    margin: 0px 10px;
+.datagram-tb .date-input, .log-tb .date-input{
+    margin: 0px 10px 10px 10px;
 }
+
+.datagram-tb .date-input input, .log-tb .date-input input{
+    width: 32%;
+    height: 30px;
+    margin: 0px 10px;
+    font-size: 20px;
+}
+
 
 
 .log-tb{
