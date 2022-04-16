@@ -11,7 +11,6 @@ async function getLogs(dvId) {
 }
 function formatDate(date) {
     var d = new Date(date)
-    console.log(d.toString())
     var month = '' + (d.getMonth() + 1)
     var year = d.getFullYear()
     var hour,day

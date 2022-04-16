@@ -6,14 +6,14 @@ import Popup from 'reactjs-popup';
 import axios from 'axios';
 import Datagram from './datagram';
 import Logs from './logs';
+import Records from './recordTable';
+
 import React, { useEffect, useState } from 'react';
 
 var TotalUser = false;
 if (localStorage.getItem("user") != null) {
     TotalUser = JSON.parse(localStorage.getItem("user"));
 }
-
-
 
 var isAdmin = TotalUser.isAdmin == false ? 0 : 1;
 let AdminStyle = {}
@@ -622,6 +622,17 @@ function ManageIotDevice({ match }) {
                                         </div>
                                     )}
                                 </Popup>
+
+                                <Popup trigger={<div className='data-gram'>Record table</div>} position="top center" nested>
+                                    {close => (
+                                        <div className='popup-overlay'>
+                                            <div className='log-tb'>
+                                                <Records close={close} deviceID={deviceInfo.Id} roomID={curRoom.Id} />
+                                            </div>
+                                        </div>
+                                    )}
+                                </Popup>
+
                                 <Popup trigger={<div className='data-gram'>Logs</div>} position="top center" nested>
                                     {close => (
                                         <div className='popup-overlay'>

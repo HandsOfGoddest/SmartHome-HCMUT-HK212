@@ -31,8 +31,6 @@ function Datagram({ dvId,dvType,close }) {
                     'year': dat._date_created.split("T")[0].split("-")[0],
                     'hour': dat._date_created.split("T")[1].split(":")[0],
                 })
-
-
             }
         })
     }
