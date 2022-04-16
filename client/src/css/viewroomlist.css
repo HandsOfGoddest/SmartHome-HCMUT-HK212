@@ -113,3 +113,22 @@ tbody{
 .border_bottom{
     border-bottom: #000 1px solid !important;
 }
+
+thead tr:before{
+    content: " ";  
+    position: absolute;  
+    display: inline-block;  
+    left: 10%;  
+    width: 80%;  
+    margin-top: -10px;
+}
+
+tbody tr:before {  
+    content: " ";  
+    position: absolute;  
+    display: inline-block;  
+    left: 10%;  
+    border-bottom: 1px solid #333;  
+    width: 80%;  
+    margin-top: -10px;
+}
