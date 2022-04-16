@@ -216,6 +216,65 @@ li{
     justify-content: center;
     padding: 30px 10px;
 }
+
+.datagram-tb{
+    position: relative;
+    background-color: white;
+    width: 40%;
+    height: max-content;
+    border: 1px solid #000;
+    border-radius: 20px;
+    font-size: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 10px;
+}
+
+.datagram-tb .date-input{
+    margin-left:20px;
+    margin-bottom: 10px;
+}
+
+.datagram-tb .dv-input{
+    position: absolute;
+    top: 20px;
+    right: 13%;
+    margin-bottom: 10px;
+    
+}
+
+.datagram-tb .dv-input p{
+    margin:0;
+    padding:0;
+    font-size: 22px;
+}
+
+.datagram-tb button{
+    position:absolute;
+    top: -18px;
+    right:-30px;
+    margin-bottom: 50px;
+    font-size: 20px;
+    padding: 7px 7px;
+    border-radius: 15px;
+}
+
+.datagram-tb button:hover{
+    cursor: pointer;
+    background-color: rgb(45, 124, 242);
+    color:white;
+}
+
+
+.datagram-tb .date-input input{
+    width: 32%;
+    height: 40px;
+    margin: 0px 10px;
+}
+
+
 .log-tb{
     background-color: white;
     width: max-content;
