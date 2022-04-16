@@ -9,6 +9,16 @@ async function getLogs(dvId) {
         console.error(error);
     }
 }
+
+async function getLogsDate(dvId,roomID,dateStart,dateEnd) {
+    try {
+        const response = await axios.get("http://localhost:8000/logs/" + roomID + dateStart + dateEnd + dvId +"/");
+        return response.data;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 function formatDate(date) {
     var d = new Date(date)
     var month = '' + (d.getMonth() + 1)
@@ -48,7 +58,7 @@ function formatDate(date) {
 function Logs({ close, roomID, deviceID }) {
     const [Logs, setLogs] = useState([]);
     useEffect(() => {
-        getLogs().then(data => {
+        getLogs(deviceID).then(data => {
             setLogs(data);
         });
     }, []);

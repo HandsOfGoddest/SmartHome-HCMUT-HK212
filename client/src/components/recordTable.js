@@ -1,7 +1,6 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import '../css/logs.css'
-
 async function getRecords(dvId) {
     try {
         const response = await axios.get("http://localhost:8000/records/" + dvId + "/");
@@ -13,7 +12,6 @@ async function getRecords(dvId) {
 
 function formatDate(date) {
     var d = new Date(date)
-    console.log(d.toString())
     var month = '' + (d.getMonth() + 1)
     var year = d.getFullYear()
     var hour,day
