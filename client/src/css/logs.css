@@ -42,7 +42,7 @@ table{
     border-radius: 0px !important;
 }
 
-.logs{
+.logs-table{
     max-height:450px;
     overflow-y:auto;
 }
