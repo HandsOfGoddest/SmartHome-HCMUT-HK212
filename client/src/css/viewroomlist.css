@@ -24,6 +24,12 @@
     height: 20px;
     margin: 0px;
 }
+
+.icon2-ls:hover{
+    opacity: 0.6;
+    cursor: pointer;
+}
+
 td{
     padding: 0px 10px ;
     border: 0px;
@@ -34,6 +40,12 @@ td{
     border-radius: 20px;
     padding: 10px 20px;
 }
+
+.chitiet:hover{
+    background-color: rgba(199, 199, 199, 0.5);
+    cursor: pointer;
+}
+
 .ten{
     border: #000 1px solid;
     border-radius: 10px;
@@ -57,6 +69,12 @@ tbody{
     margin-left: 10%;
     text-align: end;
 }
+
+.add:hover{
+    cursor: pointer;
+    opacity: 0.7;
+}
+
 .add-icon{
     height: 50px;
     border: #000 1px solid;
@@ -88,4 +106,23 @@ tbody{
 
 .border_bottom{
     border-bottom: #000 1px solid !important;
+}
+
+.list thead tr:before{
+    content: " ";  
+    position: absolute;  
+    display: inline-block;  
+    left: 10%;  
+    width: 80%;  
+    margin-top: -10px;
+}
+
+.list tbody tr:before {  
+    content: " ";  
+    position: absolute;  
+    display: inline-block;  
+    left: 10%;  
+    border-bottom: 1px solid #333;  
+    width: 80%;  
+    margin-top: -10px;
 }
