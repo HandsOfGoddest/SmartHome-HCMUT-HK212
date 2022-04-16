@@ -1,7 +1,26 @@
 .logs{
     width: max-content;
+    text-align: center;
 }
+
+.logs h2{
+    margin: 0 0 15px 0;
+    padding: 0;
+
+}
+
+.logs th{
+    padding: 0 10px;
+}
+
+.logs table{
+    border-radius: 20px;
+}
+
 .btn-overlay{
+    position:absolute;
+    top:-20px;
+    right:-30px;
     width: 100%;
     display: flex;
     justify-content: flex-end;
@@ -9,8 +28,21 @@
 .btn-overlay button{
     margin-top: 10px;
     font-size: 20px;
-    cursor: pointer;
+    padding: 7px 20px;
+    border-radius: 15px;
 }
+
+.btn-overlay button:hover{
+    cursor: pointer;
+    background-color: rgb(45, 124, 242);
+    color:white;
+}
+
 table{
     border-radius: 0px !important;
+}
+
+.logs-table{
+    max-height:300px;
+    overflow-y:auto;
 }

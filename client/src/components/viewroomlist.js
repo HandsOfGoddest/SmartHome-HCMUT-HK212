@@ -79,6 +79,14 @@ function ViewRoomList() {
         }
     }
 
+    function getIsAdmin(id) {
+        for (let i = 0; i < user.length; i++) {
+            if (user[i].userID === id) {
+                return user[i].isAdmin;
+            }
+        }
+    }    
+
     const [addRoomId, setAddRoomId] = useState("");
     const [addRoomOwner, setAddRoomOwner] = useState("");
     function addRoom() {
@@ -139,7 +147,6 @@ function ViewRoomList() {
                         <option value="view-room">View room list</option>
                         <option value="manage-account">Manage account</option>
                         <option value="manage-device">Manage Device</option>
-                        <option value="add-device">Add Device</option>
                         <option value="logout">Log Out</option>
                     </select>
                 </div>
@@ -165,9 +172,11 @@ function ViewRoomList() {
                                         <td className="room ten">
                                             {room.users.map(
                                                 (us, index) => {
+                                                    if(getIsAdmin(us) === false){
                                                     return (
                                                         <p key={index}>{getUserName(us)}</p>
                                                     )
+                                                    }
                                                 }
                                             )
                                             }
