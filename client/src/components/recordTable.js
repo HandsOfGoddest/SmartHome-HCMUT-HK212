@@ -102,7 +102,7 @@ function Records({ close, deviceID }) {
                     </tbody>
                 </table>
             </div> 
-            <div className="btn-overlay"><button onClick={close}>Đóng</button></div>
+            <div className="btn-overlay"><img onClick={()=>close()} src='../img/closebtn.png' alt="" style={{alignSelf:'flex-end'}}/></div>
         </div>
     )
 }
