@@ -25,18 +25,16 @@
     display: flex;
     justify-content: flex-end;
 }
-.btn-overlay button{
-    margin-top: 10px;
-    font-size: 20px;
-    padding: 7px 20px;
-    border-radius: 15px;
+.btn-overlay img{
+    width: 70px;
 }
 
-.btn-overlay button:hover{
+.btn-overlay img:hover{
     cursor: pointer;
-    background-color: rgb(45, 124, 242);
-    color:white;
+    opacity: 0.85;
 }
+
+
 
 table{
     border-radius: 0px !important;
