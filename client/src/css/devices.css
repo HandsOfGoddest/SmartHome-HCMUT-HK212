@@ -51,11 +51,14 @@ span{
 }
 .device-icon{
     height: 80px;
-    margin: 10px 0px;
+    margin: 10px 10px;
+    width: 30%;
+    text-align: center;
 }
 .device-name{
-    font-size: 30px;
+    font-size: 28px;
     width: 70%;
+    margin-right: 10px;
 }
 .manage-iot-device-content-center{
     width: 50%;
