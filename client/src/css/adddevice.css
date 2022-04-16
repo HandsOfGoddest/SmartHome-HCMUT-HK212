@@ -113,7 +113,7 @@ span{
     border-radius: 50px;
     background-color: rgb(235, 74, 46);
     cursor: pointer;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 /* .stt-icon:active{
     background-color: rgb(46, 235, 62);
@@ -147,7 +147,7 @@ li{
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 20px auto;
+    margin: 10px auto;
 }
 .popup-overlay{
     position: fixed;
