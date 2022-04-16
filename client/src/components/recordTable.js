@@ -59,6 +59,12 @@ function Records({ close, deviceID }) {
         <div className='logs'>
 
             <h2>Nhật ký hoạt động thiết bị</h2>
+            <div className="date-input"> 
+                <label htmlFor="date-start">From</label>
+                <input name='date-start' id='date-start' type="date" />
+                <label htmlFor="date-end">to</label>
+                <input name='date-end' id='date-end' type="date" />
+            </div>
             <div className="logs-table">
                 <table cellSpacing='0px' border='1px'>
                     <thead>
