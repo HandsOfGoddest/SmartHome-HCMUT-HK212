@@ -37,21 +37,10 @@ function Datagram({ dvId,dvType,close }) {
         })
     }
     
-
-
     return (
         <React.Fragment >
             <div style={{width:"100%",display:"flex", justifyContent:"space-between"}}>
-            <select onChange={(e)=>setPlotType(e.target.value)} style={{alignSelf:'flex-end'}}>
-                <option value="hour" selected>Giờ</option>
-                <option value="date">Ngày</option>
-                <option value="month">Tháng</option>
-                <option value="year">Năm</option>
-            </select>
-            <label htmlFor="date-start">Ngày bắt đầu</label>
-            <input name='date-start' id='date-start' type="date" />
-            <label htmlFor="date-end">Ngày kết thúc</label>
-            <input name='date-end' id='date-end' type="date" />
+
             <button onClick={()=>close()} style={{alignSelf:'flex-end'}}>Đóng</button>
             </div>
             <div style={{textAlign:'center'}}>Biểu đồ {dvType}</div>
@@ -62,6 +51,22 @@ function Datagram({ dvId,dvType,close }) {
                 <Line type="monotone" dataKey="data" stroke="#8884d8" />
                 <Tooltip />
             </LineChart>
+
+            <div className="date-input"> 
+                <label htmlFor="date-start">From</label>
+                <input name='date-start' id='date-start' type="date" />
+                <label htmlFor="date-end">to</label>
+                <input name='date-end' id='date-end' type="date" />
+            </div>
+            <div className="dv-input">  
+                <p>Đơn vị</p>
+                <select onChange={(e)=>setPlotType(e.target.value)} style={{alignSelf:'flex-end'}}>
+                    <option value="hour" selected>Giờ</option>
+                    <option value="date">Ngày</option>
+                    <option value="month">Tháng</option>
+                    <option value="year">Năm</option>
+                </select> 
+            </div>
         </React.Fragment>
     )
 }

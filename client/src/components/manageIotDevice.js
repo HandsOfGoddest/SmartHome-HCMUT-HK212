@@ -616,7 +616,7 @@ function ManageIotDevice({ match }) {
                                 <Popup trigger={<div className='data-gram'>Datagram</div>} position="top center" nested>
                                     {close => (
                                         <div className='popup-overlay'>
-                                            <div className='xoa-tb'>
+                                            <div className='datagram-tb'>
                                                 <Datagram close={close} dvId={deviceInfo.Id} dvType={deviceInfo.type} />
                                             </div>
                                         </div>
