@@ -1,11 +1,12 @@
 # import required
 from rest_framework import serializers
 from rest_framework.response import  Response
-from .models import Room, Devices, User, Records
+from .models import Room, Devices, User, Records, DevicesLog
 import datetime
 from iot.DB import DBSingleton
-db= DBSingleton.get_instance()
-db.connectDB()
+
+# db= DBSingleton.get_instance()
+# db.connectDB()
 
 class RoomSerializer(serializers.Serializer):
     Id = serializers.IntegerField()

@@ -1,15 +1,14 @@
+from iot.DB import DBSingleton
+db= DBSingleton.get_instance()
+db.connectDB()
+
 from iot.models import User, Room, Devices, Records, DevicesLog
 from iot.serializers import DevicesSerializer, RecordsSerializer
-from iot.DB import DBSingleton
-
 from rest_framework.response import  Response
 from rest_framework import status
 from rest_framework.decorators import APIView
 
 import datetime
-
-db= DBSingleton.get_instance()
-db.connectDB()
 
 class DevicesViewSet(APIView):
     def get(self, request):

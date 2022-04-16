@@ -1,13 +1,14 @@
+from iot.DB import DBSingleton
+db= DBSingleton.get_instance()
+db.connectDB()
+
 from iot.models import User, Room
 from iot.serializers import RoomSerializer
-from iot.DB import DBSingleton
-
 from rest_framework.response import  Response
 from rest_framework import status
 from rest_framework.decorators import APIView
 
-db= DBSingleton.get_instance()
-db.connectDB()
+
 
 class RoomViewSet(APIView):
     def get(self, request):

@@ -1,14 +1,15 @@
+from iot.DB import DBSingleton
+db= DBSingleton.get_instance()
+db.connectDB()
+
 from iot.models import User, Room
 from iot.serializers import UserSerializer
-from iot.DB import DBSingleton
-
 from rest_framework.response import  Response
 from rest_framework import status
 from rest_framework.decorators import APIView
 from django.http import JsonResponse
 
-db= DBSingleton.get_instance()
-db.connectDB()
+
 
 class UserViewSet(APIView):
 
@@ -86,7 +87,6 @@ class SearchUserView(APIView):
     def get_object(self, userName):
         try:
             users= User.objects(name__icontains = userName)
-
             return users
         except User.DoesNotExist:
             return Response(status.HTTP_404_NOT_FOUND)
