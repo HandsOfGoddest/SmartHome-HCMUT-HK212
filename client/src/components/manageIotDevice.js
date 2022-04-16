@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import Popup from 'reactjs-popup';
 import axios from 'axios';
 import Datagram from './datagram';
+import Logs from './logs';
 import React, { useEffect, useState } from 'react';
 
 var TotalUser = false;
@@ -41,7 +42,14 @@ async function getRoomDevices(roomId) {
         console.error(error);
     }
 }
-
+async function addDevice(device) {
+    try {
+        const response = await axios.post('http://localhost:8000/devices/', device);
+        return response.data;
+    } catch (error) {
+        console.error(error);
+    }
+}
 async function getDeviceAvailable() {
     try {
         const response = await axios.get('http://127.0.0.1:8000/addDeviceToRoom/');
@@ -124,10 +132,7 @@ function ManageIotDevice({ match }) {
         window.location.replace("/manage-account")
     }
     if (logOut === "manage-device") {
-        window.location.replace("/manage-device/"+TotalUser.room[0])
-    }
-    if (logOut === "add-device") {
-        window.location.replace("/add-device")
+        window.location.replace("/manage-device/" + TotalUser.room[0])
     }
     if (logOut === "logout") {
         window.location.replace("/login")
@@ -167,6 +172,11 @@ function ManageIotDevice({ match }) {
     }, [roomDevices.devices])
     const [deviceInfo, setDeviceInfo] = useState([])
     const [deviceIdToAdd, setDeviceIdToAdd] = useState('')
+
+    const [addId, setAddId] = useState('')
+    const [addName, setAddName] = useState('')
+    const [addType, setAddType] = useState('GAS')
+
     function updateRoom() {
         const data = {
             "Id": roomDevices.Id,
@@ -216,42 +226,71 @@ function ManageIotDevice({ match }) {
         })
         devices.fill(dataToUpdate, devices.findIndex(dv => dv.Id === dvinfo.Id), devices.findIndex(dv => dv.Id === dvinfo.Id) + 1)
     }
+    function confirmAddDevice() {
+        const newDv = {
+            "Id": addId,
+            "name": addName,
+            "data": 0.0,
+            "status": false,
+            "enabled": true,
+            "type": addType,
+        }
+        if (addId !== '' && addName !== '' && addType !== '') {
+            addDevice(newDv).then((res) => {
+                if(res === 409){
+                    alert("Thiết bị đã tồn tại")
+                }
+                else{
+                    alert("Thêm thiết bị thành công")
+                }
+            })
+        }
+        else {
+            alert("Vui lòng nhập đầy đủ thông tin")
+        }
+    }
+    function ClearAddDvInfo() {
+        console.log("ét o ét")
+        setAddId('')
+        setAddName('')
+        setAddType('GAS')
+    }
     if (roomDevices.devices) {
         if (devices.length === roomDevices.devices.length) {
             return (
                 <div className='manage-iot-device'>
                     <div className="manage-view">
                         <div className="header">
-                            
-                                <Popup trigger={<div className='sophong logo-click'><p>Phòng {curRoom}</p></div>} position="bottom center" nested>
-                                    {close => (
-                                        <div className="account-inf-value-border1">
-                                            <div className="account-inf-value-top">
-                                                <h5>Danh sách phòng hiện tại</h5>
-                                                <hr width="100%" align="center" color='black' />
-                                                <div className="room-inf-list">
-                                                    {
-                                                        TotalUser.room.map((rm, index) => {
-                                                            return (
-                                                                <div onClick={close}>
-                                                                    <Link to={`/manage-device/${rm}`} onClick={()=>{setCurRoom(rm);setDeviceInfo([])}} className="logo-click account-inf-value-ind" >
+
+                            <Popup trigger={<div className='sophong logo-click'><p>Phòng {curRoom}</p></div>} position="bottom center" nested>
+                                {close => (
+                                    <div className="account-inf-value-border1">
+                                        <div className="account-inf-value-top">
+                                            <h5>Danh sách phòng hiện tại</h5>
+                                            <hr width="100%" align="center" color='black' />
+                                            <div className="room-inf-list">
+                                                {
+                                                    TotalUser.room.map((rm, index) => {
+                                                        return (
+                                                            <div onClick={close}>
+                                                                <Link to={`/manage-device/${rm}`} onClick={() => { setCurRoom(rm); setDeviceInfo([]) }} className="logo-click account-inf-value-ind" >
                                                                     <span>Phòng {rm}</span>
                                                                 </Link>
-                                                                </div>
-                                                            )
-                                                        })
+                                                            </div>
+                                                        )
+                                                    })
 
-                                                    }
-                                                </div>
+                                                }
                                             </div>
-
                                         </div>
-                                    )}
-                                </Popup>
-                            
+
+                                    </div>
+                                )}
+                            </Popup>
+
                             <Link to='/' className='logo-click'>
                                 <div className="logo">
-                                    <img className='homelogo' src='./img/homelogo.png' alt="logo" />
+                                    <img className='homelogo' src='../img/homelogo.png' alt="logo" />
                                     <h2>Smart Home</h2>
                                 </div>
                             </Link>
@@ -265,7 +304,6 @@ function ManageIotDevice({ match }) {
                                         <option value="view-room">View room list</option>
                                         <option value="manage-account">Manage account</option>
                                         <option value="manage-device">Manage Device</option>
-                                        <option value="add-device">Add Device</option>
                                         <option value="logout">Log Out</option>
                                     </select>
                                 ) : (
@@ -300,6 +338,39 @@ function ManageIotDevice({ match }) {
                                     <img className='device-icon' src='../img/exit.png' alt="icon" />
                                     <span className='device-name' >Cảm biến đột nhập</span>
                                 </div>
+                                <Popup trigger={
+                                    <div className='devices' onClick={() => setSelectMyDevice('ADD')} style={selectMyDevice === 'ADD' ? clicked_type : Unclick_type}>
+                                        <img className='device-icon' src='../img/add.png' alt="icon" />
+                                        <span className='device-name' >Thêm thiết bị mới</span>
+                                    </div>
+                                } position='right bottom' onClose={ClearAddDvInfo} nested>
+                                    {close => (
+                                        <div className="account-inf-value-border2">
+                                            <h4>Thêm thiết bị mới</h4>
+                                            <hr width="100%" align="center" color='black' />
+                                            <div className='add-dv'>
+                                                <p>Device name</p>
+                                                <input type='text' onChange={(e) => setAddName(e.target.value)} />
+                                            </div>
+                                            <div className="add-dv">
+                                                <p>Device ID</p>
+                                                <input type='text' onChange={(e) => setAddId(e.target.value)} />
+                                            </div>
+                                            <div className="add-dv">
+                                                <p>Device type</p>
+                                                <select name="device-type" id="device-type" onChange={(e) => setAddType(e.target.value)}>
+                                                    <option value="GAS" selected>GAS</option>
+                                                    <option value="LIGHT">LIGHT</option>
+                                                    <option value="DOOR">DOOR</option>
+                                                </select>
+                                            </div>
+                                            <div className='add-dv-cf'>
+                                                <button className='add-dv-huy' onClick={close}>Hủy bỏ</button>
+                                                <button className='add-dv-ok' onClick={() => confirmAddDevice()}>Xác nhận</button>
+                                            </div>
+                                        </div>
+                                    )}
+                                </Popup>
                             </div>
 
                         </div>
@@ -448,7 +519,7 @@ function ManageIotDevice({ match }) {
                                 <Popup trigger={<img className='add-device-img' src='../img/add.png' alt='img' />} position="bottom center" nested>
                                     {
                                         close => (
-                                            <div className="account-inf-value-border">
+                                            <div className="account-inf-value-border2">
                                                 <div className="account-inf-value-top">
                                                     <h5>Danh sách thiết bị hiện tại</h5>
                                                     <hr width="99%" align="center" color='black' />
@@ -484,7 +555,7 @@ function ManageIotDevice({ match }) {
                                                             })
                                                         }
                                                     </select>
-                                                    <div onClick={() => updateRoom()}><button onClick={close} >Xác nhận</button></div>
+                                                    <div style={{ display: 'inline' }} onClick={() => updateRoom()}><button onClick={close} >Xác nhận</button></div>
 
                                                 </div>
                                             </div>
@@ -523,6 +594,15 @@ function ManageIotDevice({ match }) {
                                         <div className='popup-overlay'>
                                             <div className='xoa-tb'>
                                                 <Datagram close={close} dvId={deviceInfo.Id} dvType={deviceInfo.type} />
+                                            </div>
+                                        </div>
+                                    )}
+                                </Popup>
+                                <Popup trigger={<div className='data-gram'>Logs</div>} position="top center" nested>
+                                    {close => (
+                                        <div className='popup-overlay'>
+                                            <div className='log-tb'>
+                                                <Logs close={close} deviceID={deviceInfo.Id} roomID={curRoom.Id} />
                                             </div>
                                         </div>
                                     )}

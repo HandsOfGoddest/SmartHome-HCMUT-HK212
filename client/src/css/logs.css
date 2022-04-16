@@ -1,0 +1,16 @@
+.logs{
+    width: max-content;
+}
+.btn-overlay{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+.btn-overlay button{
+    margin-top: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+table{
+    border-radius: 0px !important;
+}

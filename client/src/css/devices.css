@@ -209,6 +209,19 @@ li{
     justify-content: center;
     padding: 30px 10px;
 }
+.log-tb{
+    background-color: white;
+    width: max-content;
+    height: max-content;
+    border: 1px solid #000;
+    
+    font-size: 35px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 10px;
+}
 .cf-btn{
     height: max-content;
     width: 80%;
@@ -237,5 +250,42 @@ li{
     background-color: #fff;
     max-height: 200px;
 }
-
+.account-inf-value-border2{
+    border: #000 solid 2px;
+    border-radius: 10px;
+    font-size: 22px;
+    padding: 4px 8px;
+    background-color: #fff;
+    max-height: 265px;
+}
+.account-inf-value-border2 h4{
+    text-align: center;
+}
+.add-dv{
+    display: flex;
+    margin: 10px 0px;
+}
+.add-dv p{
+    width: 130px;
+}
+.add-dv input{
+    margin-left: 20px;
+    font-size: 20px;
+    width: 200px;
+}
+.add-dv select{
+    width: 200px;
+    margin-left: 20px;
+    font-size: 20px;
+}
+.add-dv-cf{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+.add-dv-cf button{
+    font-size: 20px;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
 

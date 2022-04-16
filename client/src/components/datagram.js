@@ -11,6 +11,7 @@ async function getDatagram(dvId) {
     }
 }
 
+
 function Datagram({ dvId,dvType,close }) {
     var dulieu = [];
     const [plotType, setPlotType] = useState("hour");
@@ -35,7 +36,8 @@ function Datagram({ dvId,dvType,close }) {
             }
         })
     }
-    console.log(dulieu)      
+    
+
 
     return (
         <React.Fragment >
