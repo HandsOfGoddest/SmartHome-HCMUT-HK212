@@ -26,7 +26,6 @@ class UserViewSet(APIView):
                 room_lst= serializer.data["room"]
                 for room in room_lst:
                     Room.objects.get(Id= room).update(add_to_set__users= userID)
-    
                 return Response(serializer.data, status.HTTP_201_CREATED)
 
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
@@ -59,7 +58,10 @@ class UserDetailViewSet(APIView):
             serializer = UserSerializer(user, data=request.data)
             if serializer.is_valid():
                 serializer.save()
-    
+                upUser= self.get_object(userID)
+                for room in upUser.room:
+                    if upUser.id not in room.users:
+                        room.update(add_to_set__users= upUser.id)
                 return Response(serializer.data)
 
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)

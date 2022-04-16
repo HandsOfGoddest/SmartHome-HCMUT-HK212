@@ -1,4 +1,4 @@
-from iot.models import Room
+from iot.models import User, Room
 from iot.serializers import RoomSerializer
 from iot.DB import DBSingleton
 
@@ -20,7 +20,12 @@ class RoomViewSet(APIView):
             serializer = RoomSerializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()
-    
+                nRoom= Room.objects.get(Id= serializer.validated_data["Id"])
+                admins= User.objects(isAdmin= True)
+                print(serializer.validated_data)
+                for admin in admins:
+                    admin.update(add_to_set__room= nRoom.id)
+                    nRoom.update(add_to_set__users= admin.id)
                 return Response(serializer.data, status.HTTP_201_CREATED)
 
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
@@ -51,7 +56,6 @@ class RoomDetailViewSet(APIView):
             serializer = RoomSerializer(room, data=request.data)
             if serializer.is_valid():
                 serializer.save()
-    
                 return Response(serializer.data)
 
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
@@ -60,5 +64,16 @@ class RoomDetailViewSet(APIView):
 
     def delete(self, request, Id):
         room = self.get_object(Id)
-        room.delete()
-        return Response(status.HTTP_204_NO_CONTENT)
+        count= 0
+        admins= []
+        for user in room.users:
+            if user.isAdmin == True:
+                admins.append(user)
+        if len(admins) == len(room.users):
+            print("yes")
+            for admin in admins:
+                admin.update(pull__room= room.id)
+            room.delete()
+            return Response(status.HTTP_204_NO_CONTENT)
+        else:
+            return Response(status.HTTP_400_BAD_REQUEST)

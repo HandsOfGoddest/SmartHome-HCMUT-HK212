@@ -140,7 +140,7 @@ class RecordsViewSet(APIView):
 
 class RecordsDetailViewSet(APIView):
     def get_objects(self, Id, fDate= None, toDate= None):
-        # try:
+        try:
             device= Devices.objects.get(Id=Id)
             device_id= device.id
             records= Records.objects(Id=device_id)
@@ -152,11 +152,11 @@ class RecordsDetailViewSet(APIView):
             else:
                 return records
             return res
-        # except Records.DoesNotExist:
-        #     return Response(status.HTTP_404_NOT_FOUND)
+        except Records.DoesNotExist:
+            return Response(status.HTTP_404_NOT_FOUND)
 
     def get(self, request, Id):
-        # try:
+        try:
             paras= Id.split("+")
             records= None
             if len(paras) == 3:
@@ -171,6 +171,6 @@ class RecordsDetailViewSet(APIView):
             records_serializer = RecordsSerializer(records, many=True)
 
             return Response(records_serializer.data)
-        # except:
-        #     return Response(status.HTTP_404_NOT_FOUND)
+        except:
+            return Response(status.HTTP_404_NOT_FOUND)
     

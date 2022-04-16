@@ -16,6 +16,7 @@ class DBSingleton(IDataBase):
     def __init__(self, host):
         if DBSingleton.__instance is None:
             self.host= host
+            self.alias= 'myIOTDB'
             DBSingleton.__instance= self
         else:
             raise Exception("Can't be initialized")
@@ -24,7 +25,7 @@ class DBSingleton(IDataBase):
         connect(host= DBSingleton.__instance.host)
         
     def closeDB(self):
-        disconnect(DBSingleton.__instance.host)
+        disconnect()
         
     @staticmethod
     def get_data():
