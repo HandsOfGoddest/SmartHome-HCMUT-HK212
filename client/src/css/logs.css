@@ -18,6 +18,9 @@
 }
 
 .btn-overlay{
+    position:absolute;
+    top:-20px;
+    right:-30px;
     width: 100%;
     display: flex;
     justify-content: flex-end;
@@ -37,4 +40,9 @@
 
 table{
     border-radius: 0px !important;
+}
+
+.logs{
+    max-height:450px;
+    overflow-y:auto;
 }
