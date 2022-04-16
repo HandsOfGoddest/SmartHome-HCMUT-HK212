@@ -199,3 +199,10 @@ li{
     background-color: white;
     border-radius: 10px;
 }
+
+.btn_border button:hover{
+    cursor: pointer;
+    background-color: rgb(35, 139, 250);
+    color: white;
+    font-weight: 600;
+}
