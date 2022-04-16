@@ -10,7 +10,6 @@ async function getLogs(dvId) {
     }
 }
 function formatDate(date) {
-
     var d = new Date(date)
     var month = '' + (d.getMonth() + 1)
     var day = '' + d.getDate()
@@ -18,7 +17,7 @@ function formatDate(date) {
     var hour = d.getHours()
     var minute = d.getMinutes()
     var second = d.getSeconds()
-    return [year, month, day].join('-') + ' ' + [hour, minute, second].join(':')
+    return  [hour, minute, second].join(':') + ' ngày ' + [day,month,year].join('/') 
 }
 function Logs({ close, roomID, deviceID }) {
     const [Logs, setLogs] = useState([]);
@@ -30,16 +29,17 @@ function Logs({ close, roomID, deviceID }) {
     return (
         <div className='logs'>
 
+            <h2>Nhật ký điều khiển thiết bị</h2>
+
             <table cellSpacing='0px' border='1px' >
                 <thead>
                     <tr>
-                        <th>Số thứ tự</th>
+                        <th>STT</th>
                         <th>Id thiết bị</th>
                         <th>Giá trị thay đổi</th>
-                        <th>Người thay đổi</th>
-                        <th>Id người thay đổi</th>
-                        <th>Phòng thay đổi</th>
-                        <th>Ngày thay đổi</th>
+                        <th>Người điều khiển</th>
+                        <th>Id người điều khiển</th>
+                        <th>Ngày điều khiển</th>
                     </tr>
 
                 </thead>
@@ -54,9 +54,7 @@ function Logs({ close, roomID, deviceID }) {
                                 <td>{log.changeValue}</td>
                                 <td>{log.byUserName}</td>
                                 <td>{log.userID}</td>
-                                <td>{log.atRoom}</td>
                                 <td>{formatDate(log._date_changed)}</td>
-
                             </tr>
                         ))
                     ) :
