@@ -147,7 +147,8 @@ function ManageAccount() {
             }
             console.log(userData)
             await axios.post('http://127.0.0.1:8000/users/', userData);
-            // window.location.reload();
+            window.alert("Thêm thành công");
+            window.location.reload();
         }
         else {
             let addList = [addName, addPhone, addID, addDate, addPass, addHomeTown, addRoom];
