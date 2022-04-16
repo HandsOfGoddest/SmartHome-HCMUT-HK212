@@ -65,8 +65,10 @@ tbody{
 }
 
 .add{
+    position: absolute;
+    top: 29%;
+    right: 14%;
     width: 80%;
-    margin-left: 10%;
     text-align: end;
 }
 
@@ -111,7 +113,7 @@ tbody{
 .list thead tr:before{
     content: " ";  
     position: absolute;  
-    display: inline-block;    
+    display: inline-block;  
     margin-top: -10px;
 }
 
