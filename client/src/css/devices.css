@@ -131,8 +131,12 @@ span{
 
 }
 
+.dv-info-table ul{
+    padding-left: 10px;
+}
 .dv-info-table li{
-    margin-right: 40px;
+    margin-right: 10px;
+    width: 100%;
 }
 .stt-icon{
     width: 150px;

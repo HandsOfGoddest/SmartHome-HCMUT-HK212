@@ -66,6 +66,14 @@ async function addDeviceToRoom(roomId, data) {
         console.error(error);
     }
 }
+async function getCurRecord(dvId) {
+    try {
+        const response = await axios.get('http://127.0.0.1:8000/records/' + dvId + '/');
+        return response.data;
+    } catch (error) {
+        console.error(error);
+    }
+}
 
 async function updateDevices(deviceId, userID, roomId, data) {
     try {
@@ -140,10 +148,16 @@ function ManageIotDevice({ match }) {
     }
     // phong hien tai 
     const [curRoom, setCurRoom] = useState(match.params.id)
-
+    const [curValue, setCurValue] = useState({'data':0})
     const [deviceType, setDeviceType] = useState('GAS')
     const [selectMyDevice, setSelectMyDevice] = useState('')
 
+    const [deviceInfo, setDeviceInfo] = useState([])
+    const [deviceIdToAdd, setDeviceIdToAdd] = useState('')
+    const [devices, setDevices] = useState([])
+    const [addId, setAddId] = useState('')
+    const [addName, setAddName] = useState('')
+    const [addType, setAddType] = useState('GAS')
     // lay ds thiet bi trong phong 
     const [roomDevices, setRoomDevices] = useState([])
     const [device, setDevice] = useState([]);
@@ -152,13 +166,29 @@ function ManageIotDevice({ match }) {
             setRoomDevices(data)
         })
     }, [curRoom])
+    // useEffect(() => {
+    //     getCurRecord(deviceInfo.Id?deviceInfo.Id:0).then(data => {
+    //         console.log(deviceInfo.Id)
+    //         console.log(data)
+    //         // setCurValue(data)
+    //     })
+    // }, [])
+    console.log(curValue)
+
+    // setInterval(() => {
+    //     axios.get('http://127.0.0.1:8000/records/' + deviceInfo.Id + '/').then(res => {
+    //         if (res.data.length > 0) {
+    //             setCurValue(res.data[res.data.length - 1])
+    //         }
+    //     })
+    // }, 500)
 
     useEffect(() => {
         getDeviceAvailable().then(data => {
             setDevice(data);
         });
     }, []);
-    const [devices, setDevices] = useState([])
+
     useEffect(() => {
         if (roomDevices.devices) {
             setDevices([])
@@ -170,12 +200,7 @@ function ManageIotDevice({ match }) {
             })
         }
     }, [roomDevices.devices])
-    const [deviceInfo, setDeviceInfo] = useState([])
-    const [deviceIdToAdd, setDeviceIdToAdd] = useState('')
 
-    const [addId, setAddId] = useState('')
-    const [addName, setAddName] = useState('')
-    const [addType, setAddType] = useState('GAS')
 
     function updateRoom() {
         const data = {
@@ -250,7 +275,6 @@ function ManageIotDevice({ match }) {
         }
     }
     function ClearAddDvInfo() {
-        console.log("ét o ét")
         setAddId('')
         setAddName('')
         setAddType('GAS')
@@ -574,7 +598,7 @@ function ManageIotDevice({ match }) {
                                     <li>
                                         <h2>Information</h2>
                                         <ul>
-
+                                            <li>Giá trị hiện tại: {curValue.data}</li>
                                             <li>Status: {deviceInfo.status ? "On" : "Off"}</li>
                                         </ul>
                                     </li>
