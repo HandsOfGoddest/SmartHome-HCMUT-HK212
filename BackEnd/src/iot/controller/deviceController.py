@@ -65,6 +65,7 @@ class DevicesDetailViewSet(APIView):
             byUserName= user.name,
             userID= userID,
             atRoom= roomID,
+            _date_changed= datetime.datetime.now(),
         ).save()
 
     def put(self, request, Id):
