@@ -59,34 +59,35 @@ function Records({ close, deviceID }) {
         <div className='logs'>
 
             <h2>Nhật ký hoạt động thiết bị</h2>
+            <div className="logs-table">
+                <table cellSpacing='0px' border='1px'>
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Id thiết bị</th>
+                            <th>Giá trị nhận được</th>
+                            <th>Ngày điều khiển</th>
+                        </tr>
 
-            <table cellSpacing='0px' border='1px'>
-                <thead>
-                    <tr>
-                        <th>STT</th>
-                        <th>Id thiết bị</th>
-                        <th>Giá trị nhận được</th>
-                        <th>Ngày điều khiển</th>
-                    </tr>
+                    </thead>
+                    <tbody>
 
-                </thead>
-                <tbody>
+                        {Records.length !== 0 ? (
+                            Records.map((record, index) => (
+                                <tr key={index} className="account">
+                                    <td>{index+1}</td>
+                                    <td>{record.Id}</td>
+                                    <td>{record.data}</td>
+                                    <td>{formatDate(record._date_created)}</td>
+                                </tr>
+                            ))
+                        ) :
+                            <td colSpan='6' style={{ textAlign: 'center', width: '100%' }}>Chưa có dữ liệu</td>
+                        }
 
-                    {Records.length !== 0 ? (
-                        Records.map((record, index) => (
-                            <tr key={index} className="account">
-                                <td>{index+1}</td>
-                                <td>{record.Id}</td>
-                                <td>{record.data}</td>
-                                <td>{formatDate(record._date_created)}</td>
-                            </tr>
-                        ))
-                    ) :
-                        <td colSpan='6' style={{ textAlign: 'center', width: '100%' }}>Chưa có dữ liệu</td>
-                    }
-
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div> 
             <div className="btn-overlay"><button onClick={close}>Đóng</button></div>
         </div>
     )

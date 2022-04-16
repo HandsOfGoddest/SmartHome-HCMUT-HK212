@@ -56,39 +56,40 @@ function Logs({ close, roomID, deviceID }) {
         <div className='logs'>
 
             <h2>Nhật ký điều khiển thiết bị</h2>
+            <div className="logs-table"> 
+                <table cellSpacing='0px' border='1px' >
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Id thiết bị</th>
+                            <th>Giá trị thay đổi</th>
+                            <th>Người điều khiển</th>
+                            <th>Id người điều khiển</th>
+                            <th>Ngày điều khiển</th>
+                        </tr>
 
-            <table cellSpacing='0px' border='1px' >
-                <thead>
-                    <tr>
-                        <th>STT</th>
-                        <th>Id thiết bị</th>
-                        <th>Giá trị thay đổi</th>
-                        <th>Người điều khiển</th>
-                        <th>Id người điều khiển</th>
-                        <th>Ngày điều khiển</th>
-                    </tr>
+                    </thead>
 
-                </thead>
+                    <tbody>
 
-                <tbody>
+                        {Logs.filter(log => log.deviceId == deviceID).length !== 0 ? (
+                            Logs.filter(log => log.deviceId == deviceID).map((log, index) => (
+                                <tr key={index} className="account">
+                                    <td>{index+1}</td>
+                                    <td>{log.deviceId}</td>
+                                    <td>{log.changeValue}</td>
+                                    <td>{log.byUserName}</td>
+                                    <td>{log.userID}</td>
+                                    <td>{formatDate(log._date_changed)}</td>
+                                </tr>
+                            ))
+                        ) :
+                            <td colSpan='6' style={{ textAlign: 'center', width: '100%' }}>Chưa có dữ liệu</td>
+                        }
 
-                    {Logs.filter(log => log.deviceId == deviceID).length !== 0 ? (
-                        Logs.filter(log => log.deviceId == deviceID).map((log, index) => (
-                            <tr key={index} className="account">
-                                <td>{index+1}</td>
-                                <td>{log.deviceId}</td>
-                                <td>{log.changeValue}</td>
-                                <td>{log.byUserName}</td>
-                                <td>{log.userID}</td>
-                                <td>{formatDate(log._date_changed)}</td>
-                            </tr>
-                        ))
-                    ) :
-                        <td colSpan='6' style={{ textAlign: 'center', width: '100%' }}>Chưa có dữ liệu</td>
-                    }
-
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
             <div className="btn-overlay"><button onClick={close}>Đóng</button></div>
         </div>
     )
