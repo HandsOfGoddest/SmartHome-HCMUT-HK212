@@ -3,8 +3,13 @@ from django.db.migrations import serializer
 from django.shortcuts import render, HttpResponse, get_object_or_404
 from django.http import JsonResponse
 
+
 from .controller.userController import UserViewSet, UserDetailViewSet, SearchUserView
 from .controller.roomController import RoomViewSet, RoomDetailViewSet
 from .controller.deviceController import    DevicesViewSet, DevicesDetailViewSet, AvailidDevice,\
                                             RecordsViewSet, RecordsDetailViewSet
 from .controller.logController import DevicesLogViewSet, DevicesLogSearch
+
+def user_list(self):
+    # return HttpResponse("Hello, world. You're at the user list.")
+    return JsonResponse({'data': 'Hello, world. You\'re at the user list.'})

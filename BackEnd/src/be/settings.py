@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 import mongoengine
 # mongoengine.connect(host= "mongodb+srv://Akatsuki:akatsuki@cluster0.afgoj.mongodb.net/IOT_project?retryWrites=true&w=majority")
 
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
+    
 ]
 
 MIDDLEWARE = [

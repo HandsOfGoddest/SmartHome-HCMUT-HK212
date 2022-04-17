@@ -4,7 +4,7 @@ from .views import UserViewSet, UserDetailViewSet, \
     RoomViewSet, RoomDetailViewSet, \
     DevicesViewSet, DevicesDetailViewSet, AvailidDevice, \
     RecordsViewSet, RecordsDetailViewSet, SearchUserView,\
-    DevicesLogSearch, DevicesLogViewSet
+    DevicesLogSearch, DevicesLogViewSet,user_list
 
 urlpatterns = [
     path("users/", UserViewSet.as_view()),
@@ -18,5 +18,6 @@ urlpatterns = [
     path("records/<str:Id>/", RecordsDetailViewSet.as_view()), #Id= deviceId(+fromDate+toDate)?
     path("addDeviceToRoom/", AvailidDevice.as_view()),
     path("logs/", DevicesLogViewSet.as_view()),
-    path("logs/<str:paras>/", DevicesLogSearch.as_view()) #paras= roomID+fromDate+toDate+deviceID
+    path("logs/<str:paras>/", DevicesLogSearch.as_view()), #paras= roomID+fromDate+toDate+deviceID
+    path("ws/", user_list) #paras= roomID+fromDate+toDate+deviceID
 ]

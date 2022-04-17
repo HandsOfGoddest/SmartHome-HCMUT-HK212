@@ -6,6 +6,9 @@ from DB import DBSingleton
 from models import Devices, Records
 import datetime
 from abc import ABCMeta, abstractstaticmethod
+import json
+
+# from channels.generic.websocket import WebsocketConsumer
 
 db= DBSingleton.get_instance()
 db.connectDB()
@@ -20,6 +23,13 @@ def create_Record(Id, data):
         _date_created = datetime.datetime.now(),
         _date_updated = datetime.datetime.now(),
     ).save()
+
+    # .then(
+    #      self.send(text_data=json.dumps({
+    #         'data': data,
+    #         'Id': Id
+    #     }))
+    # )
 
 def DeviceController(Id, data, type):
     device= query_devices(Id)
@@ -103,9 +113,9 @@ class GatewaySingleton(IGateway):
         while True :
             self.readSerial("")
             print("#############################################################################")
-            time.sleep(5)
             
-a= GatewaySingleton("COM10")
+            
+a= GatewaySingleton("COM7")
 a.read()
 
 

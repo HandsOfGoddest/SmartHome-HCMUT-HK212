@@ -20,7 +20,8 @@
     "react-scripts": "5.0.0",
     "reactjs-popup": "^2.0.5",
     "recharts": "^2.1.9",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "websocket": "^1.0.34"
   },
   "scripts": {
     "start": "react-scripts start",

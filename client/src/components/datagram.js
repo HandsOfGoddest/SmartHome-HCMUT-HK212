@@ -10,7 +10,13 @@ async function getDatagram(dvId) {
         console.error(error);
     }
 }
-
+function AvgArray(arr,type) {
+    var sum = arr[0].data;
+    for (var i = 0; i < arr.length; i++) {
+        sum += arr[i];
+    }
+    return sum / arr.length;
+}
 
 function Datagram({ dvId,dvType,close }) {
     var dulieu = [];
@@ -34,7 +40,7 @@ function Datagram({ dvId,dvType,close }) {
             }
         })
     }
-    
+    console.log(dulieu)
     return (
         <React.Fragment >
             <div style={{width:"100%",display:"flex", justifyContent:"space-between"}}>
