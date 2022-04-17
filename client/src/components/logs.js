@@ -10,14 +10,6 @@ async function getLogs(dvId) {
     }
 }
 
-async function getLogsDate(dvId,roomID,dateStart,dateEnd) {
-    try {
-        const response = await axios.get("http://localhost:8000/logs/" + roomID + dateStart + dateEnd + dvId +"/");
-        return response.data;
-    } catch (error) {
-        console.error(error);
-    }
-}
 
 function formatDate(date) {
     var d = new Date(date)
@@ -117,7 +109,8 @@ function Logs({ close, deviceID }) {
                     </tbody>
                 </table>
             </div>
-            <div className="btn-overlay"><button onClick={close}>Đóng</button></div>
+            
+            <div className="btn-overlay"><img onClick={()=>close()} src='../img/closebtn.png' alt="" style={{alignSelf:'flex-end'}}/></div>
         </div>
     )
 }

@@ -1,7 +1,9 @@
+from iot.DB import DBSingleton
+db= DBSingleton.get_instance()
+db.connectDB()
+
 from iot.models import DevicesLog
 from iot.serializers import DevicesLogSerializer
-from iot.DB import DBSingleton
-
 from rest_framework.response import  Response
 from rest_framework import status
 from rest_framework.decorators import APIView
@@ -9,8 +11,7 @@ from rest_framework.decorators import APIView
 import datetime
 from mongoengine import *
 
-db= DBSingleton.get_instance()
-db.connectDB()
+
 
 class DevicesLogViewSet(APIView):
     def get(self, request):
@@ -31,6 +32,8 @@ class DevicesLogSearch(APIView):
         d2= ldate.split("-")
         date1= datetime.date(int(d1[0]), int(d1[1]), int(d1[2]))
         date2= datetime.date(int(d2[0]), int(d2[1]), int(d2[2]))
+        print(date1)
+        print(date2)
         if self.__verify_date(date1, date2):  
             logs=[]
             if deviceID != None:

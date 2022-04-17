@@ -44,8 +44,7 @@ function Datagram({ dvId,dvType,close }) {
     return (
         <React.Fragment >
             <div style={{width:"100%",display:"flex", justifyContent:"space-between"}}>
-
-            <button onClick={()=>close()} style={{alignSelf:'flex-end'}}>Đóng</button>
+            <img onClick={()=>close()} src='../img/closebtn.png' alt="" style={{alignSelf:'flex-end'}}/>
             </div>
             <div style={{textAlign:'center'}}>Biểu đồ {dvType}</div>
             <LineChart width={600} height={300} data={dulieu} style={{ fontSize: "15px" }} margin={{ top: 5, right: 10, bottom: 5, left: 0 }} >

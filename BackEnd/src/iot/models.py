@@ -8,7 +8,6 @@ import binascii
 import os
 from django.conf import settings
 from django.utils.timezone import now
-# from .DB import DBSingleton
 
 
 class Devices(Document):
