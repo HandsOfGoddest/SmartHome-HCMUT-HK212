@@ -25,13 +25,18 @@ function Datagram({ dvId,dvType,close }) {
     if (data.length !== 0) {
         if( data.length >= plotType){
             for (var x = 0; x < plotType; x++) {
-                if (data[data.length - 1 -x]._date_created) {
+                var dat = data[data.length - 1 -x]
+                if (dat._date_created) {
+                    var second = dat._date_created.split("T")[1].split(":")[2].split(".")[0]
+                    var minute = dat._date_created.split("T")[1].split(":")[1]
+                    var hour = dat._date_created.split("T")[1].split(":")[0]
+                    var date = dat._date_created.split("T")[0].split("-")[2]
+                    var month = dat._date_created.split("T")[0].split("-")[1]
+                    var year = dat._date_created.split("T")[0].split("-")[0]
+
                     dulieu.push({
-                        'data': data[data.length - 1 -x].data,
-                        'date': data[data.length - 1 -x]._date_created.split("T")[0].split("-")[2],
-                        'month': data[data.length - 1 -x]._date_created.split("T")[0].split("-")[1],
-                        'year': data[data.length - 1 -x]._date_created.split("T")[0].split("-")[0],
-                        'hour': data[data.length - 1 -x]._date_created.split("T")[1].split(":")[0],
+                        'data': dat.data,
+                        'full_time': hour + ":" + minute + ":" + second + " " + date + "/" + month + "/" + year,
                     })
                 }
             }
@@ -40,12 +45,16 @@ function Datagram({ dvId,dvType,close }) {
         else{
             data.map((dat) => {
                 if (dat._date_created) {
+                    var second = dat._date_created.split("T")[1].split(":")[2].split(".")[0]
+                    var minute = dat._date_created.split("T")[1].split(":")[1]
+                    var hour = dat._date_created.split("T")[1].split(":")[0]
+                    var date = dat._date_created.split("T")[0].split("-")[2]
+                    var month = dat._date_created.split("T")[0].split("-")[1]
+                    var year = dat._date_created.split("T")[0].split("-")[0]
+
                     dulieu.push({
                         'data': dat.data,
-                        'date': dat._date_created.split("T")[0].split("-")[2],
-                        'month': dat._date_created.split("T")[0].split("-")[1],
-                        'year': dat._date_created.split("T")[0].split("-")[0],
-                        'hour': dat._date_created.split("T")[1].split(":")[0],
+                        'full_time': hour + ":" + minute + ":" + second + " " + date + "/" + month + "/" + year,
                     })
                 }
             })
@@ -59,7 +68,7 @@ function Datagram({ dvId,dvType,close }) {
             </div>
             <div style={{textAlign:'center'}}>Biểu đồ {dvType}</div>
             <LineChart width={600} height={300} data={dulieu} style={{ fontSize: "15px" }} margin={{ top: 5, right: 10, bottom: 5, left: 0 }} >
-                <XAxis dataKey={"hour"} />
+                <XAxis dataKey={'full_time'} />
                 <YAxis />
                 <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
                 <Line type="monotone" dataKey="data" stroke="#8884d8" />
