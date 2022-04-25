@@ -7,6 +7,13 @@ from models import Devices, Records
 import datetime
 from abc import ABCMeta, abstractstaticmethod
 import json
+import socket
+from threading import Thread
+import threading
+
+HOST = "127.0.0.1"
+PORT = 65432
+
 
 # from channels.generic.websocket import WebsocketConsumer
 
@@ -23,14 +30,6 @@ def create_Record(Id, data):
         _date_created = datetime.datetime.now(),
         _date_updated = datetime.datetime.now(),
     ).save()
-
-    # .then(
-    #      self.send(text_data=json.dumps({
-    #         'data': data,
-    #         'Id': Id
-    #     }))
-    # )
-
 def DeviceController(Id, data, type):
     device= query_devices(Id)
     if(device):
@@ -107,15 +106,60 @@ class GatewaySingleton(IGateway):
             print("connected microbit")
         except:
             print("Can not found microbit port!")
-            
-    def read(self):
+
+    def  turn_on(self,typ):
+        GatewaySingleton.ser.write((typ + str(1) + "#").encode())    
+    def  turn_off(self,typ):
+        GatewaySingleton.ser.write((typ + str(0) + "#").encode())    
+
+    def PyToBit(self):
+        while True:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.bind((HOST, PORT))
+                s.listen(2)
+                conn, addr = s.accept()
+                with conn:
+                    print('Connected by', addr)
+                    while True:
+                        data = conn.recv(1024)
+                        if not data:
+                            break
+                        print(data.decode())
+                        dat = data.decode().split(".")
+                        if dat[1] == "on":
+                            self.turn_on(dat[0])
+                        elif dat[1] == "off":
+                            self.turn_off(dat[0])
+                        else:
+                            print("Unknown command")
+    def BitToPy(self):
         self.__connectPorts()
         while True :
             self.readSerial("")
-            print("#############################################################################")
+            # time.sleep(0.2)
+            # print("#############################")
+    def read(self):
+        t1 = threading.Thread(target=self.PyToBit)
+        t2 = threading.Thread(target=self.BitToPy)
+        t1.start()
+        t2.start()
+        t1.join()
+        t2.join()
+                            # conn.sendall(data)
+            #     s.listen()
+            #     conn, addr = s.accept()
+            #     with conn:
+            #         print('Connected by', addr)
+            #         data = conn.recv(1024)
+            #         print(data.decode())
+            #         conn.sendall(b"nhan hello")
+            # self.readSerial("")
+            # time.sleep(2)
+            # print("#############################")
             
             
 a= GatewaySingleton("COM7")
+
 a.read()
 
 

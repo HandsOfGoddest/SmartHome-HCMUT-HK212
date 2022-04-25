@@ -1,3 +1,4 @@
+from encodings import utf_8
 from iot.DB import DBSingleton
 db= DBSingleton.get_instance()
 db.connectDB()
@@ -7,9 +8,12 @@ from iot.serializers import DevicesSerializer, RecordsSerializer
 from rest_framework.response import  Response
 from rest_framework import status
 from rest_framework.decorators import APIView
-
+# from ..gateWay import GatewaySingleton
+# import serial.tools.list_ports
 import datetime
-
+import socket
+HOST = "127.0.0.1"
+PORT = 65432
 class DevicesViewSet(APIView):
     def get(self, request):
         devices = Devices.objects.all()
@@ -68,7 +72,7 @@ class DevicesDetailViewSet(APIView):
         ).save()
 
     def put(self, request, Id):
-        try:
+        # try:
             deviceID= Id.split('+')[0]
             userID= Id.split('+')[1]
             roomID= Id.split('+')[2]
@@ -83,19 +87,33 @@ class DevicesDetailViewSet(APIView):
                     device, 
                 )
                 serializer.save()
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    s.connect((HOST, PORT))
+                    if serializer.data["status"] == False:
+                        s.sendall((str(serializer.data["type"])+"."+"off").encode('utf_8'))
+                    else:
+                        s.sendall((str(serializer.data["type"])+"."+"on").encode('utf_8'))
+                # if serializer.data["status"] == False:
+                #     GatewaySingleton.send = 1
+                # else:
+                #     GatewaySingleton.send = 2
+                # ser = serial.Serial( port='COM7', baudrate=115200)
+                # print("connected microbit")
+
                 if serializer.data["enabled"] == False:
                     rooms= Room.objects.all()
                     for room in rooms:
                         try:
                             room.update(pull__devices=device.id)
+                            
                         except:
-                            print("xóa cc")
+                            print("Không thể xóa thiết bị")
     
                 return Response(serializer.data)
 
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-        except:
-            return Response(serializer.errors, status.HTTP_403_FORBIDDEN)
+        # except:
+        #     return Response(serializer.errors, status.HTTP_403_FORBIDDEN)
 
     def delete(self, request, Id):
         device = self.get_object(Id)

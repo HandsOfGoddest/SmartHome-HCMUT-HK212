@@ -126,12 +126,18 @@ function ManageAccount() {
 
     function searching(e) {
         var keyword = e.target.value;
-        searchUser(keyword).then(data => {
-            setUser(data);
-            if (data.length != 0) {
-                setUserInfo(data[0]);
-            }
-        });
+        if(keyword == "#" || keyword == "/" || keyword == "." || keyword == "?" || keyword == "\\"){
+            alert("Không chấp nhận các kí tự: #, /, ., ?, \\")
+            setUser("");
+        }
+        else{
+            searchUser(keyword).then(data => {
+                setUser(data);
+                if (data.length != 0) {
+                    setUserInfo(data[0]);
+                }
+            });
+        }
     }
     async function addUser() {
         if (addName !== "" && addPhone !== "" && addID !== "" && addDate !== "" && addPass !== "" && addHomeTown !== "" && addRoom !== "") {
