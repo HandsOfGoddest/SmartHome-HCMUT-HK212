@@ -225,7 +225,7 @@ function ManageAccount() {
         setUserInfo(userDataToUpdateRoom);
 
     }
-    function UserToUpdate() {
+    function UserToUpdate(idx) {
         var userDataToUpdateRoom = {
             "name": editName,
             "phoneNumber": editPhone,
@@ -237,7 +237,7 @@ function ManageAccount() {
             "isAdmin": editAdmin
         }
         console.log(userDataToUpdateRoom)
-        updateUser(userDataToUpdateRoom.userID, userDataToUpdateRoom).then(data => {
+        updateUser(idx, userDataToUpdateRoom).then(data => {
             window.location.reload()
         });
     }
@@ -360,7 +360,7 @@ function ManageAccount() {
                         <div className='trash-border'>
                             <div className="confirm_edit">
                                 <button className="huybo" onClick={() => setEditClickHander(false)}>Hủy bỏ</button>
-                                <button className="xacnhan" onClick={() => UserToUpdate()}>Xác nhận</button>
+                                <button className="xacnhan" onClick={() => UserToUpdate(userInfo.userID)}>Xác nhận</button>
                             </div>
                             <Popup trigger={<img src='../img/trash.png' alt='trash-img' className='trash-img' />} position="top center" nested>
                                 {close => (
