@@ -1,0 +1,7 @@
+pip install django
+pip install mongoengine
+pip install pymongo
+pip install dnspython
+pip install djangorestframework
+python -m pip install django-cors-headers
+pip install required
